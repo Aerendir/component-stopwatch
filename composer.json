@@ -1,0 +1,37 @@
+{
+    "name": "serendipity_hq/stopwatch",
+    "type": "library",
+    "description": "Symfony Stopwatch Component",
+    "keywords": [],
+    "homepage": "https://symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        },
+        {
+            "name": "Adamo Crespi",
+            "email": "hello@aerendir.me"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://symfony.com/contributors"
+        }
+    ],
+    "require": {
+        "php": "^7.1.3"
+    },
+    "autoload": {
+        "psr-4": { "SerendipityHQ\\Component\\Stopwatch\\": "src" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "4.1-dev"
+        }
+    }
+}
