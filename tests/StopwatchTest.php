@@ -1,18 +1,22 @@
 <?php
 
 /*
- * This file is part of the Symfony package.
+ *
+ * This file is part of the Serendipity HQ Stopwatch Component.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
+ * (c) Adamo Crespi <hello@aerendir.me>
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * file that was distributed with the Symfony Framework.
  */
 
 namespace SerendipityHQ\Component\Stopwatch\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Stopwatch\Stopwatch;
+use SerendipityHQ\Component\Stopwatch\Section;
+use SerendipityHQ\Component\Stopwatch\Stopwatch;
+use SerendipityHQ\Component\Stopwatch\StopwatchEvent;
 
 /**
  * StopwatchTest.
@@ -28,11 +32,11 @@ class StopwatchTest extends TestCase
     public function testStart()
     {
         $stopwatch = new Stopwatch();
-        $event = $stopwatch->start('foo', 'cat');
+        $event     = $stopwatch->start('foo', 'cat');
 
-        $this->assertInstanceOf('Symfony\Component\Stopwatch\StopwatchEvent', $event);
-        $this->assertEquals('cat', $event->getCategory());
-        $this->assertSame($event, $stopwatch->getEvent('foo'));
+        self::assertInstanceOf(StopwatchEvent::class, $event);
+        self::assertEquals('cat', $event->getCategory());
+        self::assertSame($event, $stopwatch->getEvent('foo'));
     }
 
     public function testIsStarted()
@@ -40,35 +44,37 @@ class StopwatchTest extends TestCase
         $stopwatch = new Stopwatch();
         $stopwatch->start('foo', 'cat');
 
-        $this->assertTrue($stopwatch->isStarted('foo'));
+        self::assertTrue($stopwatch->isStarted('foo'));
     }
 
     public function testIsNotStarted()
     {
         $stopwatch = new Stopwatch();
 
-        $this->assertFalse($stopwatch->isStarted('foo'));
+        self::assertFalse($stopwatch->isStarted('foo'));
     }
 
+    /**
+     * @throws \ReflectionException
+     */
     public function testIsNotStartedEvent()
     {
         $stopwatch = new Stopwatch();
 
-        $sections = new \ReflectionProperty('Symfony\Component\Stopwatch\Stopwatch', 'sections');
+        $sections = new \ReflectionProperty(Stopwatch::class, 'sections');
         $sections->setAccessible(true);
         $section = $sections->getValue($stopwatch);
 
-        $events = new \ReflectionProperty('Symfony\Component\Stopwatch\Section', 'events');
+        $events = new \ReflectionProperty(Section::class, 'events');
         $events->setAccessible(true);
 
-        $stopwatchMockEvent = $this->getMockBuilder('Symfony\Component\Stopwatch\StopwatchEvent')
-            ->setConstructorArgs(array(microtime(true) * 1000))
-            ->getMock()
-        ;
+        $stopwatchMockEvent = $this->getMockBuilder(StopwatchEvent::class)
+            ->setConstructorArgs([microtime(true) * 1000])
+            ->getMock();
 
-        $events->setValue(end($section), array('foo' => $stopwatchMockEvent));
+        $events->setValue(end($section), ['foo' => $stopwatchMockEvent]);
 
-        $this->assertFalse($stopwatch->isStarted('foo'));
+        self::assertFalse($stopwatch->isStarted('foo'));
     }
 
     public function testStop()
@@ -78,8 +84,8 @@ class StopwatchTest extends TestCase
         usleep(200000);
         $event = $stopwatch->stop('foo');
 
-        $this->assertInstanceOf('Symfony\Component\Stopwatch\StopwatchEvent', $event);
-        $this->assertEquals(200, $event->getDuration(), null, self::DELTA);
+        self::assertInstanceOf('SerendipityHQ\Component\Stopwatch\StopwatchEvent', $event);
+        self::assertEquals(200, $event->getDuration(), null, self::DELTA);
     }
 
     /**
@@ -107,9 +113,9 @@ class StopwatchTest extends TestCase
         $stopwatch->start('foo');
         $event = $stopwatch->stop('foo');
 
-        $this->assertInternalType('float', $event->getStartTime());
-        $this->assertInternalType('float', $event->getEndTime());
-        $this->assertInternalType('float', $event->getDuration());
+        self::assertInternalType('float', $event->getStartTime());
+        self::assertInternalType('float', $event->getEndTime());
+        self::assertInternalType('float', $event->getDuration());
     }
 
     public function testSection()
@@ -134,9 +140,9 @@ class StopwatchTest extends TestCase
         $stopwatch->stopSection('0');
 
         // the section is an event by itself
-        $this->assertCount(3, $stopwatch->getSectionEvents('1'));
-        $this->assertCount(2, $stopwatch->getSectionEvents('2'));
-        $this->assertCount(2, $stopwatch->getSectionEvents('0'));
+        self::assertCount(3, $stopwatch->getSectionEvents('1'));
+        self::assertCount(2, $stopwatch->getSectionEvents('2'));
+        self::assertCount(2, $stopwatch->getSectionEvents('0'));
     }
 
     public function testReopenASection()
@@ -153,8 +159,8 @@ class StopwatchTest extends TestCase
 
         $events = $stopwatch->getSectionEvents('section');
 
-        $this->assertCount(3, $events);
-        $this->assertCount(2, $events['__section__']->getPeriods());
+        self::assertCount(3, $events);
+        self::assertCount(2, $events['__section__']->getPeriods());
     }
 
     /**
@@ -175,6 +181,6 @@ class StopwatchTest extends TestCase
 
         $stopwatch->reset();
 
-        $this->assertEquals(new Stopwatch(), $stopwatch);
+        self::assertEquals(new Stopwatch(), $stopwatch);
     }
 }

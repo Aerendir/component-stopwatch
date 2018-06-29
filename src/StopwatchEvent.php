@@ -1,12 +1,14 @@
 <?php
 
 /*
- * This file is part of the Symfony package.
+ *
+ * This file is part of the Serendipity HQ Stopwatch Component.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
+ * (c) Adamo Crespi <hello@aerendir.me>
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * file that was distributed with the Symfony Framework.
  */
 
 namespace SerendipityHQ\Component\Stopwatch;
@@ -20,9 +22,9 @@ namespace SerendipityHQ\Component\Stopwatch;
 class StopwatchEvent
 {
     /**
-     * @var StopwatchPeriod[]
+     * @var Period[]
      */
-    private $periods = array();
+    private $periods = [];
 
     /**
      * @var float
@@ -42,7 +44,7 @@ class StopwatchEvent
     /**
      * @var float[]
      */
-    private $started = array();
+    private $started = [];
 
     /**
      * @param float       $origin        The origin time in milliseconds
@@ -53,8 +55,8 @@ class StopwatchEvent
      */
     public function __construct(float $origin, string $category = null, bool $morePrecision = false)
     {
-        $this->origin = $this->formatTime($origin);
-        $this->category = is_string($category) ? $category : 'default';
+        $this->origin        = $this->formatTime($origin);
+        $this->category      = $category ?? 'default';
         $this->morePrecision = $morePrecision;
     }
 
@@ -63,7 +65,7 @@ class StopwatchEvent
      *
      * @return string The category
      */
-    public function getCategory()
+    public function getCategory():string
     {
         return $this->category;
     }
@@ -73,39 +75,9 @@ class StopwatchEvent
      *
      * @return float The origin in milliseconds
      */
-    public function getOrigin()
+    public function getOrigin():float
     {
         return $this->origin;
-    }
-
-    /**
-     * Starts a new event period.
-     *
-     * @return $this
-     */
-    public function start()
-    {
-        $this->started[] = $this->getNow();
-
-        return $this;
-    }
-
-    /**
-     * Stops the last started event period.
-     *
-     * @return $this
-     *
-     * @throws \LogicException When stop() is called without a matching call to start()
-     */
-    public function stop()
-    {
-        if (!count($this->started)) {
-            throw new \LogicException('stop() called but start() has not been called before.');
-        }
-
-        $this->periods[] = new StopwatchPeriod(array_pop($this->started), $this->getNow(), $this->morePrecision);
-
-        return $this;
     }
 
     /**
@@ -113,37 +85,17 @@ class StopwatchEvent
      *
      * @return bool
      */
-    public function isStarted()
+    public function isStarted():bool
     {
-        return !empty($this->started);
-    }
-
-    /**
-     * Stops the current period and then starts a new one.
-     *
-     * @return $this
-     */
-    public function lap()
-    {
-        return $this->stop()->start();
-    }
-
-    /**
-     * Stops all non already stopped periods.
-     */
-    public function ensureStopped()
-    {
-        while (count($this->started)) {
-            $this->stop();
-        }
+        return ! empty($this->started);
     }
 
     /**
      * Gets all event periods.
      *
-     * @return StopwatchPeriod[] An array of StopwatchPeriod instances
+     * @return Period[] An array of Period instances
      */
-    public function getPeriods()
+    public function getPeriods():array
     {
         return $this->periods;
     }
@@ -151,7 +103,7 @@ class StopwatchEvent
     /**
      * Gets the relative time of the start of the first period.
      *
-     * @return int|float The time (in milliseconds)
+     * @return float|int The time (in milliseconds)
      */
     public function getStartTime()
     {
@@ -161,7 +113,7 @@ class StopwatchEvent
     /**
      * Gets the relative time of the end of the last period.
      *
-     * @return int|float The time (in milliseconds)
+     * @return float|int The time (in milliseconds)
      */
     public function getEndTime()
     {
@@ -173,17 +125,17 @@ class StopwatchEvent
     /**
      * Gets the duration of the events (including all periods).
      *
-     * @return int|float The duration (in milliseconds)
+     * @return float|int The duration (in milliseconds)
      */
     public function getDuration()
     {
         $periods = $this->periods;
         $stopped = count($periods);
-        $left = count($this->started) - $stopped;
+        $left    = count($this->started) - $stopped;
 
         for ($i = 0; $i < $left; ++$i) {
-            $index = $stopped + $i;
-            $periods[] = new StopwatchPeriod($this->started[$index], $this->getNow(), $this->morePrecision);
+            $index     = $stopped + $i;
+            $periods[] = new Period($this->started[$index], $this->getNow(), $this->morePrecision);
         }
 
         $total = 0;
@@ -201,7 +153,7 @@ class StopwatchEvent
      *
      * @return int The memory usage (in bytes)
      */
-    public function getMemory()
+    public function getMemory():int
     {
         $memory = 0;
         foreach ($this->periods as $period) {
@@ -220,7 +172,7 @@ class StopwatchEvent
      *
      * @return int The memory usage (in bytes)
      */
-    public function getMemoryCurrent()
+    public function getMemoryCurrent():int
     {
         $memoryCurrent = 0;
         foreach ($this->periods as $period) {
@@ -237,7 +189,7 @@ class StopwatchEvent
      *
      * @return int The memory usage (in bytes)
      */
-    public function getMemoryPeak()
+    public function getMemoryPeak():int
     {
         $memoryPeak = 0;
         foreach ($this->periods as $period) {
@@ -254,7 +206,7 @@ class StopwatchEvent
      *
      * @return int The memory usage (in bytes)
      */
-    public function getMemoryPeakEmalloc()
+    public function getMemoryPeakEmalloc():int
     {
         $memoryPeakCurrent = 0;
         foreach ($this->periods as $period) {
@@ -267,11 +219,65 @@ class StopwatchEvent
     }
 
     /**
+     * Starts a new event period.
+     *
+     * @return StopwatchEvent
+     * @internal
+     */
+    public function start():StopwatchEvent
+    {
+        $this->started[] = $this->getNow();
+
+        return $this;
+    }
+
+    /**
+     * Stops the last started event period.
+     *
+     * @throws \LogicException When stop() is called without a matching call to start()
+     *
+     * @return StopwatchEvent
+     *              @internal
+     */
+    public function stop():StopwatchEvent
+    {
+        if ( ! count($this->started)) {
+            throw new \LogicException('stop() called but start() has not been called before.');
+        }
+
+        $this->periods[] = new Period(array_pop($this->started), $this->getNow(), $this->morePrecision);
+
+        return $this;
+    }
+
+    /**
+     * Stops the current period and then starts a new one.
+     *
+     * @return StopwatchEvent
+     *              @internal
+     */
+    public function lap():StopwatchEvent
+    {
+        return $this->stop()->start();
+    }
+
+    /**
+     * Stops all non already stopped periods.
+     * @internal
+     */
+    public function ensureStopped():void
+    {
+        while (count($this->started)) {
+            $this->stop();
+        }
+    }
+
+    /**
      * Return the current time relative to origin.
      *
      * @return float Time in ms
      */
-    protected function getNow()
+    protected function getNow():float
     {
         return $this->formatTime(microtime(true) * 1000 - $this->origin);
     }
@@ -279,15 +285,15 @@ class StopwatchEvent
     /**
      * Formats a time.
      *
-     * @param int|float $time A raw time
-     *
-     * @return float The formatted time
+     * @param float|int $time A raw time
      *
      * @throws \InvalidArgumentException When the raw time is not valid
+     *
+     * @return float The formatted time
      */
-    private function formatTime($time)
+    private function formatTime($time):float
     {
-        if (!is_numeric($time)) {
+        if ( ! is_numeric($time)) {
             throw new \InvalidArgumentException('The time must be a numerical value');
         }
 

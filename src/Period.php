@@ -1,12 +1,14 @@
 <?php
 
 /*
- * This file is part of the Symfony package.
+ *
+ * This file is part of the Serendipity HQ Stopwatch Component.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
+ * (c) Adamo Crespi <hello@aerendir.me>
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * file that was distributed with the Symfony Framework.
  */
 
 namespace SerendipityHQ\Component\Stopwatch;
@@ -17,7 +19,7 @@ namespace SerendipityHQ\Component\Stopwatch;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Adamo Crespi <hello@aerendir.me>
  */
-class StopwatchPeriod
+class Period
 {
     /** @var float|int $start */
     private $start;
@@ -38,8 +40,8 @@ class StopwatchPeriod
     private $memoryPeakEmalloc;
 
     /**
-     * @param int|float $start         The relative time of the start of the period (in milliseconds)
-     * @param int|float $end           The relative time of the end of the period (in milliseconds)
+     * @param float|int $start         The relative time of the start of the period (in milliseconds)
+     * @param float|int $end           The relative time of the end of the period (in milliseconds)
      * @param bool      $morePrecision If true, time is stored as float to keep the original microsecond precision
      */
     public function __construct($start, $end, bool $morePrecision = false)
@@ -55,7 +57,7 @@ class StopwatchPeriod
     /**
      * Gets the relative time of the start of the period.
      *
-     * @return int|float The time (in milliseconds)
+     * @return float|int The time (in milliseconds)
      */
     public function getStartTime()
     {
@@ -65,7 +67,7 @@ class StopwatchPeriod
     /**
      * Gets the relative time of the end of the period.
      *
-     * @return int|float The time (in milliseconds)
+     * @return float|int The time (in milliseconds)
      */
     public function getEndTime()
     {
@@ -75,7 +77,7 @@ class StopwatchPeriod
     /**
      * Gets the time spent in this period.
      *
-     * @return int|float The period duration (in milliseconds)
+     * @return float|int The period duration (in milliseconds)
      */
     public function getDuration()
     {
@@ -97,7 +99,7 @@ class StopwatchPeriod
      *
      * @return int
      */
-    public function getMemoryCurrent() : int
+    public function getMemoryCurrent(): int
     {
         return $this->memoryCurrent;
     }
@@ -107,7 +109,7 @@ class StopwatchPeriod
      *
      * @return int
      */
-    public function getMemoryPeak() : int
+    public function getMemoryPeak(): int
     {
         return $this->memoryPeak;
     }
@@ -117,7 +119,7 @@ class StopwatchPeriod
      *
      * @return int
      */
-    public function getMemoryPeakEmalloc() : int
+    public function getMemoryPeakEmalloc(): int
     {
         return $this->memoryPeakEmalloc;
     }

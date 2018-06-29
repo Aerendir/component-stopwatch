@@ -1,0 +1,32 @@
+language: php
+
+matrix:
+    include:
+        - php: 7.1
+        - php: 7.2
+
+cache:
+    directories:
+        - "$HOME/.phive"
+        - "$HOME/.phive/phars"
+        - "$HOME/.cache/composer"
+        - "$HOME/.composer/cache"
+        - "$HOME/.gnupg"
+
+before_install:
+    - composer self-update
+    - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+    - chmod +x ./cc-test-reporter
+    - ./cc-test-reporter before-build
+
+install:
+    - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction
+
+before_script:
+    - ./cc-test-reporter before-build
+
+script:
+    - vendor/bin/phpunit --verbose --coverage-clover clover.xml
+
+after_script:
+  - ./cc-test-reporter after-build --coverage-input-type clover  --exit-code $TRAVIS_TEST_RESULT

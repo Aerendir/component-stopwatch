@@ -1,12 +1,14 @@
 <?php
 
 /*
- * This file is part of the Symfony package.
+ *
+ * This file is part of the Serendipity HQ Stopwatch Component.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
+ * (c) Adamo Crespi <hello@aerendir.me>
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * file that was distributed with the Symfony Framework.
  */
 
 namespace SerendipityHQ\Component\Stopwatch;
@@ -21,10 +23,10 @@ class Section
     /**
      * @var StopwatchEvent[]
      */
-    private $events = array();
+    private $events = [];
 
     /**
-     * @var null|float
+     * @var float|null
      */
     private $origin;
 
@@ -41,7 +43,7 @@ class Section
     /**
      * @var Section[]
      */
-    private $children = array();
+    private $children = [];
 
     /**
      * @param float|null $origin        Set the origin of the events in this section, use null to set their origin to their start time
@@ -49,7 +51,7 @@ class Section
      */
     public function __construct(float $origin = null, bool $morePrecision = false)
     {
-        $this->origin = $origin;
+        $this->origin        = $origin;
         $this->morePrecision = $morePrecision;
     }
 
@@ -117,7 +119,7 @@ class Section
      */
     public function startEvent($name, $category)
     {
-        if (!isset($this->events[$name])) {
+        if ( ! isset($this->events[$name])) {
             $this->events[$name] = new StopwatchEvent($this->origin ?: microtime(true) * 1000, $category, $this->morePrecision);
         }
 
@@ -141,13 +143,13 @@ class Section
      *
      * @param string $name The event name
      *
-     * @return StopwatchEvent The event
-     *
      * @throws \LogicException When the event has not been started
+     *
+     * @return StopwatchEvent The event
      */
     public function stopEvent($name)
     {
-        if (!isset($this->events[$name])) {
+        if ( ! isset($this->events[$name])) {
             throw new \LogicException(sprintf('Event "%s" is not started.', $name));
         }
 
@@ -159,9 +161,9 @@ class Section
      *
      * @param string $name The event name
      *
-     * @return StopwatchEvent The event
-     *
      * @throws \LogicException When the event has not been started
+     *
+     * @return StopwatchEvent The event
      */
     public function lap($name)
     {
@@ -173,13 +175,13 @@ class Section
      *
      * @param string $name The event name
      *
-     * @return StopwatchEvent The event
-     *
      * @throws \LogicException When the event is not known
+     *
+     * @return StopwatchEvent The event
      */
     public function getEvent($name)
     {
-        if (!isset($this->events[$name])) {
+        if ( ! isset($this->events[$name])) {
             throw new \LogicException(sprintf('Event "%s" is not known.', $name));
         }
 

@@ -1,12 +1,14 @@
 <?php
 
 /*
- * This file is part of the Symfony package.
+ *
+ * This file is part of the Serendipity HQ Stopwatch Component.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
+ * (c) Adamo Crespi <hello@aerendir.me>
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * file that was distributed with the Symfony Framework.
  */
 
 namespace SerendipityHQ\Component\Stopwatch;
@@ -15,22 +17,17 @@ namespace SerendipityHQ\Component\Stopwatch;
  * Stopwatch provides a way to profile code.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @author Adamo Crespi <hello@aerendir.me>
  */
 class Stopwatch
 {
-    /**
-     * @var bool
-     */
+    /** @var bool $morePrecision */
     private $morePrecision;
 
-    /**
-     * @var Section[]
-     */
+    /** @var Section[] $sections */
     private $sections;
 
-    /**
-     * @var Section[]
-     */
+    /** @var Section[] $activeSections */
     private $activeSections;
 
     /**
@@ -40,6 +37,43 @@ class Stopwatch
     {
         $this->morePrecision = $morePrecision;
         $this->reset();
+    }
+
+    /**
+     * Starts an event.
+     *
+     * @param string $name     The event name
+     * @param string $category The event category
+     *
+     * @return StopwatchEvent
+     */
+    public function start(string $name, string $category = null): StopwatchEvent
+    {
+        return end($this->activeSections)->startEvent($name, $category);
+    }
+
+    /**
+     * Stops an event.
+     *
+     * @param string $name The event name
+     *
+     * @return StopwatchEvent
+     */
+    public function stop(string $name): StopwatchEvent
+    {
+        return end($this->activeSections)->stopEvent($name);
+    }
+
+    /**
+     * Stops then restarts an event.
+     *
+     * @param string $name The event name
+     *
+     * @return StopwatchEvent
+     */
+    public function lap(string $name): StopwatchEvent
+    {
+        return end($this->activeSections)->stopEvent($name)->start();
     }
 
     /**
@@ -85,25 +119,12 @@ class Stopwatch
     {
         $this->stop('__section__');
 
-        if (1 == count($this->activeSections)) {
+        if (1 === count($this->activeSections)) {
             throw new \LogicException('There is no started section to stop.');
         }
 
         $this->sections[$id] = array_pop($this->activeSections)->setId($id);
         $this->stop('__section__.child');
-    }
-
-    /**
-     * Starts an event.
-     *
-     * @param string $name     The event name
-     * @param string $category The event category
-     *
-     * @return StopwatchEvent
-     */
-    public function start($name, $category = null)
-    {
-        return end($this->activeSections)->startEvent($name, $category);
     }
 
     /**
@@ -116,30 +137,6 @@ class Stopwatch
     public function isStarted($name)
     {
         return end($this->activeSections)->isEventStarted($name);
-    }
-
-    /**
-     * Stops an event.
-     *
-     * @param string $name The event name
-     *
-     * @return StopwatchEvent
-     */
-    public function stop($name)
-    {
-        return end($this->activeSections)->stopEvent($name);
-    }
-
-    /**
-     * Stops then restarts an event.
-     *
-     * @param string $name The event name
-     *
-     * @return StopwatchEvent
-     */
-    public function lap($name)
-    {
-        return end($this->activeSections)->stopEvent($name)->start();
     }
 
     /**
@@ -163,7 +160,7 @@ class Stopwatch
      */
     public function getSectionEvents($id)
     {
-        return isset($this->sections[$id]) ? $this->sections[$id]->getEvents() : array();
+        return isset($this->sections[$id]) ? $this->sections[$id]->getEvents() : [];
     }
 
     /**
@@ -171,6 +168,6 @@ class Stopwatch
      */
     public function reset()
     {
-        $this->sections = $this->activeSections = array('__root__' => new Section(null, $this->morePrecision));
+        $this->sections = $this->activeSections = ['__root__' => new Section(null, $this->morePrecision)];
     }
 }

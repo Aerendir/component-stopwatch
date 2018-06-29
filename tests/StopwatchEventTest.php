@@ -1,18 +1,20 @@
 <?php
 
 /*
- * This file is part of the Symfony package.
+ *
+ * This file is part of the Serendipity HQ Stopwatch Component.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
+ * (c) Adamo Crespi <hello@aerendir.me>
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ * file that was distributed with the Symfony Framework.
  */
 
 namespace SerendipityHQ\Component\Stopwatch\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Stopwatch\StopwatchEvent;
+use SerendipityHQ\Component\Stopwatch\StopwatchEvent;
 
 /**
  * StopwatchEventTest.
@@ -28,34 +30,34 @@ class StopwatchEventTest extends TestCase
     public function testGetOrigin()
     {
         $event = new StopwatchEvent(12);
-        $this->assertEquals(12, $event->getOrigin());
+        self::assertEquals(12, $event->getOrigin());
     }
 
     public function testGetCategory()
     {
         $event = new StopwatchEvent(microtime(true) * 1000);
-        $this->assertEquals('default', $event->getCategory());
+        self::assertEquals('default', $event->getCategory());
 
         $event = new StopwatchEvent(microtime(true) * 1000, 'cat');
-        $this->assertEquals('cat', $event->getCategory());
+        self::assertEquals('cat', $event->getCategory());
     }
 
     public function testGetPeriods()
     {
         $event = new StopwatchEvent(microtime(true) * 1000);
-        $this->assertEquals(array(), $event->getPeriods());
+        self::assertEquals([], $event->getPeriods());
 
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
         $event->stop();
-        $this->assertCount(1, $event->getPeriods());
+        self::assertCount(1, $event->getPeriods());
 
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
         $event->stop();
         $event->start();
         $event->stop();
-        $this->assertCount(2, $event->getPeriods());
+        self::assertCount(2, $event->getPeriods());
     }
 
     public function testLap()
@@ -64,7 +66,7 @@ class StopwatchEventTest extends TestCase
         $event->start();
         $event->lap();
         $event->stop();
-        $this->assertCount(2, $event->getPeriods());
+        self::assertCount(2, $event->getPeriods());
     }
 
     public function testDuration()
@@ -73,7 +75,7 @@ class StopwatchEventTest extends TestCase
         $event->start();
         usleep(200000);
         $event->stop();
-        $this->assertEquals(200, $event->getDuration(), null, self::DELTA);
+        self::assertEquals(200, $event->getDuration(), null, self::DELTA);
 
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
@@ -83,7 +85,7 @@ class StopwatchEventTest extends TestCase
         $event->start();
         usleep(100000);
         $event->stop();
-        $this->assertEquals(200, $event->getDuration(), null, self::DELTA);
+        self::assertEquals(200, $event->getDuration(), null, self::DELTA);
     }
 
     public function testDurationBeforeStop()
@@ -91,7 +93,7 @@ class StopwatchEventTest extends TestCase
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
         usleep(200000);
-        $this->assertEquals(200, $event->getDuration(), null, self::DELTA);
+        self::assertEquals(200, $event->getDuration(), null, self::DELTA);
 
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
@@ -100,7 +102,7 @@ class StopwatchEventTest extends TestCase
         usleep(50000);
         $event->start();
         usleep(100000);
-        $this->assertEquals(100, $event->getDuration(), null, self::DELTA);
+        self::assertEquals(100, $event->getDuration(), null, self::DELTA);
     }
 
     /**
@@ -116,13 +118,13 @@ class StopwatchEventTest extends TestCase
     {
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
-        $this->assertTrue($event->isStarted());
+        self::assertTrue($event->isStarted());
     }
 
     public function testIsNotStarted()
     {
         $event = new StopwatchEvent(microtime(true) * 1000);
-        $this->assertFalse($event->isStarted());
+        self::assertFalse($event->isStarted());
     }
 
     public function testEnsureStopped()
@@ -134,35 +136,35 @@ class StopwatchEventTest extends TestCase
         $event->start();
         usleep(100000);
         $event->ensureStopped();
-        $this->assertEquals(300, $event->getDuration(), null, self::DELTA);
+        self::assertEquals(300, $event->getDuration(), null, self::DELTA);
     }
 
     public function testStartTime()
     {
         $event = new StopwatchEvent(microtime(true) * 1000);
-        $this->assertLessThanOrEqual(0.5, $event->getStartTime());
+        self::assertLessThanOrEqual(0.5, $event->getStartTime());
 
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
         $event->stop();
-        $this->assertLessThanOrEqual(1, $event->getStartTime());
+        self::assertLessThanOrEqual(1, $event->getStartTime());
 
         $event = new StopwatchEvent(microtime(true) * 1000);
         $event->start();
         usleep(100000);
         $event->stop();
-        $this->assertEquals(0, $event->getStartTime(), null, self::DELTA);
+        self::assertEquals(0, $event->getStartTime(), null, self::DELTA);
     }
 
     public function testHumanRepresentation()
     {
         $event = new StopwatchEvent(microtime(true) * 1000);
-        $this->assertEquals('default: 0.00 MiB - 0 ms', (string) $event);
+        self::assertEquals('default: 0.00 MiB - 0 ms', (string) $event);
         $event->start();
         $event->stop();
-        $this->assertEquals(1, preg_match('/default: [0-9\.]+ MiB - [0-9]+ ms/', (string) $event));
+        self::assertEquals(1, preg_match('/default: [0-9\.]+ MiB - [0-9]+ ms/', (string) $event));
 
         $event = new StopwatchEvent(microtime(true) * 1000, 'foo');
-        $this->assertEquals('foo: 0.00 MiB - 0 ms', (string) $event);
+        self::assertEquals('foo: 0.00 MiB - 0 ms', (string) $event);
     }
 }
