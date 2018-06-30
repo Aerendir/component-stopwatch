@@ -74,36 +74,57 @@ Now you can start measurements:
 
     // ...
     
-    // Starts event named 'eventName'
-    $stopwatch->start('eventName');
+    // Starts event named 'event_name'
+    $stopwatch->start('event_name');
 
     // ... some code goes here
     
     // Stop the event and get it
-    $event = $stopwatch->stop('eventName');
+    $event = $stopwatch->stop('event_name');
 
-`$event` is a `StopwatchEvent` object from which you can get the profiling information.
+`$event` is a `Event` object from which you can get the profiling information.
 
 Basic concepts
 --------------
 
 Stopwatch component has three main concepts:
 
-1. Periods: The time passed between the start (`$stopwatch->start('eventName)`) and the stop (`$stopwatch->stop('eventName`);
+1. Periods: The time passed between the start (`$stopwatch->start('event_name)`) and the stop (`$stopwatch->stop('event_name`);
 2. Events: Something that is happening in your code and that you like to measure. It contains the Periods;
 3. Sections: A group of events logically connected.
 
 Each one of those is represented by a class, but you have to only interact with the main `Stopwatch` class.
 
+The `Stopwatch` class exposes those methods:
+
+    // To manage Events
+    $stopwatch->start('event_name', 'event_category');
+    $stopwatch->lap('event_name');
+    $stopwatch->stop('event_name');
+    $stopwatch->getEvent('event_name');
+    $stopwatch->isStarted('event_name');
+    $stopwatch->getSectionEvents('__root__');
+    
+    // To manage Sections
+    $stopwatch->openSection();
+    $stopwatch->stopSection('');
+    $stopwatch->getSections();
+    
+    // Other methods
+    $stopwatch->reset();
+
 ### Events and Periods
 
 An `Event` is something that is happening in you application: routing, image processing, a cycle, ecc.
 
-An `Event` measures the time that passes using `Periods`.
+An `Event`, using `Periods`, measures the time that passes.
 
 So an `Event` is basically a collection of `Period`s.
 
-You can give an `Event` a category: this way you can logically group `Event`s in the same category.
+You can optionally give a category to an `Event`: this way you can logically group `Event`s in the same category:
+
+    // Starts event named 'event_name'
+    $stopwatch->start('event_name', 'event_category');
 
 Categories are used, for example, by the Symfony WebProfileBundle to show a timeline with color-coded events.
 
@@ -111,16 +132,49 @@ Categories are used, for example, by the Symfony WebProfileBundle to show a time
 
 In the image, "default", "section", "event_listener", ecc. are all categories of `Event`s.
 
+You can get the `Event` object calling:
+
+    $stopwatch->start('event_name')
+    $stopwatch->stop('event_name')
+    $stopwatch->lap('event_name')
+    $stopwatch->getEvent('event_name')
+
+The latter should be used when you need to retrieve the duration of an event while it is still running.
+
+The `Event` object stores basically two kind of information: memory consumption and timing.
+
+You can get all this useful information from the event object:
+
+    $event->getCategory();          // Returns the category the event was started in
+    $event->getOrigin();            // Returns the event start time in milliseconds
+    $event->ensureStopped();        // Stops all periods not already stopped
+    $event->getStartTime();         // Returns the start time of the very first period
+    $event->getEndTime();           // Returns the end time of the very last period
+    $event->getDuration();          // Returns the event duration, including all periods
+    $event->getMemory();            // Of all periods, gets the max memory amount assigned
+                                    // to PHP (measured with memory_get_usage(true))
+    $event->getMemoryCurrent();     // Of all periods, gets the max amount of memory used
+                                    // by the script (measured with memory_get_usage())
+    $event->getMemoryPeak();        // Of all periods, gets the max peak amount of memory
+                                    // assigned to PHP (measured with memory_get_peak_usage(true))
+    $event->getMemoryPeakEmalloc(); // Of all periods, gets the max amount of memory assigned
+                                    // to PHP and used by emalloc() (measured with memory_get_peak_usage())
+
+Additionally to this, the `Event` object stores also `Period`s.
 
 As you know from the real world, all stopwatches come with two buttons: one to start and stop the stopwatch, and another to measure the lap time.
 
 This is exactly what the `Stopwatch::lap()` method does::
 
+```php
     // ...
     
-    // starts event named 'foo'
+    // starts event named 'process_elements'
     $stopwatch->start('process_elements');
     
+    // Maybe here some other code
+    
+    // Start cycling the elements
     foreach ($lements as $element) {
         // Process the $element
         
@@ -129,71 +183,167 @@ This is exactly what the `Stopwatch::lap()` method does::
         
     }
     
-    // ... some other code goes here
-    $event = $stopwatch->stop('eventName');
+    // ... Some other code goes here
+    
+    // Finally stop the Event and get it to get information about timing and memory
+    $event = $stopwatch->stop('process_elements');
+```
 
-Lap information is stored as "periods" within the event. To get lap information
-call::
+Lap information is stored as "periods" within the event.
 
-    $event->getPeriods();
+To get detailed information about timing and memory for each lap, call:
 
-In addition to periods, you can get other useful information from the event object.
-For example::
+    // Get all Periods measured in the Event
+    $periods = $event->getPeriods();
 
-    $event->getCategory();   // returns the category the event was started in
-    $event->getOrigin();     // returns the event start time in milliseconds
-    $event->ensureStopped(); // stops all periods not already stopped
-    $event->getStartTime();  // returns the start time of the very first period
-    $event->getEndTime();    // returns the end time of the very last period
-    $event->getDuration();   // returns the event duration, including all periods
-    $event->getMemory();     // returns the max memory usage of all periods
+### Sections
 
+Sections are a way to logically split the timeline into groups. 
 
+You can see how Symfony uses sections to nicely visualize the framework lifecycle in the Symfony Profiler tool:
 
+![Image](https://farm5.staticflickr.com/4265/35035732604_d0eaece2ff_o.png)
 
-The :class:`SerendipityHQ\\Component\\Stopwatch\\StopwatchEvent` object can be retrieved
-from the  :method:`SerendipityHQ\\Component\\Stopwatch\\Stopwatch::start`,
-:method:`SerendipityHQ\\Component\\Stopwatch\\Stopwatch::stop`,
-:method:`SerendipityHQ\\Component\\Stopwatch\\Stopwatch::lap` and
-:method:`SerendipityHQ\\Component\\Stopwatch\\Stopwatch::getEvent` methods.
-The latter should be used when you need to retrieve the duration of an event
-while it is still running.
+In the image, "kernel_request" is a `Section`.
 
-The stopwatch can be reset to its original state at any given time with the
-:method:`SerendipityHQ\\Component\\Stopwatch\\Stopwatch::reset` method, which deletes
-all the data measured so far.
+Exapanding on the previous example, try implment somthing to use the `Section`s:
 
-You can also provide a category name to an event::
+```php
+    // ...
 
-    $stopwatch->start('eventName', 'categoryName');
-
-You can consider categories as a way of tagging events. For example, the
-Symfony Profiler tool uses categories to nicely color-code different events.
-
-
-Sections
---------
-
-Sections are a way to logically split the timeline into groups. You can see
-how Symfony uses sections to nicely visualize the framework lifecycle in the
-Symfony Profiler tool. Here is a basic usage example using sections::
-
-    $stopwatch = new Stopwatch();
-
+    // Open a section
     $stopwatch->openSection();
-    $stopwatch->start('parsing_config_file', 'filesystem_operations');
-    $stopwatch->stopSection('routing');
+    
+    // Start the event assigning the category "numbers"
+    $stopwatch->start('fibonacci_event', 'numbers');
+    
+    // Execute the code
+    dump('fibonacci_event result', '-------------', '');
+    $prev = 0;
+    $next = 1;
+    while($prev < 10000000000000) {
+        $num = $prev + $next;
 
-    $events = $stopwatch->getSectionEvents('routing');
+        dump($num);
 
-You can reopen a closed section by calling the :method:`SerendipityHQ\\Component\\Stopwatch\\Stopwatch::openSection`
-method and specifying the id of the section to be reopened::
+        $prev = $next;
+        $next = $num;
 
-    $stopwatch->openSection('routing');
-    $stopwatch->start('building_config_tree');
-    $stopwatch->stopSection('routing');
+        // Get a lap (returns the current event to be used if you like!)
+        $stopwatch->lap('fibonacci_event');
+    }
 
-.. _Packagist: https://packagist.org/packages/serendipity_hq/stopwatch
+    // Stop the event
+    $stopwatch->stop('fibonacci_event');
+
+    // Start a new event assigning the category "geometry"
+    $stopwatch->start('square_numbers_event', 'geometry');
+    
+    // Execute the code
+    dump('square_numbers_event result', '-------------', '');
+    $root = 0;
+    while ($root < 50) {
+        dump($root * $root); // or pow($root, 2);
+
+        $root++;
+
+        // Get a lap (returns the current event to be used if you like!)
+        $stopwatch->lap('square_numbers_event');
+    }
+
+    // Stop the event
+    $stopwatch->stop('square_numbers_event');
+    
+    // Stop the section assigning it a name (yes, when closing, not when opening!)
+    $stopwatch->stopSection('fibonacci_and_squares');
+
+    // Open a new section
+    $stopwatch->openSection();
+
+    // Start a new event assigning the category "geometry"
+    $stopwatch->start('triangle_numbers_event', 'geometry');
+
+    // Execute some code
+    dump('triangle_numbers_event result', '-------------', '');
+    for($i = 1; $i <= 10; $i++) {
+        $triangle = [];
+
+        for($j = 1; $j <= $i; $j++) {
+            $triangle[] = $j;
+        }
+
+        dump(implode(' ', $triangle));
+
+        // Get a lap (returns the current event to be used if you like!)
+        $stopwatch->lap('triangle_numbers_event');
+    }
+    
+    // Stop the event
+    $stopwatch->stop('triangle_numbers_event');
+
+    // Start a new event assigning the category "numbers"
+    $stopwatch->start('magic_square', 'numbers');
+
+    // Execute some code
+    dump('magic_square result', '-------------', '');
+    $order = 5;
+
+    for ($row = 0; $row < $order; $row++) {
+        $rows = [];
+        for ($col = 0; $col < $order; $col++) {
+            $rowMatrix = ((($order + 1) / 2 + $row + $col) % $order);
+            $colMatrix = ((($order + 1) / 2 + $row + $order - $col - 1) % $order) + 1;
+
+            $rows[] = $rowMatrix * $order + $colMatrix;
+        }
+
+        dump(implode(' ', $rows));
+
+        // Get a lap (returns the current event to be used if you like!)
+        $stopwatch->lap('magic_square');
+    }
+
+    // Stop the event
+    $stopwatch->stop('magic_square');
+
+    // Stop the section assigning it a name (yes, when closing, not when opening!)
+    $stopwatch->stopSection('triangle_numbersand_magic_square');
+
+
+    dd($stopwatch);
+```
+
+You can reopen a closed section by calling `$stopwatch::openSection('section_name')`.
+
+So, for example, if we would like to add to the section `fibonacci_and_squares` another `Event`, we do:
+
+    $stopwatch->openSection('fibonacci_and_squares');
+    
+    // Start another event, execute other code...
+    
+    // Stop the event and then stop the section again
+
+### Memory
+
+As told, measuring memory in PHP is task not so simple and also not so precise.
+
+Using the `Stopwatch` component itself, you consume memory (a really small amount, but anyway an amount!), so when measuring the memory consumption you get cumulative results.
+
+This means, for example, that if you run two scripts on your server and measure memory only from one, the memory measurements you get are anyway influenced by the other not measured script.
+
+Take this into account when reading the results of the `Stopwatch`.
+
+If you want to get more accurate measurements, you should consider using a more advanced tool for profiling like Blackfire that can be used also in production.
+
+There are other caveats, too, but this is the most important one.
+
+In long running processes, where you need to profile a lot of code in a long period of time, the ´Stopwatch` component may become very "fat" as it stores a lot of `Event`s, `Period`s and maybe of `Section`s.
+
+In such situation maybe useful to optimize the amount of memory used by PHP ánd so, by `Stopwatch` too).
+
+So, if you like, you can call `$stopwatch->reset()` method to erease from the `Stopwatch` object all the information collected, freeing up memory.
+
+Obviously, once called, the information collected until that moment will not be available anymore, so it is a good idea to "save" them somewhere (in the database, in the logs or anywhere else).
 
 Resources
 ---------
