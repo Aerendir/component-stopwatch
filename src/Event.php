@@ -13,6 +13,8 @@
 
 namespace SerendipityHQ\Component\Stopwatch;
 
+use SerendipityHQ\Component\Stopwatch\Properties\OriginTrait;
+
 /**
  * Represents an Event managed by Stopwatch.
  *
@@ -21,27 +23,25 @@ namespace SerendipityHQ\Component\Stopwatch;
  */
 class Event
 {
-    /** @var Period[] $periods */
-    private $periods = [];
-
-    /** @var float $origin */
-    private $origin;
+    use OriginTrait;
 
     /** @var string $category */
     private $category;
 
-    /** @var float[] $started */
+    /** @var Period[] $started */
     private $started = [];
 
+    /** @var Period[] $periods */
+    private $periods = [];
+
     /**
-     * @param float       $origin   The origin time in milliseconds
      * @param string|null $category The event category or null to use the default
      *
      * @throws \InvalidArgumentException When the raw time is not valid
      */
-    public function __construct(float $origin, ?string $category = null)
+    public function __construct(?string $category = null)
     {
-        $this->origin   = $origin;
+        $this->initializeOrigins();
         $this->category = $category ?? 'default';
     }
 
@@ -53,16 +53,6 @@ class Event
     public function getCategory(): string
     {
         return $this->category;
-    }
-
-    /**
-     * Gets the origin.
-     *
-     * @return float The time at which the Event was created
-     */
-    public function getOrigin(): float
-    {
-        return $this->origin;
     }
 
     /**
@@ -82,7 +72,7 @@ class Event
      */
     public function getStartTime(): float
     {
-        return isset($this->periods[0]) ? $this->periods[0]->getStartTime() : 0;
+        return isset($this->getPeriods()[0]) ? $this->getPeriods()[0]->getTime()->getStartTime() : 0;
     }
 
     /**
@@ -92,30 +82,27 @@ class Event
      */
     public function getEndTime()
     {
-        $count = count($this->periods);
+        $count = count($this->getPeriods());
 
-        return $count ? $this->periods[$count - 1]->getEndTime() : 0;
+        return 0 === $count ? $this->getPeriods()[$count - 1]->getTime()->getEndTime() : 0;
     }
 
     /**
-     * Gets the duration of the events (including all periods).
+     * Gets the duration of the events (including all periods, both stopped and still measuring).
      *
-     * @return float|int The duration (in milliseconds)
+     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     *
+     * @return float The duration
      */
-    public function getDuration()
+    public function getDuration(bool $includeStarted = false): float
     {
-        $periods = $this->periods;
-        $stopped = count($periods);
-        $left    = count($this->started) - $stopped;
-
-        for ($i = 0; $i < $left; ++$i) {
-            $index     = $stopped + $i;
-            $periods[] = new Period($this->started[$index], $this->getNow());
-        }
+        $periods = $includeStarted ? $this->includeClonedStarted() : $this->getPeriods();
 
         $total = 0;
+
+        /** @var Period $period */
         foreach ($periods as $period) {
-            $total += $period->getDuration();
+            $total += $period->getTime()->getDuration();
         }
 
         return $total;
@@ -126,14 +113,19 @@ class Event
      *
      * Very similar to Event::getMemoryPeak().
      *
+     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     *
      * @return int The memory usage (in bytes)
      */
-    public function getMemory(): int
+    public function getMemory(bool $includeStarted = false): int
     {
+        $periods = $includeStarted ? $this->includeClonedStarted() : $this->getPeriods();
+
         $memory = 0;
-        foreach ($this->periods as $period) {
-            if ($period->getMemory() > $memory) {
-                $memory = $period->getMemory();
+
+        foreach ($periods as $period) {
+            if ($period->getMemory()->getEndMemory() > $memory) {
+                $memory = $period->getMemory()->getEndMemory();
             }
         }
 
@@ -145,14 +137,18 @@ class Event
      *
      * Very similar to Event::getMemoryPeakEmalloc().
      *
+     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     *
      * @return int The memory usage (in bytes)
      */
-    public function getMemoryCurrent(): int
+    public function getMemoryCurrent(bool $includeStarted = false): int
     {
+        $periods = $includeStarted ? $this->includeClonedStarted() : $this->getPeriods();
+
         $memoryCurrent = 0;
-        foreach ($this->periods as $period) {
-            if ($period->getMemoryCurrent() > $memoryCurrent) {
-                $memoryCurrent = $period->getMemoryCurrent();
+        foreach ($periods as $period) {
+            if ($period->getMemory()->getEndMemoryCurrent() > $memoryCurrent) {
+                $memoryCurrent = $period->getMemory()->getEndMemoryCurrent();
             }
         }
 
@@ -162,14 +158,18 @@ class Event
     /**
      * Of all periods, gets the max peak amount of memory assigned to PHP.
      *
+     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     *
      * @return int The memory usage (in bytes)
      */
-    public function getMemoryPeak(): int
+    public function getMemoryPeak(bool $includeStarted = false): int
     {
+        $periods = $includeStarted ? $this->includeClonedStarted() : $this->getPeriods();
+
         $memoryPeak = 0;
-        foreach ($this->periods as $period) {
-            if ($period->getMemoryPeak() > $memoryPeak) {
-                $memoryPeak = $period->getMemoryPeak();
+        foreach ($periods as $period) {
+            if ($period->getMemory()->getEndMemoryPeak() > $memoryPeak) {
+                $memoryPeak = $period->getMemory()->getEndMemoryPeak();
             }
         }
 
@@ -179,14 +179,18 @@ class Event
     /**
      * Of all periods, gets the max amount of memory assigned to PHP and used by emalloc().
      *
+     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     *
      * @return int The memory usage (in bytes)
      */
-    public function getMemoryPeakEmalloc(): int
+    public function getMemoryPeakEmalloc(bool $includeStarted = false): int
     {
+        $periods = $includeStarted ? $this->includeClonedStarted() : $this->getPeriods();
+
         $memoryPeakCurrent = 0;
-        foreach ($this->periods as $period) {
-            if ($period->getMemoryPeakEmalloc() > $memoryPeakCurrent) {
-                $memoryPeakCurrent = $period->getMemoryPeakEmalloc();
+        foreach ($periods as $period) {
+            if ($period->getMemory()->getEndMemoryPeakEmalloc() > $memoryPeakCurrent) {
+                $memoryPeakCurrent = $period->getMemory()->getEndMemoryPeakEmalloc();
             }
         }
 
@@ -198,7 +202,7 @@ class Event
      */
     public function ensureStopped(): void
     {
-        while (count($this->started)) {
+        while (0 !== count($this->started)) {
             $this->stop();
         }
     }
@@ -212,7 +216,7 @@ class Event
      */
     public function start(): Event
     {
-        $this->started[] = $this->getNow();
+        $this->started[] = new Period();
 
         return $this;
     }
@@ -228,11 +232,17 @@ class Event
      */
     public function stop(): Event
     {
-        if ( ! count($this->started)) {
+        if (0 === count($this->started)) {
             throw new \LogicException('stop() called but start() has not been called before.');
         }
 
-        $this->periods[] = new Period(array_pop($this->started), $this->getNow());
+        /** @var Period $period */
+        $period = array_pop($this->started);
+
+        $this->periods[] = $period->stop();
+
+        $this->originTime->stop();
+        $this->originMemory->stop();
 
         return $this;
     }
@@ -262,20 +272,22 @@ class Event
     }
 
     /**
-     * Return the current time relative to origin.
-     *
-     * @return float Time in ms
+     * @return array
      */
-    protected function getNow(): float
+    private function includeClonedStarted(): array
     {
-        return microtime(true) - $this->origin;
-    }
+        $periods = $this->getPeriods();
 
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return sprintf('%s: %.2F MiB - %d ms', $this->getCategory(), $this->getMemory() / 1024 / 1024, $this->getDuration());
+        $stopped = count($periods);
+        $left    = count($this->started) - $stopped;
+
+        for ($i = 0; $i < $left; ++$i) {
+            $index = $stopped + $i;
+            // Clone the Period to not really close it
+            $period    = clone $this->started[$index];
+            $periods[] = $period->stop();
+        }
+
+        return $periods;
     }
 }

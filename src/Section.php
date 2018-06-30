@@ -13,6 +13,8 @@
 
 namespace SerendipityHQ\Component\Stopwatch;
 
+use SerendipityHQ\Component\Stopwatch\Properties\OriginTrait;
+
 /**
  * Stopwatch section.
  *
@@ -20,42 +22,41 @@ namespace SerendipityHQ\Component\Stopwatch;
  */
 class Section
 {
+    use OriginTrait;
+
     /** @var Event[] $events */
     private $events = [];
 
-    /** @var float|null $origin */
-    private $origin;
-
-    /** @var string $id */
+    /** @var string|null $id */
     private $id;
 
     /** @var Section[] $children */
     private $children = [];
 
     /**
-     * @param float|null $origin Set the origin of the events in this section, use null to set their origin to their start time
+     * @return string The identifier of the section
      */
-    public function __construct(float $origin = null)
+    public function getId(): string
     {
-        $this->origin = $origin;
+        if (null === $this->id) {
+            throw new \LogicException('This Section is not yet closed. You cannot get its ID until you close it for the first time.');
+        }
+
+        return $this->id;
     }
 
     /**
-     * Returns the child section.
+     * Sets the Section identifier.
      *
-     * @param string $id The child section identifier
+     * @param string $id The Section identifier
      *
-     * @return Section|null The child section or null when none found
+     * @return Section
      */
-    public function get(string $id): ?Section
+    public function stopSection(string $id): Section
     {
-        foreach ($this->children as $child) {
-            if ($id === $child->getId()) {
-                return $child;
-            }
-        }
+        $this->id = $id;
 
-        return null;
+        return $this;
     }
 
     /**
@@ -65,40 +66,32 @@ class Section
      *
      * @return Section
      */
-    public function open(?string $id = null): Section
+    public function openChildSection(?string $id = null): Section
     {
         // If no id is passed or if the Section is not already created, create a new Section
-        if (null === $id) {
-            return $section = $this->children[] = new self(microtime(true));
+        if (null === $id || null === $this->getChildSection($id)) {
+            return $section = $this->children[] = new self();
         }
 
-        if (null === $this->get($id)) {
-            return $section = $this->children[] = new self(microtime(true));
-        }
-
-        return $this->get($id);
+        return $this->getChildSection($id);
     }
 
     /**
-     * @return string The identifier of the section
-     */
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    /**
-     * Sets the session identifier.
+     * Returns the child section.
      *
-     * @param string $id The session identifier
+     * @param string $id The child section identifier
      *
-     * @return Section
+     * @return Section|null The child section or null when none found
      */
-    public function setId(string $id): Section
+    public function getChildSection(string $id): ?Section
     {
-        $this->id = $id;
+        foreach ($this->children as $child) {
+            if ($id === $child->getId()) {
+                return $child;
+            }
+        }
 
-        return $this;
+        return null;
     }
 
     /**
@@ -111,8 +104,14 @@ class Section
      */
     public function startEvent(string $name, ?string $category = null): Event
     {
+        // If this is the first event started...
+        if (0 === count($this->events)) {
+            // ... initialize the origins to get the origins set at the moment Stopwatch is used the very first time
+            $this->initializeOrigins();
+        }
+
         if ( ! isset($this->events[$name])) {
-            $this->events[$name] = new Event($this->origin ?: microtime(true), $category);
+            $this->events[$name] = new Event($category);
         }
 
         return $this->events[$name]->start();

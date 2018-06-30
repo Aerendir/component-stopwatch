@@ -21,6 +21,11 @@ namespace SerendipityHQ\Component\Stopwatch;
  */
 class Stopwatch
 {
+    private const SECTION = '__section__';
+    private const SECTION_ROOT = '__root__';
+    private const SECTION_CHILD = '__section__.child';
+    private const SECTION_CATEGORY = 'section';
+
     /** @var Section[] $sections */
     private $sections;
 
@@ -45,7 +50,7 @@ class Stopwatch
      */
     public function start(string $name, string $category = null): Event
     {
-        return end($this->activeSections)->startEvent($name, $category);
+        return $this->getCurrentSection()->startEvent($name, $category);
     }
 
     /**
@@ -57,7 +62,7 @@ class Stopwatch
      */
     public function stop(string $name): Event
     {
-        return end($this->activeSections)->stopEvent($name);
+        return $this->getCurrentSection()->stopEvent($name);
     }
 
     /**
@@ -69,7 +74,7 @@ class Stopwatch
      */
     public function lap(string $name): Event
     {
-        return end($this->activeSections)->stopEvent($name)->start();
+        return $this->getCurrentSection()->stopEvent($name)->start();
     }
 
     /**
@@ -81,7 +86,7 @@ class Stopwatch
      */
     public function getEvent(string $name): Event
     {
-        return end($this->activeSections)->getEvent($name);
+        return $this->getCurrentSection()->getEvent($name);
     }
 
     /**
@@ -93,7 +98,7 @@ class Stopwatch
      */
     public function isStarted(string $name): bool
     {
-        return end($this->activeSections)->isEventStarted($name);
+        return $this->getCurrentSection()->isEventStarted($name);
     }
 
     /**
@@ -105,7 +110,7 @@ class Stopwatch
      */
     public function getSectionEvents(string $id): array
     {
-        return isset($this->sections[$id]) ? $this->sections[$id]->getEvents() : [];
+        return $this->hasSection($id) ? $this->getSection($id)->getEvents() : [];
     }
 
     /**
@@ -117,16 +122,13 @@ class Stopwatch
      */
     public function openSection(?string $id = null): void
     {
-        /** @var Section $current */
-        $current = end($this->activeSections);
-
-        if (null !== $id && null === $current->get($id)) {
+        if (null !== $id && null === $this->getCurrentSection()->getChildSection($id)) {
             throw new \LogicException(sprintf('The section "%s" has been started at an other level and can not be opened.', $id));
         }
 
-        $this->start('__section__.child', 'section');
-        $this->activeSections[] = $current->open($id);
-        $this->start('__section__');
+        $this->start(self::SECTION_CHILD, self::SECTION_CATEGORY);
+        $this->activeSections[] = $this->getCurrentSection()->openChildSection($id);
+        $this->start(self::SECTION);
     }
 
     /**
@@ -142,14 +144,17 @@ class Stopwatch
      */
     public function stopSection(string $id): void
     {
-        $this->stop('__section__');
+        $this->stop(self::SECTION);
 
         if (1 === count($this->activeSections)) {
             throw new \LogicException('There is no started section to stop.');
         }
+        
+        /** @var Section $section */
+        $section = array_pop($this->activeSections);
 
-        $this->sections[$id] = array_pop($this->activeSections)->setId($id);
-        $this->stop('__section__.child');
+        $this->sections[$id] = $section->closeSection($id);
+        $this->stop(self::SECTION_CHILD);
     }
 
     /**
@@ -189,6 +194,14 @@ class Stopwatch
      */
     public function reset(): void
     {
-        $this->sections = $this->activeSections = ['__root__' => new Section(null)];
+        $this->sections = $this->activeSections = [self::SECTION_ROOT => new Section()];
+    }
+
+    /**
+     * @return Section
+     */
+    private function getCurrentSection():Section
+    {
+        return end($this->activeSections);
     }
 }

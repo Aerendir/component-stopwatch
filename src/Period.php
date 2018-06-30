@@ -13,6 +13,9 @@
 
 namespace SerendipityHQ\Component\Stopwatch;
 
+use SerendipityHQ\Component\Stopwatch\Properties\Memory;
+use SerendipityHQ\Component\Stopwatch\Properties\Time;
+
 /**
  * Represents an Period for an Event.
  *
@@ -21,105 +24,81 @@ namespace SerendipityHQ\Component\Stopwatch;
  */
 class Period
 {
-    /** @var float|int $start */
-    private $start;
+    /** @var Time $time */
+    private $time;
 
-    /** @var float|int $end */
-    private $end;
-
-    /** @var int $memory The amount of memory assigned to PHP */
+    /** @var Memory $memory */
     private $memory;
 
-    /** @var int $memoryCurrent Of the memory assigned to PHP, the amount of memory currently consumed by the script */
-    private $memoryCurrent;
-
-    /** @var int $memoryPeak The max amount of memory assigned to PHP */
-    private $memoryPeak;
-
-    /** @var int $memoryPeakEmalloc The max amount of memory assigned to PHP and used by emalloc() */
-    private $memoryPeakEmalloc;
-
     /**
-     * @param float $start The relative time of the start of the period (in milliseconds)
-     * @param float $end   The relative time of the end of the period (in milliseconds)
+     * Initializes the Period.
      */
-    public function __construct(float $start, float $end)
+    public function __construct()
     {
-        $this->start             = $start;
-        $this->end               = $end;
-        $this->memory            = memory_get_usage(true);
-        $this->memoryCurrent     = memory_get_usage();
-        $this->memoryPeak        = memory_get_peak_usage(true);
-        $this->memoryPeakEmalloc = memory_get_peak_usage();
+        $this->time   = new Time();
+        $this->memory = new Memory();
     }
 
     /**
-     * Gets the relative time of the start of the period.
-     *
-     * @return float The time (in milliseconds)
+     * @return Time
      */
-    public function getStartTime(): float
+    public function getTime(): Time
     {
-        return $this->start;
+        return $this->time;
     }
 
     /**
-     * Gets the relative time of the end of the period.
-     *
-     * @return float The time (in milliseconds)
+     * @return Memory
      */
-    public function getEndTime(): float
-    {
-        return $this->end;
-    }
-
-    /**
-     * Gets the time spent in this period.
-     *
-     * @return float The period duration (in milliseconds)
-     */
-    public function getDuration(): float
-    {
-        return $this->end - $this->start;
-    }
-
-    /**
-     * Gets the memory assigned to PHP.
-     *
-     * @return int The memory usage (in bytes)
-     */
-    public function getMemory(): int
+    public function getMemory(): Memory
     {
         return $this->memory;
     }
 
     /**
-     * Of the memory assigned to PHP, gets the amount of memory currently used by the script.
+     * Stops the Period.
      *
-     * @return int
+     * @return Period
+     *
+     * @internal use Stopwatch::stop() or Stopwatch::stopSection()
      */
-    public function getMemoryCurrent(): int
+    public function stop(): Period
     {
-        return $this->memoryCurrent;
+        $this->getTime()->stop();
+        $this->getMemory()->stop();
+
+        return $this;
     }
 
     /**
-     * Gets the max amount of memory assigned to PHP.
-     *
-     * @return int
+     * @return bool
      */
-    public function getMemoryPeak(): int
+    public function isStopped(): bool
     {
-        return $this->memoryPeak;
+        return $this->getTime()->isStopped() && $this->getMemory()->isStopped();
     }
 
     /**
-     * Gets the max amount of memory used by emalloc().
-     *
-     * @return int
+     * @return Period
      */
-    public function getMemoryPeakEmalloc(): int
+    public function __clone()
     {
-        return $this->memoryPeakEmalloc;
+        // Save current objects
+        $oldTime   = $this->getTime();
+        $oldMemory = $this->getMemory();
+
+        // Assign cloned object to this Period
+        $this->memory = clone $this->getMemory();
+        $this->time   = clone $this->getTime();
+
+        // Clone this period (with already cloned time and memory)
+        $period = clone $this;
+
+        // Reassign old time and memory
+        $this->memory = $oldMemory;
+        $this->time   = $oldTime;
+
+        // Return the cloned Period
+        return $period;
     }
 }
