@@ -40,14 +40,13 @@ class Period
     private $memoryPeakEmalloc;
 
     /**
-     * @param float|int $start         The relative time of the start of the period (in milliseconds)
-     * @param float|int $end           The relative time of the end of the period (in milliseconds)
-     * @param bool      $morePrecision If true, time is stored as float to keep the original microsecond precision
+     * @param float $start The relative time of the start of the period (in milliseconds)
+     * @param float $end   The relative time of the end of the period (in milliseconds)
      */
-    public function __construct($start, $end, bool $morePrecision = false)
+    public function __construct(float $start, float $end)
     {
-        $this->start             = $morePrecision ? (float) $start : (int) $start;
-        $this->end               = $morePrecision ? (float) $end : (int) $end;
+        $this->start             = $start;
+        $this->end               = $end;
         $this->memory            = memory_get_usage(true);
         $this->memoryCurrent     = memory_get_usage();
         $this->memoryPeak        = memory_get_peak_usage(true);
@@ -57,9 +56,9 @@ class Period
     /**
      * Gets the relative time of the start of the period.
      *
-     * @return float|int The time (in milliseconds)
+     * @return float The time (in milliseconds)
      */
-    public function getStartTime()
+    public function getStartTime(): float
     {
         return $this->start;
     }
@@ -67,9 +66,9 @@ class Period
     /**
      * Gets the relative time of the end of the period.
      *
-     * @return float|int The time (in milliseconds)
+     * @return float The time (in milliseconds)
      */
-    public function getEndTime()
+    public function getEndTime(): float
     {
         return $this->end;
     }
@@ -77,9 +76,9 @@ class Period
     /**
      * Gets the time spent in this period.
      *
-     * @return float|int The period duration (in milliseconds)
+     * @return float The period duration (in milliseconds)
      */
-    public function getDuration()
+    public function getDuration(): float
     {
         return $this->end - $this->start;
     }
@@ -89,7 +88,7 @@ class Period
      *
      * @return int The memory usage (in bytes)
      */
-    public function getMemory()
+    public function getMemory(): int
     {
         return $this->memory;
     }

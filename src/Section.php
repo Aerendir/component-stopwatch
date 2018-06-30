@@ -20,39 +20,24 @@ namespace SerendipityHQ\Component\Stopwatch;
  */
 class Section
 {
-    /**
-     * @var StopwatchEvent[]
-     */
+    /** @var Event[] $events */
     private $events = [];
 
-    /**
-     * @var float|null
-     */
+    /** @var float|null $origin */
     private $origin;
 
-    /**
-     * @var bool
-     */
-    private $morePrecision;
-
-    /**
-     * @var string
-     */
+    /** @var string $id */
     private $id;
 
-    /**
-     * @var Section[]
-     */
+    /** @var Section[] $children */
     private $children = [];
 
     /**
-     * @param float|null $origin        Set the origin of the events in this section, use null to set their origin to their start time
-     * @param bool       $morePrecision If true, time is stored as float to keep the original microsecond precision
+     * @param float|null $origin Set the origin of the events in this section, use null to set their origin to their start time
      */
-    public function __construct(float $origin = null, bool $morePrecision = false)
+    public function __construct(float $origin = null)
     {
-        $this->origin        = $origin;
-        $this->morePrecision = $morePrecision;
+        $this->origin = $origin;
     }
 
     /**
@@ -60,15 +45,17 @@ class Section
      *
      * @param string $id The child section identifier
      *
-     * @return self|null The child section or null when none found
+     * @return Section|null The child section or null when none found
      */
-    public function get($id)
+    public function get(string $id): ?Section
     {
         foreach ($this->children as $child) {
             if ($id === $child->getId()) {
                 return $child;
             }
         }
+
+        return null;
     }
 
     /**
@@ -76,21 +63,26 @@ class Section
      *
      * @param string|null $id Null to create a new section, the identifier to re-open an existing one
      *
-     * @return self
+     * @return Section
      */
-    public function open($id)
+    public function open(?string $id = null): Section
     {
-        if (null === $session = $this->get($id)) {
-            $session = $this->children[] = new self(microtime(true) * 1000, $this->morePrecision);
+        // If no id is passed or if the Section is not already created, create a new Section
+        if (null === $id) {
+            return $section = $this->children[] = new self(microtime(true));
         }
 
-        return $session;
+        if (null === $this->get($id)) {
+            return $section = $this->children[] = new self(microtime(true));
+        }
+
+        return $this->get($id);
     }
 
     /**
      * @return string The identifier of the section
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -100,9 +92,9 @@ class Section
      *
      * @param string $id The session identifier
      *
-     * @return $this
+     * @return Section
      */
-    public function setId($id)
+    public function setId(string $id): Section
     {
         $this->id = $id;
 
@@ -112,15 +104,15 @@ class Section
     /**
      * Starts an event.
      *
-     * @param string $name     The event name
-     * @param string $category The event category
+     * @param string      $name     The event name
+     * @param string|null $category The event category
      *
-     * @return StopwatchEvent The event
+     * @return Event The event
      */
-    public function startEvent($name, $category)
+    public function startEvent(string $name, ?string $category = null): Event
     {
         if ( ! isset($this->events[$name])) {
-            $this->events[$name] = new StopwatchEvent($this->origin ?: microtime(true) * 1000, $category, $this->morePrecision);
+            $this->events[$name] = new Event($this->origin ?: microtime(true), $category);
         }
 
         return $this->events[$name]->start();
@@ -133,7 +125,7 @@ class Section
      *
      * @return bool
      */
-    public function isEventStarted($name)
+    public function isEventStarted(string $name): bool
     {
         return isset($this->events[$name]) && $this->events[$name]->isStarted();
     }
@@ -145,9 +137,9 @@ class Section
      *
      * @throws \LogicException When the event has not been started
      *
-     * @return StopwatchEvent The event
+     * @return Event The event
      */
-    public function stopEvent($name)
+    public function stopEvent(string $name): Event
     {
         if ( ! isset($this->events[$name])) {
             throw new \LogicException(sprintf('Event "%s" is not started.', $name));
@@ -163,9 +155,9 @@ class Section
      *
      * @throws \LogicException When the event has not been started
      *
-     * @return StopwatchEvent The event
+     * @return Event The event
      */
-    public function lap($name)
+    public function lap(string $name): Event
     {
         return $this->stopEvent($name)->start();
     }
@@ -177,9 +169,9 @@ class Section
      *
      * @throws \LogicException When the event is not known
      *
-     * @return StopwatchEvent The event
+     * @return Event The event
      */
-    public function getEvent($name)
+    public function getEvent(string $name): Event
     {
         if ( ! isset($this->events[$name])) {
             throw new \LogicException(sprintf('Event "%s" is not known.', $name));
@@ -191,9 +183,9 @@ class Section
     /**
      * Returns the events from this section.
      *
-     * @return StopwatchEvent[] An array of StopwatchEvent instances
+     * @return Event[] An array of Event instances
      */
-    public function getEvents()
+    public function getEvents(): array
     {
         return $this->events;
     }

@@ -14,9 +14,9 @@
 namespace SerendipityHQ\Component\Stopwatch\Tests;
 
 use PHPUnit\Framework\TestCase;
+use SerendipityHQ\Component\Stopwatch\Event;
 use SerendipityHQ\Component\Stopwatch\Section;
 use SerendipityHQ\Component\Stopwatch\Stopwatch;
-use SerendipityHQ\Component\Stopwatch\StopwatchEvent;
 
 /**
  * StopwatchTest.
@@ -27,14 +27,14 @@ use SerendipityHQ\Component\Stopwatch\StopwatchEvent;
  */
 class StopwatchTest extends TestCase
 {
-    const DELTA = 20;
+    const DELTA = 0.003;
 
     public function testStart()
     {
         $stopwatch = new Stopwatch();
         $event     = $stopwatch->start('foo', 'cat');
 
-        self::assertInstanceOf(StopwatchEvent::class, $event);
+        self::assertInstanceOf(Event::class, $event);
         self::assertEquals('cat', $event->getCategory());
         self::assertSame($event, $stopwatch->getEvent('foo'));
     }
@@ -68,7 +68,7 @@ class StopwatchTest extends TestCase
         $events = new \ReflectionProperty(Section::class, 'events');
         $events->setAccessible(true);
 
-        $stopwatchMockEvent = $this->getMockBuilder(StopwatchEvent::class)
+        $stopwatchMockEvent = $this->getMockBuilder(Event::class)
             ->setConstructorArgs([microtime(true) * 1000])
             ->getMock();
 
@@ -84,8 +84,8 @@ class StopwatchTest extends TestCase
         usleep(200000);
         $event = $stopwatch->stop('foo');
 
-        self::assertInstanceOf('SerendipityHQ\Component\Stopwatch\StopwatchEvent', $event);
-        self::assertEquals(200, $event->getDuration(), null, self::DELTA);
+        self::assertInstanceOf('SerendipityHQ\Component\Stopwatch\Event', $event);
+        self::assertEquals(0.204, $event->getDuration(), null, self::DELTA);
     }
 
     /**
@@ -104,18 +104,6 @@ class StopwatchTest extends TestCase
     {
         $stopwatch = new Stopwatch();
         $stopwatch->stop('foo');
-    }
-
-    public function testMorePrecision()
-    {
-        $stopwatch = new Stopwatch(true);
-
-        $stopwatch->start('foo');
-        $event = $stopwatch->stop('foo');
-
-        self::assertInternalType('float', $event->getStartTime());
-        self::assertInternalType('float', $event->getEndTime());
-        self::assertInternalType('float', $event->getDuration());
     }
 
     public function testSection()

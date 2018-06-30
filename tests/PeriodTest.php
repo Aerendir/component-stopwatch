@@ -25,12 +25,11 @@ class PeriodTest extends TestCase
      * @dataProvider provideTimeValues
      *
      * @param mixed $start
-     * @param mixed $useMorePrecision
      * @param mixed $expected
      */
-    public function testGetStartTime($start, $useMorePrecision, $expected)
+    public function testGetStartTime($start, $expected)
     {
-        $period = new Period($start, $start, $useMorePrecision);
+        $period = new Period($start, $start);
         self::assertSame($expected, $period->getStartTime());
     }
 
@@ -38,12 +37,11 @@ class PeriodTest extends TestCase
      * @dataProvider provideTimeValues
      *
      * @param mixed $end
-     * @param mixed $useMorePrecision
      * @param mixed $expected
      */
-    public function testGetEndTime($end, $useMorePrecision, $expected)
+    public function testGetEndTime($end, $expected)
     {
-        $period = new Period($end, $end, $useMorePrecision);
+        $period = new Period($end, $end);
         self::assertSame($expected, $period->getEndTime());
     }
 
@@ -52,40 +50,31 @@ class PeriodTest extends TestCase
      *
      * @param mixed $start
      * @param mixed $end
-     * @param mixed $useMorePrecision
      * @param mixed $duration
      */
-    public function testGetDuration($start, $end, $useMorePrecision, $duration)
+    public function testGetDuration($start, $end, $duration)
     {
-        $period = new Period($start, $end, $useMorePrecision);
+        $period = new Period($start, $end);
         self::assertSame($duration, $period->getDuration());
     }
 
     /**
      * @return \Generator
      */
-    public function provideTimeValues():\Generator
+    public function provideTimeValues(): \Generator
     {
-        yield [0, false, 0];
-        yield [0, true, 0.0];
-        yield [0.0, false, 0];
-        yield [0.0, true, 0.0];
-        yield [2.71, false, 2];
-        yield [2.71, true, 2.71];
+        yield [0.0, 0.0];
+        yield [2.71, 2.71];
     }
 
     /**
      * @return \Generator
      */
-    public function provideDurationValues():\Generator
+    public function provideDurationValues(): \Generator
     {
-        yield [0, 0, false, 0];
-        yield [0, 0, true, 0.0];
-        yield [0.0, 0.0, false, 0];
-        yield [0.0, 0.0, true, 0.0];
-        yield [2, 3.14, false, 1];
-        yield [2, 3.14, true, 1.14];
-        yield [2.71, 3.14, false, 1];
-        yield [2.71, 3.14, true, 0.43];
+        yield [0, 0, 0.0];
+        yield [0.0, 0.0, 0.0];
+        yield [2, 3.14, 1.14];
+        yield [2.71, 3.14, 0.43];
     }
 }

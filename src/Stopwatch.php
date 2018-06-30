@@ -21,9 +21,6 @@ namespace SerendipityHQ\Component\Stopwatch;
  */
 class Stopwatch
 {
-    /** @var bool $morePrecision */
-    private $morePrecision;
-
     /** @var Section[] $sections */
     private $sections;
 
@@ -31,11 +28,10 @@ class Stopwatch
     private $activeSections;
 
     /**
-     * @param bool $morePrecision If true, time is stored as float to keep the original microsecond precision
+     * Initializes the Stopwatch.
      */
-    public function __construct(bool $morePrecision = false)
+    public function __construct()
     {
-        $this->morePrecision = $morePrecision;
         $this->reset();
     }
 
@@ -45,9 +41,9 @@ class Stopwatch
      * @param string $name     The event name
      * @param string $category The event category
      *
-     * @return StopwatchEvent
+     * @return Event
      */
-    public function start(string $name, string $category = null): StopwatchEvent
+    public function start(string $name, string $category = null): Event
     {
         return end($this->activeSections)->startEvent($name, $category);
     }
@@ -57,9 +53,9 @@ class Stopwatch
      *
      * @param string $name The event name
      *
-     * @return StopwatchEvent
+     * @return Event
      */
-    public function stop(string $name): StopwatchEvent
+    public function stop(string $name): Event
     {
         return end($this->activeSections)->stopEvent($name);
     }
@@ -69,19 +65,47 @@ class Stopwatch
      *
      * @param string $name The event name
      *
-     * @return StopwatchEvent
+     * @return Event
      */
-    public function lap(string $name): StopwatchEvent
+    public function lap(string $name): Event
     {
         return end($this->activeSections)->stopEvent($name)->start();
     }
 
     /**
-     * @return Section[]
+     * Returns a specific event by name.
+     *
+     * @param string $name The event name
+     *
+     * @return Event
      */
-    public function getSections()
+    public function getEvent(string $name): Event
     {
-        return $this->sections;
+        return end($this->activeSections)->getEvent($name);
+    }
+
+    /**
+     * Checks if the event was started.
+     *
+     * @param string $name The event name
+     *
+     * @return bool
+     */
+    public function isStarted(string $name): bool
+    {
+        return end($this->activeSections)->isEventStarted($name);
+    }
+
+    /**
+     * Gets all events for a given section.
+     *
+     * @param string $id A section identifier
+     *
+     * @return Event[]
+     */
+    public function getSectionEvents(string $id): array
+    {
+        return isset($this->sections[$id]) ? $this->sections[$id]->getEvents() : [];
     }
 
     /**
@@ -91,8 +115,9 @@ class Stopwatch
      *
      * @throws \LogicException When the section to re-open is not reachable
      */
-    public function openSection($id = null)
+    public function openSection(?string $id = null): void
     {
+        /** @var Section $current */
         $current = end($this->activeSections);
 
         if (null !== $id && null === $current->get($id)) {
@@ -115,7 +140,7 @@ class Stopwatch
      *
      * @throws \LogicException When there's no started section to be stopped
      */
-    public function stopSection($id)
+    public function stopSection(string $id): void
     {
         $this->stop('__section__');
 
@@ -128,46 +153,42 @@ class Stopwatch
     }
 
     /**
-     * Checks if the event was started.
+     * @param string $id
      *
-     * @param string $name The event name
+     * @return Section
+     */
+    public function getSection(string $id): Section
+    {
+        if (false === $this->hasSection($id)) {
+            throw new \InvalidArgumentException(sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id));
+        }
+
+        return $this->sections[$id];
+    }
+
+    /**
+     * @return Section[]
+     */
+    public function getSections(): array
+    {
+        return $this->sections;
+    }
+
+    /**
+     * @param string $id
      *
      * @return bool
      */
-    public function isStarted($name)
+    public function hasSection(string $id): bool
     {
-        return end($this->activeSections)->isEventStarted($name);
-    }
-
-    /**
-     * Returns a specific event by name.
-     *
-     * @param string $name The event name
-     *
-     * @return StopwatchEvent
-     */
-    public function getEvent($name)
-    {
-        return end($this->activeSections)->getEvent($name);
-    }
-
-    /**
-     * Gets all events for a given section.
-     *
-     * @param string $id A section identifier
-     *
-     * @return StopwatchEvent[]
-     */
-    public function getSectionEvents($id)
-    {
-        return isset($this->sections[$id]) ? $this->sections[$id]->getEvents() : [];
+        return isset($this->sections[$id]);
     }
 
     /**
      * Resets the stopwatch to its original state.
      */
-    public function reset()
+    public function reset(): void
     {
-        $this->sections = $this->activeSections = ['__root__' => new Section(null, $this->morePrecision)];
+        $this->sections = $this->activeSections = ['__root__' => new Section(null)];
     }
 }

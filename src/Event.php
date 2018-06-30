@@ -19,45 +19,30 @@ namespace SerendipityHQ\Component\Stopwatch;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Adamo Crespi <hello@aerendir.me>
  */
-class StopwatchEvent
+class Event
 {
-    /**
-     * @var Period[]
-     */
+    /** @var Period[] $periods */
     private $periods = [];
 
-    /**
-     * @var float
-     */
+    /** @var float $origin */
     private $origin;
 
-    /**
-     * @var string
-     */
+    /** @var string $category */
     private $category;
 
-    /**
-     * @var bool
-     */
-    private $morePrecision;
-
-    /**
-     * @var float[]
-     */
+    /** @var float[] $started */
     private $started = [];
 
     /**
-     * @param float       $origin        The origin time in milliseconds
-     * @param string|null $category      The event category or null to use the default
-     * @param bool        $morePrecision If true, time is stored as float to keep the original microsecond precision
+     * @param float       $origin   The origin time in milliseconds
+     * @param string|null $category The event category or null to use the default
      *
      * @throws \InvalidArgumentException When the raw time is not valid
      */
-    public function __construct(float $origin, string $category = null, bool $morePrecision = false)
+    public function __construct(float $origin, ?string $category = null)
     {
-        $this->origin        = $this->formatTime($origin);
-        $this->category      = $category ?? 'default';
-        $this->morePrecision = $morePrecision;
+        $this->origin   = $origin;
+        $this->category = $category ?? 'default';
     }
 
     /**
@@ -65,7 +50,7 @@ class StopwatchEvent
      *
      * @return string The category
      */
-    public function getCategory():string
+    public function getCategory(): string
     {
         return $this->category;
     }
@@ -73,21 +58,11 @@ class StopwatchEvent
     /**
      * Gets the origin.
      *
-     * @return float The origin in milliseconds
+     * @return float The time at which the Event was created
      */
-    public function getOrigin():float
+    public function getOrigin(): float
     {
         return $this->origin;
-    }
-
-    /**
-     * Checks if the event was started.
-     *
-     * @return bool
-     */
-    public function isStarted():bool
-    {
-        return ! empty($this->started);
     }
 
     /**
@@ -95,7 +70,7 @@ class StopwatchEvent
      *
      * @return Period[] An array of Period instances
      */
-    public function getPeriods():array
+    public function getPeriods(): array
     {
         return $this->periods;
     }
@@ -103,9 +78,9 @@ class StopwatchEvent
     /**
      * Gets the relative time of the start of the first period.
      *
-     * @return float|int The time (in milliseconds)
+     * @return float The start time of the very first Period
      */
-    public function getStartTime()
+    public function getStartTime(): float
     {
         return isset($this->periods[0]) ? $this->periods[0]->getStartTime() : 0;
     }
@@ -135,7 +110,7 @@ class StopwatchEvent
 
         for ($i = 0; $i < $left; ++$i) {
             $index     = $stopped + $i;
-            $periods[] = new Period($this->started[$index], $this->getNow(), $this->morePrecision);
+            $periods[] = new Period($this->started[$index], $this->getNow());
         }
 
         $total = 0;
@@ -149,11 +124,11 @@ class StopwatchEvent
     /**
      * Of all periods, gets the max memory amount assigned to PHP.
      *
-     * Very similar to StopwatchEvent::getMemoryPeak().
+     * Very similar to Event::getMemoryPeak().
      *
      * @return int The memory usage (in bytes)
      */
-    public function getMemory():int
+    public function getMemory(): int
     {
         $memory = 0;
         foreach ($this->periods as $period) {
@@ -168,11 +143,11 @@ class StopwatchEvent
     /**
      * Of all periods, gets the max amount of memory used by the script.
      *
-     * Very similar to StopwatchEvent::getMemoryPeakEmalloc().
+     * Very similar to Event::getMemoryPeakEmalloc().
      *
      * @return int The memory usage (in bytes)
      */
-    public function getMemoryCurrent():int
+    public function getMemoryCurrent(): int
     {
         $memoryCurrent = 0;
         foreach ($this->periods as $period) {
@@ -185,11 +160,11 @@ class StopwatchEvent
     }
 
     /**
-     * Of all periods, gets the max amount of memory assigned to PHP.
+     * Of all periods, gets the max peak amount of memory assigned to PHP.
      *
      * @return int The memory usage (in bytes)
      */
-    public function getMemoryPeak():int
+    public function getMemoryPeak(): int
     {
         $memoryPeak = 0;
         foreach ($this->periods as $period) {
@@ -206,7 +181,7 @@ class StopwatchEvent
      *
      * @return int The memory usage (in bytes)
      */
-    public function getMemoryPeakEmalloc():int
+    public function getMemoryPeakEmalloc(): int
     {
         $memoryPeakCurrent = 0;
         foreach ($this->periods as $period) {
@@ -219,12 +194,23 @@ class StopwatchEvent
     }
 
     /**
+     * Stops all non already stopped periods.
+     */
+    public function ensureStopped(): void
+    {
+        while (count($this->started)) {
+            $this->stop();
+        }
+    }
+
+    /**
      * Starts a new event period.
      *
-     * @return StopwatchEvent
-     * @internal
+     * @return Event
+     *
+     * @internal Use the Stopwatch object instead
      */
-    public function start():StopwatchEvent
+    public function start(): Event
     {
         $this->started[] = $this->getNow();
 
@@ -236,16 +222,17 @@ class StopwatchEvent
      *
      * @throws \LogicException When stop() is called without a matching call to start()
      *
-     * @return StopwatchEvent
-     *              @internal
+     * @return Event
+     *
+     * @internal Use the Stopwatch object instead
      */
-    public function stop():StopwatchEvent
+    public function stop(): Event
     {
         if ( ! count($this->started)) {
             throw new \LogicException('stop() called but start() has not been called before.');
         }
 
-        $this->periods[] = new Period(array_pop($this->started), $this->getNow(), $this->morePrecision);
+        $this->periods[] = new Period(array_pop($this->started), $this->getNow());
 
         return $this;
     }
@@ -253,23 +240,25 @@ class StopwatchEvent
     /**
      * Stops the current period and then starts a new one.
      *
-     * @return StopwatchEvent
-     *              @internal
+     * @return Event
+     *
+     * @internal Use the Stopwatch object instead
      */
-    public function lap():StopwatchEvent
+    public function lap(): Event
     {
         return $this->stop()->start();
     }
 
     /**
-     * Stops all non already stopped periods.
+     * Checks if the event was started.
+     *
+     * @return bool
+     *
      * @internal
      */
-    public function ensureStopped():void
+    public function isStarted(): bool
     {
-        while (count($this->started)) {
-            $this->stop();
-        }
+        return ! empty($this->started);
     }
 
     /**
@@ -277,27 +266,9 @@ class StopwatchEvent
      *
      * @return float Time in ms
      */
-    protected function getNow():float
+    protected function getNow(): float
     {
-        return $this->formatTime(microtime(true) * 1000 - $this->origin);
-    }
-
-    /**
-     * Formats a time.
-     *
-     * @param float|int $time A raw time
-     *
-     * @throws \InvalidArgumentException When the raw time is not valid
-     *
-     * @return float The formatted time
-     */
-    private function formatTime($time):float
-    {
-        if ( ! is_numeric($time)) {
-            throw new \InvalidArgumentException('The time must be a numerical value');
-        }
-
-        return round($time, 1);
+        return microtime(true) - $this->origin;
     }
 
     /**

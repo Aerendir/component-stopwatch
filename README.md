@@ -61,13 +61,16 @@ Instead, use the simple `SerendipityHQ\Component\Stopwatch\Stopwatch` class:
     use Symfony\Component\Stopwatch\Stopwatch;
 
     // Initialize the class
+    $stopwatch = new Stopwatch();
+
+
+> Unlike the Symfony's Stopwatch Component that accepts a `true` parameter (`$morePrecision`), SerendipityHQ's Stopwatch Component
+always measures time with microsecond precision, so you don't need to pass any parameter to the constructor.
+
+    // This is the Symfony's Stopwatch way
     $stopwatch = new Stopwatch(true);
-
-
-> By default, the stopwatch truncates any sub-millisecond time measure to ``0``,
-so you can't measure microseconds or nanoseconds. If you need more precision,
-pass ``true`` to the ``Stopwatch`` class constructor to enable full precision::
-
+    
+    // This is the SerendipityHQ's Stopwatch way: always microseconds precision
     $stopwatch = new Stopwatch(true);
 
 Now you can start measurements:
