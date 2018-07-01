@@ -277,8 +277,10 @@ class Event
 
         for ($i = 0; $i < $left; ++$i) {
             $index = $stopped + $i;
+            $time = clone $this->started[$index]->getTime();
+            $memory = clone $this->started[$index]->getMemory();
             // Clone the Period to not really close it
-            $period    = clone $this->started[$index];
+            $period    = new Period($time, $memory);
             $periods[] = $period->stop();
         }
 

@@ -32,11 +32,17 @@ class Period
 
     /**
      * Initializes the Period.
+     *
+     * Time and Memory objects are passed when the Event has to
+     * calculate some measurement including not still stopped Periods.
+     *
+     * @param Time|null   $time
+     * @param Memory|null $memory
      */
-    public function __construct()
+    public function __construct(Time $time = null, Memory $memory = null)
     {
-        $this->time   = new Time();
-        $this->memory = new Memory();
+        $this->time   = $time ?? new Time();
+        $this->memory = $memory ?? new Memory();
     }
 
     /**
@@ -76,29 +82,5 @@ class Period
     public function isStopped(): bool
     {
         return $this->getTime()->isStopped() && $this->getMemory()->isStopped();
-    }
-
-    /**
-     * @return Period
-     */
-    public function __clone()
-    {
-        // Save current objects
-        $oldTime   = $this->getTime();
-        $oldMemory = $this->getMemory();
-
-        // Assign cloned object to this Period
-        $this->memory = clone $this->getMemory();
-        $this->time   = clone $this->getTime();
-
-        // Clone this period (with already cloned time and memory)
-        $period = clone $this;
-
-        // Reassign old time and memory
-        $this->memory = $oldMemory;
-        $this->time   = $oldTime;
-
-        // Return the cloned Period
-        return $period;
     }
 }
