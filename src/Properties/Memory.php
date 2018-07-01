@@ -49,7 +49,7 @@ class Memory
      */
     public function __construct()
     {
-        $memories = self::measure();
+        $memories                     = self::measure();
         $this->startMemory            = $memories['memory_get_usage_true'];
         $this->startMemoryCurrent     = $memories['memory_get_usage'];
         $this->startMemoryPeak        = $memories['memory_get_peak_usage_true'];
@@ -59,13 +59,13 @@ class Memory
     /**
      * @return array
      */
-    public static function measure():array
+    public static function measure(): array
     {
         return [
-            'memory_get_usage_true' => memory_get_usage(true),
-            'memory_get_usage' => memory_get_usage(),
+            'memory_get_usage_true'      => memory_get_usage(true),
+            'memory_get_usage'           => memory_get_usage(),
             'memory_get_peak_usage_true' => memory_get_peak_usage(true),
-            'memory_get_peak_usage' => memory_get_peak_usage()
+            'memory_get_peak_usage'      => memory_get_peak_usage(),
         ];
     }
 
@@ -156,7 +156,7 @@ class Memory
      */
     public function stop(): void
     {
-        $memories = self::measure();
+        $memories                   = self::measure();
         $this->endMemory            = $memories['memory_get_usage_true'];
         $this->endMemoryCurrent     = $memories['memory_get_usage'];
         $this->endMemoryPeak        = $memories['memory_get_peak_usage_true'];

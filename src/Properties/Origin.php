@@ -1,5 +1,16 @@
 <?php
 
+/*
+ *
+ * This file is part of the Serendipity HQ Stopwatch Component.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ * (c) Adamo Crespi <hello@aerendir.me>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with the Symfony Framework.
+ */
+
 namespace SerendipityHQ\Component\Stopwatch\Properties;
 
 /**

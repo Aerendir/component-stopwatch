@@ -226,7 +226,7 @@ class Stopwatch
     /**
      * @return Section
      */
-    private function getCurrentSection():Section
+    private function getCurrentSection(): Section
     {
         return end($this->activeSections);
     }

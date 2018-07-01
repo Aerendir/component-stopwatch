@@ -48,6 +48,7 @@ class Section
      * @param string $id The Section identifier
      *
      * @return Section
+     *
      * @internal
      */
     public function stopSection(string $id): Section
@@ -65,6 +66,7 @@ class Section
      * @param string|null $id Null to create a new section, the identifier to re-open an existing one
      *
      * @return Section
+     *
      * @internal
      */
     public function openChildSection(?string $id = null): Section
@@ -85,6 +87,7 @@ class Section
      * @param string $id The child section identifier
      *
      * @return Section|null The child section or null when none found
+     *
      * @internal
      */
     public function getChildSection(string $id): ?Section
@@ -105,6 +108,7 @@ class Section
      * @param string|null $category The event category
      *
      * @return Event The event
+     *
      * @internal
      */
     public function startEvent(string $name, ?string $category = null): Event
@@ -122,6 +126,7 @@ class Section
      * @param string $name The event name
      *
      * @return bool
+     *
      * @internal
      */
     public function isEventStarted(string $name): bool
@@ -137,6 +142,7 @@ class Section
      * @throws \LogicException When the event has not been started
      *
      * @return Event The event
+     *
      * @internal
      */
     public function stopEvent(string $name): Event
@@ -156,6 +162,7 @@ class Section
      * @throws \LogicException When the event has not been started
      *
      * @return Event The event
+     *
      * @internal
      */
     public function lap(string $name): Event
@@ -171,6 +178,7 @@ class Section
      * @throws \LogicException When the event is not known
      *
      * @return Event The event
+     *
      * @internal
      */
     public function getEvent(string $name): Event
@@ -186,6 +194,7 @@ class Section
      * Returns the events recorded by this Section.
      *
      * @return Event[] All the Events recored by this Section
+     *
      * @internal
      */
     public function getEvents(): array

@@ -13,8 +13,6 @@
 
 namespace SerendipityHQ\Component\Stopwatch;
 
-use SerendipityHQ\Component\Stopwatch\Properties\Origin;
-
 /**
  * Represents an Event managed by Stopwatch.
  *
@@ -276,8 +274,8 @@ class Event
         $left    = count($this->started) - $stopped;
 
         for ($i = 0; $i < $left; ++$i) {
-            $index = $stopped + $i;
-            $time = clone $this->started[$index]->getTime();
+            $index  = $stopped + $i;
+            $time   = clone $this->started[$index]->getTime();
             $memory = clone $this->started[$index]->getMemory();
             // Clone the Period to not really close it
             $period    = new Period($time, $memory);
