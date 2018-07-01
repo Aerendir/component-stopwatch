@@ -49,10 +49,24 @@ class Memory
      */
     public function __construct()
     {
-        $this->startMemory            = memory_get_usage(true);
-        $this->startMemoryCurrent     = memory_get_usage();
-        $this->startMemoryPeak        = memory_get_peak_usage(true);
-        $this->startMemoryPeakEmalloc = memory_get_peak_usage();
+        $memories = self::measure();
+        $this->startMemory            = $memories['memory_get_usage_true'];
+        $this->startMemoryCurrent     = $memories['memory_get_usage'];
+        $this->startMemoryPeak        = $memories['memory_get_peak_usage_true'];
+        $this->startMemoryPeakEmalloc = $memories['memory_get_peak_usage'];
+    }
+
+    /**
+     * @return array
+     */
+    public static function measure():array
+    {
+        return [
+            'memory_get_usage_true' => memory_get_usage(true),
+            'memory_get_usage' => memory_get_usage(),
+            'memory_get_peak_usage_true' => memory_get_peak_usage(true),
+            'memory_get_peak_usage' => memory_get_peak_usage()
+        ];
     }
 
     /**
@@ -142,10 +156,11 @@ class Memory
      */
     public function stop(): void
     {
-        $this->endMemory            = memory_get_usage(true);
-        $this->endMemoryCurrent     = memory_get_usage();
-        $this->endMemoryPeak        = memory_get_peak_usage(true);
-        $this->endMemoryPeakEmalloc = memory_get_peak_usage();
+        $memories = self::measure();
+        $this->endMemory            = $memories['memory_get_usage_true'];
+        $this->endMemoryCurrent     = $memories['memory_get_usage'];
+        $this->endMemoryPeak        = $memories['memory_get_peak_usage_true'];
+        $this->endMemoryPeakEmalloc = $memories['memory_get_peak_usage'];
     }
 
     /**
