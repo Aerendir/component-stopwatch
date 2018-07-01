@@ -53,11 +53,31 @@ class Event
     /**
      * Gets all event periods.
      *
+     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     *
      * @return Period[] An array of Period instances
      */
-    public function getPeriods(): array
+    public function getPeriods(bool $includeStarted = false): array
     {
-        return $this->periods;
+        if (false === $includeStarted) {
+            return $this->periods;
+        }
+
+        $periods = $this->periods;
+
+        $stopped = count($periods);
+        $left    = count($this->started) - $stopped;
+
+        for ($i = 0; $i < $left; ++$i) {
+            $index  = $stopped + $i;
+            $time   = clone $this->started[$index]->getTime();
+            $memory = clone $this->started[$index]->getMemory();
+            // Clone the Period to not really close it
+            $period    = new Period($time, $memory);
+            $periods[] = $period->stop();
+        }
+
+        return $periods;
     }
 
     /**
@@ -91,12 +111,10 @@ class Event
      */
     public function getDuration(bool $includeStarted = false): float
     {
-        $periods = $includeStarted ? $this->includeClonedStarted() : $this->getPeriods();
-
         $total = 0;
 
         /** @var Period $period */
-        foreach ($periods as $period) {
+        foreach ($this->getPeriods($includeStarted) as $period) {
             $total += $period->getTime()->getDuration();
         }
 
@@ -114,11 +132,9 @@ class Event
      */
     public function getMemory(bool $includeStarted = false): int
     {
-        $periods = $includeStarted ? $this->includeClonedStarted() : $this->getPeriods();
-
         $memory = 0;
 
-        foreach ($periods as $period) {
+        foreach ($this->getPeriods($includeStarted) as $period) {
             if ($period->getMemory()->getEndMemory() > $memory) {
                 $memory = $period->getMemory()->getEndMemory();
             }
@@ -138,10 +154,8 @@ class Event
      */
     public function getMemoryCurrent(bool $includeStarted = false): int
     {
-        $periods = $includeStarted ? $this->includeClonedStarted() : $this->getPeriods();
-
         $memoryCurrent = 0;
-        foreach ($periods as $period) {
+        foreach ($this->getPeriods($includeStarted) as $period) {
             if ($period->getMemory()->getEndMemoryCurrent() > $memoryCurrent) {
                 $memoryCurrent = $period->getMemory()->getEndMemoryCurrent();
             }
@@ -159,10 +173,8 @@ class Event
      */
     public function getMemoryPeak(bool $includeStarted = false): int
     {
-        $periods = $includeStarted ? $this->includeClonedStarted() : $this->getPeriods();
-
         $memoryPeak = 0;
-        foreach ($periods as $period) {
+        foreach ($this->getPeriods($includeStarted) as $period) {
             if ($period->getMemory()->getEndMemoryPeak() > $memoryPeak) {
                 $memoryPeak = $period->getMemory()->getEndMemoryPeak();
             }
@@ -180,10 +192,8 @@ class Event
      */
     public function getMemoryPeakEmalloc(bool $includeStarted = false): int
     {
-        $periods = $includeStarted ? $this->includeClonedStarted() : $this->getPeriods();
-
         $memoryPeakCurrent = 0;
-        foreach ($periods as $period) {
+        foreach ($this->getPeriods($includeStarted) as $period) {
             if ($period->getMemory()->getEndMemoryPeakEmalloc() > $memoryPeakCurrent) {
                 $memoryPeakCurrent = $period->getMemory()->getEndMemoryPeakEmalloc();
             }
@@ -261,27 +271,5 @@ class Event
     public function isStarted(): bool
     {
         return ! empty($this->started);
-    }
-
-    /**
-     * @return array
-     */
-    private function includeClonedStarted(): array
-    {
-        $periods = $this->getPeriods();
-
-        $stopped = count($periods);
-        $left    = count($this->started) - $stopped;
-
-        for ($i = 0; $i < $left; ++$i) {
-            $index  = $stopped + $i;
-            $time   = clone $this->started[$index]->getTime();
-            $memory = clone $this->started[$index]->getMemory();
-            // Clone the Period to not really close it
-            $period    = new Period($time, $memory);
-            $periods[] = $period->stop();
-        }
-
-        return $periods;
     }
 }
