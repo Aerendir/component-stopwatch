@@ -13,7 +13,7 @@
 
 namespace SerendipityHQ\Component\Stopwatch;
 
-use SerendipityHQ\Component\Stopwatch\Properties\OriginTrait;
+use SerendipityHQ\Component\Stopwatch\Properties\Origin;
 
 /**
  * Represents an Event managed by Stopwatch.
@@ -23,8 +23,6 @@ use SerendipityHQ\Component\Stopwatch\Properties\OriginTrait;
  */
 class Event
 {
-    use OriginTrait;
-
     /** @var string $category */
     private $category;
 
@@ -41,7 +39,6 @@ class Event
      */
     public function __construct(?string $category = null)
     {
-        $this->initializeOrigins();
         $this->category = $category ?? 'default';
     }
 
@@ -240,9 +237,6 @@ class Event
         $period = array_pop($this->started);
 
         $this->periods[] = $period->stop();
-
-        $this->originTime->stop();
-        $this->originMemory->stop();
 
         return $this;
     }

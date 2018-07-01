@@ -71,7 +71,7 @@ always measures time with microsecond precision, so you don't need to pass any p
     $stopwatch = new Stopwatch(true);
     
     // This is the SerendipityHQ's Stopwatch way: always microseconds precision
-    $stopwatch = new Stopwatch(true);
+    $stopwatch = new Stopwatch();
 
 Now you can start measurements:
 
@@ -90,37 +90,40 @@ Now you can start measurements:
 Basic concepts
 --------------
 
-Stopwatch component has three main concepts:
+### Measurements
 
-1. Periods: The time passed between the start (`$stopwatch->start('event_name)`) and the stop (`$stopwatch->stop('event_name`);
-2. Events: Something that is happening in your code and that you like to measure. It contains the Periods;
-3. Sections: A group of events logically connected.
+Stopwatch component has three main concepts when it comes to measurements:
+
+1. **Periods**: The time passed between the start (`$stopwatch->start('event_name)`) and the stop (`$stopwatch->stop('event_name`);
+2. **Events**: Something that is happening in your code and that you like to measure. It contains the Periods;
+3. **Sections**: A group of events logically connected.
+4. **origins**: Available for `Event`s and `Section`s, are the start time and memory measurements taken on creation of an `Event` or of a `Section` and the time and memory measurements of the last
+time `$stopwatch->stop('event_name')` was called.
 
 Each one of those is represented by a class, but you have to only interact with the main `Stopwatch` class.
 
-The `Stopwatch` class exposes those methods:
+The `Stopwatch` class exposes those methods for measurements:
 
     // To manage Events
-    $stopwatch->start('event_name', 'event_category');
-    $stopwatch->lap('event_name');
-    $stopwatch->stop('event_name');
-    $stopwatch->getEvent('event_name');
-    $stopwatch->isStarted('event_name');
-    $stopwatch->getSectionEvents('__root__');
+    $stopwatch->start('event_name', 'event_category'); // Starts an event starting a new Period
+    $stopwatch->stop('event_name');                    // Stops the current Period
+    $stopwatch->lap('event_name');                     // Stops the current Period and starts a new one.
+                                                       // Equals to $stopwatch->stop('event_name')->start('event_name')
     
     // To manage Sections
     $stopwatch->openSection();
-    $stopwatch->stopSection('');
-    $stopwatch->getSections();
+    $stopwatch->stopSection('section_name');
     
     // Other methods
     $stopwatch->reset();
 
-### Events and Periods
+#### Events and Periods
 
 An `Event` is something that is happening in you application: routing, image processing, a cycle, ecc.
 
-An `Event`, using `Periods`, measures the time that passes.
+An `Event`, using `Periods` and origins, measures the time that passes.
+
+Origins are the start time and memory measurements and the time and memory measurements of the last time `$stopwatch->stop('event_name')` was called.
 
 So an `Event` is basically a collection of `Period`s.
 

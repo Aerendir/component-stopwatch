@@ -13,17 +13,14 @@
 
 namespace SerendipityHQ\Component\Stopwatch;
 
-use SerendipityHQ\Component\Stopwatch\Properties\OriginTrait;
-
 /**
  * Stopwatch section.
  *
  * @author Fabien Potencier <fabien@symfony.com>
+ * @author Adamo Crespi <hello@aerendir.me>
  */
 class Section
 {
-    use OriginTrait;
-
     /** @var Event[] $events */
     private $events = [];
 
@@ -51,6 +48,7 @@ class Section
      * @param string $id The Section identifier
      *
      * @return Section
+     * @internal
      */
     public function stopSection(string $id): Section
     {
@@ -60,19 +58,24 @@ class Section
     }
 
     /**
-     * Creates or re-opens a child section.
+     * Creates a new Section if conditions are met or returns an existing child section if it exists.
+     *
+     * The resulting section is returned so Stopwatch can add it to the list of currently active Sections.
      *
      * @param string|null $id Null to create a new section, the identifier to re-open an existing one
      *
      * @return Section
+     * @internal
      */
     public function openChildSection(?string $id = null): Section
     {
-        // If no id is passed or if the Section is not already created, create a new Section
+        // If no $id is passed or if the Section is not already created, create a new Section
         if (null === $id || null === $this->getChildSection($id)) {
+            // Return the created section so Stopwatch can add it to the list of currently active Sections
             return $section = $this->children[] = new self();
         }
 
+        // Return the found child section so Stopwatch can add it to the list of currently active Sections
         return $this->getChildSection($id);
     }
 
@@ -82,6 +85,7 @@ class Section
      * @param string $id The child section identifier
      *
      * @return Section|null The child section or null when none found
+     * @internal
      */
     public function getChildSection(string $id): ?Section
     {
@@ -101,15 +105,10 @@ class Section
      * @param string|null $category The event category
      *
      * @return Event The event
+     * @internal
      */
     public function startEvent(string $name, ?string $category = null): Event
     {
-        // If this is the first event started...
-        if (0 === count($this->events)) {
-            // ... initialize the origins to get the origins set at the moment Stopwatch is used the very first time
-            $this->initializeOrigins();
-        }
-
         if ( ! isset($this->events[$name])) {
             $this->events[$name] = new Event($category);
         }
@@ -123,6 +122,7 @@ class Section
      * @param string $name The event name
      *
      * @return bool
+     * @internal
      */
     public function isEventStarted(string $name): bool
     {
@@ -137,6 +137,7 @@ class Section
      * @throws \LogicException When the event has not been started
      *
      * @return Event The event
+     * @internal
      */
     public function stopEvent(string $name): Event
     {
@@ -155,6 +156,7 @@ class Section
      * @throws \LogicException When the event has not been started
      *
      * @return Event The event
+     * @internal
      */
     public function lap(string $name): Event
     {
@@ -169,6 +171,7 @@ class Section
      * @throws \LogicException When the event is not known
      *
      * @return Event The event
+     * @internal
      */
     public function getEvent(string $name): Event
     {
@@ -180,9 +183,10 @@ class Section
     }
 
     /**
-     * Returns the events from this section.
+     * Returns the events recorded by this Section.
      *
-     * @return Event[] An array of Event instances
+     * @return Event[] All the Events recored by this Section
+     * @internal
      */
     public function getEvents(): array
     {

@@ -21,10 +21,11 @@ namespace SerendipityHQ\Component\Stopwatch;
  */
 class Stopwatch
 {
-    private const SECTION = '__section__';
-    private const SECTION_ROOT = '__root__';
-    private const SECTION_CHILD = '__section__.child';
-    private const SECTION_CATEGORY = 'section';
+    // Identifier of the root section, the one that contains all the data collected by Stopwatch
+    private const STOPWATCH_ROOT     = '__root__';
+    private const SECTION            = '__section__';
+    private const SECTION_CHILD      = '__section__.child';
+    private const STOPWATCH_CATEGORY = 'section';
 
     /** @var Section[] $sections */
     private $sections;
@@ -122,21 +123,32 @@ class Stopwatch
      */
     public function openSection(?string $id = null): void
     {
+        // The $id is accepted only to re-open a previously closed section
         if (null !== $id && null === $this->getCurrentSection()->getChildSection($id)) {
             throw new \LogicException(sprintf('The section "%s" has been started at an other level and can not be opened.', $id));
         }
 
-        $this->start(self::SECTION_CHILD, self::SECTION_CATEGORY);
+        // Create a new Event meant to measure the timing and memory of the opening child section
+        $this->start(self::SECTION_CHILD, self::STOPWATCH_CATEGORY);
+
+        // Then, actually open the child section and append it to the active ones
         $this->activeSections[] = $this->getCurrentSection()->openChildSection($id);
+
+        // Now start another Event.
+        // This is opened in the just created child section (that is now
+        // the currently active one) and measures the timing and memory
+        // of the just created child section.
+        // If you like, compare Event self::SECTION_CHILD and Event self::SECTION
+        // to know how much time and memory is required to open a new Section.
         $this->start(self::SECTION);
     }
 
     /**
      * Stops the last started section.
      *
-     * The id parameter is used to retrieve the events from this section.
-     *
-     * @see getSectionEvents()
+     * The id parameter is assigned to the closing Section and can be
+     * used later to retrieve the events from this section with
+     * self::getSectionEvents($id).
      *
      * @param string $id The identifier of the section
      *
@@ -144,16 +156,26 @@ class Stopwatch
      */
     public function stopSection(string $id): void
     {
+        // First, stop the Event self::SECTION.
+        // This is the Event created in every Section and that
+        // measures the timing and memory of the Section itself
         $this->stop(self::SECTION);
 
+        // This happens if the only active section is the self::STOPWATCH_ROOT one.
         if (1 === count($this->activeSections)) {
             throw new \LogicException('There is no started section to stop.');
         }
-        
+
+        // Remove the closing section from the active ones
         /** @var Section $section */
         $section = array_pop($this->activeSections);
 
-        $this->sections[$id] = $section->closeSection($id);
+        // Add the closing section to list of Sections managed by Stopwatch
+        // AND ASSIGN THE GIVEN ID TO IT
+        $this->sections[$id] = $section->stopSection($id);
+
+        // Then stop the Event that measures the time (and memory) passed
+        // between the creation of the Section and its closing of now
         $this->stop(self::SECTION_CHILD);
     }
 
@@ -191,10 +213,14 @@ class Stopwatch
 
     /**
      * Resets the stopwatch to its original state.
+     *
+     * Practically recreates the root Section in which all other Sections,
+     * Events and Periods collected are stored.
      */
     public function reset(): void
     {
-        $this->sections = $this->activeSections = [self::SECTION_ROOT => new Section()];
+        // On initialization, Section doesn't collect anything nor has any Event
+        $this->sections = $this->activeSections = [self::STOPWATCH_ROOT => new Section()];
     }
 
     /**
