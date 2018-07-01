@@ -140,7 +140,7 @@ class Stopwatch
         // of the just created child section.
         // If you like, compare Event self::SECTION_CHILD and Event self::SECTION
         // to know how much time and memory is required to open a new Section.
-        $this->start(self::SECTION);
+        $this->start(self::SECTION, self::STOPWATCH_CATEGORY);
     }
 
     /**
