@@ -144,65 +144,6 @@ class Event
     }
 
     /**
-     * Of all periods, gets the max amount of memory used by the script.
-     *
-     * Very similar to Event::getMemoryPeakEmalloc().
-     *
-     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
-     *
-     * @return int The memory usage (in bytes)
-     */
-    public function getMemoryCurrent(bool $includeStarted = false): int
-    {
-        $memoryCurrent = 0;
-        foreach ($this->getPeriods($includeStarted) as $period) {
-            if ($period->getMemory()->getEndMemoryCurrent() > $memoryCurrent) {
-                $memoryCurrent = $period->getMemory()->getEndMemoryCurrent();
-            }
-        }
-
-        return $memoryCurrent;
-    }
-
-    /**
-     * Of all periods, gets the max peak amount of memory assigned to PHP.
-     *
-     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
-     *
-     * @return int The memory usage (in bytes)
-     */
-    public function getMemoryPeak(bool $includeStarted = false): int
-    {
-        $memoryPeak = 0;
-        foreach ($this->getPeriods($includeStarted) as $period) {
-            if ($period->getMemory()->getEndMemoryPeak() > $memoryPeak) {
-                $memoryPeak = $period->getMemory()->getEndMemoryPeak();
-            }
-        }
-
-        return $memoryPeak;
-    }
-
-    /**
-     * Of all periods, gets the max amount of memory assigned to PHP and used by emalloc().
-     *
-     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
-     *
-     * @return int The memory usage (in bytes)
-     */
-    public function getMemoryPeakEmalloc(bool $includeStarted = false): int
-    {
-        $memoryPeakCurrent = 0;
-        foreach ($this->getPeriods($includeStarted) as $period) {
-            if ($period->getMemory()->getEndMemoryPeakEmalloc() > $memoryPeakCurrent) {
-                $memoryPeakCurrent = $period->getMemory()->getEndMemoryPeakEmalloc();
-            }
-        }
-
-        return $memoryPeakCurrent;
-    }
-
-    /**
      * Stops all non already stopped periods.
      */
     public function ensureStopped(): void
