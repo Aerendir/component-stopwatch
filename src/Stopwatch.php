@@ -81,6 +81,8 @@ class Stopwatch
     /**
      * Returns a specific event by name.
      *
+     * Use this to get information from an Event still running.
+     *
      * @param string $name The event name
      *
      * @return Event
@@ -100,18 +102,6 @@ class Stopwatch
     public function isStarted(string $name): bool
     {
         return $this->getCurrentSection()->isEventStarted($name);
-    }
-
-    /**
-     * Gets all events for a given section.
-     *
-     * @param string $id A section identifier
-     *
-     * @return Event[]
-     */
-    public function getSectionEvents(string $id): array
-    {
-        return $this->hasSection($id) ? $this->getSection($id)->getEvents() : [];
     }
 
     /**
@@ -209,6 +199,18 @@ class Stopwatch
     public function hasSection(string $id): bool
     {
         return isset($this->sections[$id]);
+    }
+
+    /**
+     * Gets all events for a given section.
+     *
+     * @param string $id A section identifier
+     *
+     * @return Event[]
+     */
+    public function getSectionEvents(string $id): array
+    {
+        return $this->hasSection($id) ? $this->getSection($id)->getEvents() : [];
     }
 
     /**
