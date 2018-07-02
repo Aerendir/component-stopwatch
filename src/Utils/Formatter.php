@@ -52,7 +52,7 @@ class Formatter
                     || $index === count($timeFormats) - 1
                 ) {
                     if (2 === count($format)) {
-                        return $microtime . ' ' . $format[1];
+                        return round($microtime, $precision) . ' ' . $format[1];
                     }
 
                     return round($microtime / $format[2], $precision) . ' ' . $format[1];
@@ -65,21 +65,28 @@ class Formatter
 
     /**
      * @param int $memory
+     * @param int $precision
      *
      * @return string
      */
-    public static function formatMemory(int $memory): string
+    public static function formatMemory(int $memory, int $precision = 2): string
     {
         if ($memory >= 1024 * 1024 * 1024) {
-            return sprintf('%.1f GiB', $memory / 1024 / 1024 / 1024);
+            $print = (float) $memory / 1024 / 1024 / 1024;
+
+            return sprintf('%s GiB', round($print, $precision));
         }
 
         if ($memory >= 1024 * 1024) {
-            return sprintf('%.1f MiB', $memory / 1024 / 1024);
+            $print = (float) $memory / 1024 / 1024;
+
+            return sprintf('%s MiB', round($print, $precision));
         }
 
         if ($memory >= 1024) {
-            return sprintf('%d KiB', $memory / 1024);
+            $print = (float) $memory / 1024;
+
+            return sprintf('%d KiB', round($print, $precision));
         }
 
         return sprintf('%d B', $memory);
