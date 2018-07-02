@@ -71,21 +71,18 @@ class Formatter
      */
     public static function formatMemory(int $memory, int $precision = 2): string
     {
-        if ($memory >= 1024 * 1024 * 1024) {
+        if (abs($memory) >= 1024 * 1024 * 1024) {
             $print = (float) $memory / 1024 / 1024 / 1024;
-
             return sprintf('%s GiB', round($print, $precision));
         }
 
-        if ($memory >= 1024 * 1024) {
+        if (abs($memory) >= 1024 * 1024) {
             $print = (float) $memory / 1024 / 1024;
-
             return sprintf('%s MiB', round($print, $precision));
         }
 
-        if ($memory >= 1024) {
+        if (abs($memory) >= 1024) {
             $print = (float) $memory / 1024;
-
             return sprintf('%d KiB', round($print, $precision));
         }
 
