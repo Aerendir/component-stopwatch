@@ -53,13 +53,13 @@ class Event
     /**
      * Gets all event periods.
      *
-     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     * @param bool $includeStillMeasuring if the calculation should include also started but not still closed Periods
      *
      * @return Period[] An array of Period instances
      */
-    public function getPeriods(bool $includeStarted = false): array
+    public function getPeriods(bool $includeStillMeasuring = false): array
     {
-        if (false === $includeStarted) {
+        if (false === $includeStillMeasuring) {
             return $this->periods;
         }
 
@@ -105,16 +105,16 @@ class Event
     /**
      * Gets the duration of the events (including all periods, both stopped and still measuring).
      *
-     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     * @param bool $includeStillMeasuring if the calculation should include also started but not still closed Periods
      *
      * @return float The duration
      */
-    public function getDuration(bool $includeStarted = false): float
+    public function getDuration(bool $includeStillMeasuring = false): float
     {
         $total = 0;
 
         /** @var Period $period */
-        foreach ($this->getPeriods($includeStarted) as $period) {
+        foreach ($this->getPeriods($includeStillMeasuring) as $period) {
             $total += $period->getTime()->getDuration();
         }
 
@@ -126,21 +126,41 @@ class Event
      *
      * Very similar to Event::getMemoryPeak().
      *
-     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     * @param bool $includeStillMeasuring if the calculation should include also started but not still closed Periods
      *
      * @return int The memory usage (in bytes)
      */
-    public function getMemory(bool $includeStarted = false): int
+    public function getMemory(bool $includeStillMeasuring = false): int
     {
         $memory = 0;
 
-        foreach ($this->getPeriods($includeStarted) as $period) {
+        foreach ($this->getPeriods($includeStillMeasuring) as $period) {
             if ($period->getMemory()->getEndMemory() > $memory) {
                 $memory = $period->getMemory()->getEndMemory();
             }
         }
 
         return $memory;
+    }
+
+    /**
+     * Get the current consumed memory of the last period.
+     *
+     * If the period is stopped, returns its end current memory,
+     * while returns its start current memory if it is still measuring.
+     *
+     * Very similar to Event::getMemoryPeak().
+     *
+     * @param bool $includeStillMeasuring if the calculation should include also started but not still closed Periods
+     *
+     * @return int The memory usage (in bytes)
+     */
+    public function getMemoryCurrent(bool $includeStillMeasuring = false): int
+    {
+        $periods = $includeStillMeasuring ? $this->started : $this->getPeriods();
+        $lastPeriod = end($periods);
+
+        return $lastPeriod->getMemory()->isStopped() ? $lastPeriod->getMemory()->getEndMemoryCurrent() : $lastPeriod->getMemory()->getStartMemoryCurrent();
     }
 
     /**

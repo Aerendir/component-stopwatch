@@ -73,16 +73,19 @@ class Formatter
     {
         if (abs($memory) >= 1024 * 1024 * 1024) {
             $print = (float) $memory / 1024 / 1024 / 1024;
+
             return sprintf('%s GiB', round($print, $precision));
         }
 
         if (abs($memory) >= 1024 * 1024) {
             $print = (float) $memory / 1024 / 1024;
+
             return sprintf('%s MiB', round($print, $precision));
         }
 
         if (abs($memory) >= 1024) {
             $print = (float) $memory / 1024;
+
             return sprintf('%d KiB', round($print, $precision));
         }
 

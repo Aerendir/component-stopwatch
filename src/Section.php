@@ -201,4 +201,14 @@ class Section
     {
         return $this->events;
     }
+
+    /**
+     * Returns the event that measures the Section.
+     *
+     * @return Event
+     */
+    public function getSectionEvent(): Event
+    {
+        return $this->getEvent(Stopwatch::SECTION);
+    }
 }

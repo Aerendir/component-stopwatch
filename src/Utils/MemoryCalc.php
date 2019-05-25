@@ -28,11 +28,11 @@ class MemoryCalc
 
     /**
      * @param Event $event
-     * @param bool  $includeStarted if the calculation should include also started but not still closed Periods
+     * @param bool  $includeStillMeasuring if the calculation should include also started but not still closed Periods
      */
-    public function setEvent(Event $event, bool $includeStarted = false)
+    public function setEvent(Event $event, bool $includeStillMeasuring = false)
     {
-        $this->periods = $event->getPeriods($includeStarted);
+        $this->periods = $event->getPeriods($includeStillMeasuring);
     }
 
     /**

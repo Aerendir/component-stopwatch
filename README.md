@@ -19,7 +19,7 @@ only for basic purposes. For more advanced measurements, use a more accurate too
 *This component is a fork of the Symfony's Stopwatch component, so you can check
 [its Documentation](https://symfony.com/doc/current/components/stopwatch.html) for further information.*
 
-*Improvements introduced in this version are waiting for merge in the main Symfony's Stopwatch component.*
+We decided to fork it as the proposed changes about memory measurement were [rejected](https://github.com/symfony/symfony/pull/27711).
 
 ### Features:
 
@@ -202,6 +202,18 @@ To get detailed information about timing and memory for each lap, call:
     // Get all Periods measured in the Event
     $periods = $event->getPeriods();
 
+### Formatting `Event`'s information
+
+Stopwatch provides an Helper method useful to format the measurements:
+
+```php
+use SerendipityHQ\Component\Stopwatch\Utils\Formatter;
+
+$event = $stopwatch->getSection('section_name')->getEvent('event_name');
+
+dump(Formatter::formatTime($event->getDuration()), Formatter::formatMemory($event->getMemory());
+```
+
 ### Sections
 
 Sections are a way to logically split the timeline into groups. 
@@ -328,6 +340,28 @@ So, for example, if we would like to add to the section `fibonacci_and_squares` 
     // Start another event, execute other code...
     
     // Stop the event and then stop the section again
+
+#### Get measurement of a Section
+
+As told, when you call `Stopwatch::openSection()`, Stopwatch creates an event that measures the section itself, other than collecting the other events you create manually.
+
+This is useful to measure the entire section, without having to sum all the events in it.
+
+You can get the `Section`'s `Event` with this simple code:
+
+```php
+use SerendipityHQ\Component\Stopwatch\Utils\Formatter;
+
+$sectionEvent = $stopwatch->getSection('section_name')->getEvent(Stopwatch::SECTION);
+
+dump(Formatter::formatTime($sectionEvent->getDuration()), Formatter::formatMemory($sectionEvent->getMemory());
+``` 
+
+You can also use the shortcut `Section::getSectionEvent()` to get the `Section`s `Event`:
+
+```php
+$sectionEvent = $stopwatch->getSection('section_name')->getSectionEvent();
+```
 
 ### Memory
 

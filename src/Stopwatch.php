@@ -21,10 +21,16 @@ namespace SerendipityHQ\Component\Stopwatch;
  */
 class Stopwatch
 {
-    // Identifier of the root section, the one that contains all the data collected by Stopwatch
-    private const STOPWATCH_ROOT     = '__root__';
-    private const SECTION            = '__section__';
-    private const SECTION_CHILD      = '__section__.child';
+    /** @var string Identifier of the event that measures the start and stop of a section */
+    public const SECTION = '__section__';
+
+    /** @var string Identifier of the root section, the one that contains all the data collected by Stopwatch */
+    private const STOPWATCH_ROOT = '__root__';
+
+    /** @var string */
+    private const SECTION_CHILD = '__section__.child';
+
+    /** @var string */
     private const STOPWATCH_CATEGORY = 'section';
 
     /** @var Section[] $sections */
