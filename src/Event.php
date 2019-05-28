@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  *
  * This file is part of the Serendipity HQ Stopwatch Component.
@@ -13,6 +15,10 @@
 
 namespace SerendipityHQ\Component\Stopwatch;
 
+use InvalidArgumentException;
+use LogicException;
+use SerendipityHQ\Component\Stopwatch\Properties\Origin;
+
 /**
  * Represents an Event managed by Stopwatch.
  *
@@ -21,6 +27,9 @@ namespace SerendipityHQ\Component\Stopwatch;
  */
 class Event
 {
+    /** @var Origin $origin */
+    private $origin;
+
     /** @var string $category */
     private $category;
 
@@ -33,11 +42,20 @@ class Event
     /**
      * @param string|null $category The event category or null to use the default
      *
-     * @throws \InvalidArgumentException When the raw time is not valid
+     * @throws InvalidArgumentException When the raw time is not valid
      */
     public function __construct(?string $category = null)
     {
+        $this->origin   = new Origin();
         $this->category = $category ?? 'default';
+    }
+
+    /**
+     * @return Origin
+     */
+    public function getOrigin(): Origin
+    {
+        return $this->origin;
     }
 
     /**
@@ -111,7 +129,7 @@ class Event
      */
     public function getDuration(bool $includeStillMeasuring = false): float
     {
-        $total = 0;
+        $total = (float) 0;
 
         /** @var Period $period */
         foreach ($this->getPeriods($includeStillMeasuring) as $period) {
@@ -158,7 +176,9 @@ class Event
     public function getMemoryCurrent(bool $includeStillMeasuring = false): int
     {
         $periods = $includeStillMeasuring ? $this->started : $this->getPeriods();
-        $lastPeriod = end($periods);
+        $count   = count($periods);
+        // We don't use end() to not modify the internal pointer of the array
+        $lastPeriod = $periods[$count - 1];
 
         return $lastPeriod->getMemory()->isStopped() ? $lastPeriod->getMemory()->getEndMemoryCurrent() : $lastPeriod->getMemory()->getStartMemoryCurrent();
     }
@@ -190,7 +210,7 @@ class Event
     /**
      * Stops the last started event period.
      *
-     * @throws \LogicException When stop() is called without a matching call to start()
+     * @throws LogicException When stop() is called without a matching call to start()
      *
      * @return Event
      *
@@ -199,7 +219,7 @@ class Event
     public function stop(): Event
     {
         if (0 === count($this->started)) {
-            throw new \LogicException('stop() called but start() has not been called before.');
+            throw new LogicException('stop() called but start() has not been called before.');
         }
 
         /** @var Period $period */
@@ -212,6 +232,8 @@ class Event
 
     /**
      * Stops the current period and then starts a new one.
+     *
+     * @throws LogicException
      *
      * @return Event
      *

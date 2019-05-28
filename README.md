@@ -3,9 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/serendipity_hq/stopwatch/downloads.svg)](https://packagist.org/packages/serendipity_hq/stopwatch)
 [![License](https://poser.pugx.org/serendipity_hq/stopwatch/license.svg)](https://packagist.org/packages/serendipity_hq/stopwatch)
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/f201e5346bcaf8c041fa/maintainability)](https://codeclimate.com/github/Aerendir/Stopwatch/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/f201e5346bcaf8c041fa/test_coverage)](https://codeclimate.com/github/Aerendir/Stopwatch/test_coverage)
-[![Issue Count](https://codeclimate.com/github/Aerendir/Stopwatch/badges/issue_count.svg)](https://codeclimate.com/github/Aerendir/Stopwatch)
+Statically tested with Psalm, Phan and PHPStan.
 
 The Stopwatch Component
 =======================

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  *
  * This file is part of the Serendipity HQ Stopwatch Component.
@@ -27,7 +29,7 @@ use SerendipityHQ\Component\Stopwatch\Stopwatch;
  */
 class StopwatchTest extends TestCase
 {
-    const DELTA = 0.003;
+    private const DELTA = 0.005;
 
     public function testStart()
     {
@@ -54,9 +56,6 @@ class StopwatchTest extends TestCase
         self::assertFalse($stopwatch->isStarted('foo'));
     }
 
-    /**
-     * @throws \ReflectionException
-     */
     public function testIsNotStartedEvent()
     {
         $stopwatch = new Stopwatch();
@@ -84,24 +83,19 @@ class StopwatchTest extends TestCase
         usleep(200000);
         $event = $stopwatch->stop('foo');
 
-        self::assertInstanceOf('SerendipityHQ\Component\Stopwatch\Event', $event);
-        self::assertEquals(0.204, $event->getDuration(), null, self::DELTA);
+        self::assertEqualsWithDelta(0.204, $event->getDuration(), self::DELTA);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testUnknownEvent()
     {
+        $this->expectException(\LogicException::class);
         $stopwatch = new Stopwatch();
         $stopwatch->getEvent('foo');
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testStopWithoutStart()
     {
+        $this->expectException(\LogicException::class);
         $stopwatch = new Stopwatch();
         $stopwatch->stop('foo');
     }
@@ -151,11 +145,9 @@ class StopwatchTest extends TestCase
         self::assertCount(2, $events['__section__']->getPeriods());
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testReopenANewSectionShouldThrowAnException()
     {
+        $this->expectException(\LogicException::class);
         $stopwatch = new Stopwatch();
         $stopwatch->openSection('section');
     }
@@ -169,6 +161,12 @@ class StopwatchTest extends TestCase
 
         $stopwatch->reset();
 
-        self::assertEquals(new Stopwatch(), $stopwatch);
+        $sections = $stopwatch->getSections();
+
+        // Root section is equal to private constant Stopwatch::STOPWATCH_ROOT
+        $rootSection = '__root__';
+        self::assertCount(1, $sections);
+        self::assertArrayHasKey($rootSection, $sections);
+        self::assertEmpty($sections[$rootSection]->getEvents());
     }
 }

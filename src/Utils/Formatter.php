@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  *
  * This file is part of the Serendipity HQ Stopwatch Component.
@@ -12,6 +14,10 @@
  */
 
 namespace SerendipityHQ\Component\Stopwatch\Utils;
+
+use Countable;
+use RuntimeException;
+use Safe\Exceptions\StringsException;
 
 /**
  * Helper to format times and memories.
@@ -30,10 +36,14 @@ class Formatter
      * @param float $microtime
      * @param int   $precision
      *
+     * @throws StringsException
+     * @throws RuntimeException If the passed time cannot be formatted
+     *
      * @return string
      */
     public static function formatTime(float $microtime, int $precision = 2): string
     {
+        $timeFormats        = null;
         static $timeFormats = [
             [0, 'ms'],
             [1, '1 sec'],
@@ -49,46 +59,50 @@ class Formatter
         foreach ($timeFormats as $index => $format) {
             if ($microtime >= $format[0]) {
                 if ((isset($timeFormats[$index + 1]) && $microtime < $timeFormats[$index + 1][0])
-                    || $index === count($timeFormats) - 1
+                    || $index === (is_array($timeFormats) || $timeFormats instanceof Countable ? count($timeFormats) : 0) - 1
                 ) {
-                    if (2 === count($format)) {
-                        return round($microtime, $precision) . ' ' . $format[1];
+                    if (2 === (is_array($format) || $format instanceof Countable ? count($format) : 0)) {
+                        return \Safe\sprintf('%s %s', round($microtime, $precision), $format[1]);
                     }
 
-                    return round($microtime / $format[2], $precision) . ' ' . $format[1];
+                    return \Safe\sprintf('%s %s', round($microtime / $format[2], $precision), $format[1]);
                 }
             }
         }
 
-        throw new \RuntimeException('Impossible to format the time value you passed. This should never happen.');
+        throw new RuntimeException('Impossible to format the time value you passed. This should never happen.');
     }
 
     /**
      * @param int $memory
      * @param int $precision
      *
+     * @throws StringsException
+     *
      * @return string
      */
     public static function formatMemory(int $memory, int $precision = 2): string
     {
         if (abs($memory) >= 1024 * 1024 * 1024) {
-            $print = (float) $memory / 1024 / 1024 / 1024;
+            /** @psalm-suppress InvalidOperand */
+            $print = $memory / 1024 / 1024 / 1024;
 
-            return sprintf('%s GiB', round($print, $precision));
+            return \Safe\sprintf('%s GiB', round($print, $precision));
         }
 
         if (abs($memory) >= 1024 * 1024) {
-            $print = (float) $memory / 1024 / 1024;
+            /** @psalm-suppress InvalidOperand */
+            $print = $memory / 1024 / 1024;
 
-            return sprintf('%s MiB', round($print, $precision));
+            return \Safe\sprintf('%s MiB', round($print, $precision));
         }
 
         if (abs($memory) >= 1024) {
-            $print = (float) $memory / 1024;
+            $print = $memory / 1024;
 
-            return sprintf('%d KiB', round($print, $precision));
+            return \Safe\sprintf('%d KiB', round($print, $precision));
         }
 
-        return sprintf('%d B', $memory);
+        return \Safe\sprintf('%d B', $memory);
     }
 }

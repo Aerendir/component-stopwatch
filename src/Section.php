@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  *
  * This file is part of the Serendipity HQ Stopwatch Component.
@@ -13,6 +15,12 @@
 
 namespace SerendipityHQ\Component\Stopwatch;
 
+use InvalidArgumentException;
+use LogicException;
+use RuntimeException;
+use Safe\Exceptions\StringsException;
+use SerendipityHQ\Component\Stopwatch\Properties\Origin;
+
 /**
  * Stopwatch section.
  *
@@ -21,6 +29,9 @@ namespace SerendipityHQ\Component\Stopwatch;
  */
 class Section
 {
+    /** @var Origin $origin */
+    private $origin;
+
     /** @var Event[] $events */
     private $events = [];
 
@@ -31,12 +42,30 @@ class Section
     private $children = [];
 
     /**
+     * Initializes the Origin.
+     */
+    public function __construct()
+    {
+        $this->origin = new Origin();
+    }
+
+    /**
+     * @return Origin
+     */
+    public function getOrigin(): Origin
+    {
+        return $this->origin;
+    }
+
+    /**
+     * @throws LogicException if the ID is get before the Section is closed
+     *
      * @return string The identifier of the section
      */
     public function getId(): string
     {
         if (null === $this->id) {
-            throw new \LogicException('This Section is not yet closed. You cannot get its ID until you close it for the first time.');
+            throw new LogicException('This Section is not yet closed. You cannot get its ID until you close it for the first time.');
         }
 
         return $this->id;
@@ -65,20 +94,29 @@ class Section
      *
      * @param string|null $id Null to create a new section, the identifier to re-open an existing one
      *
+     * @throws RuntimeException If the child section is not found
+     *
      * @return Section
      *
      * @internal
      */
     public function openChildSection(?string $id = null): Section
     {
-        // If no $id is passed or if the Section is not already created, create a new Section
-        if (null === $id || null === $this->getChildSection($id)) {
-            // Return the created section so Stopwatch can add it to the list of currently active Sections
-            return $section = $this->children[] = new self();
+        $section = null;
+
+        if (is_string($id)) {
+            $section = $this->getChildSection($id);
         }
 
-        // Return the found child section so Stopwatch can add it to the list of currently active Sections
-        return $this->getChildSection($id);
+        // If no $id is passed or if the Section is not already created, create a new Section
+        if (null === $id || null === $section) {
+            // Return the created section so Stopwatch can add it to the list of currently active Sections
+            $section          = new self();
+            $this->children[] = $section;
+        }
+
+        // Return the found or created child section so Stopwatch can add it to the list of currently active Sections
+        return $section;
     }
 
     /**
@@ -106,6 +144,8 @@ class Section
      *
      * @param string      $name     The event name
      * @param string|null $category The event category
+     *
+     * @throws InvalidArgumentException If the Event cannot be created
      *
      * @return Event The event
      *
@@ -139,16 +179,17 @@ class Section
      *
      * @param string $name The event name
      *
-     * @throws \LogicException When the event has not been started
+     * @throws StringsException
+     * @throws LogicException   When the event has not been started
      *
      * @return Event The event
      *
-     * @internal
+     *@internal
      */
     public function stopEvent(string $name): Event
     {
         if ( ! isset($this->events[$name])) {
-            throw new \LogicException(sprintf('Event "%s" is not started.', $name));
+            throw new LogicException(\Safe\sprintf('Event "%s" is not started.', $name));
         }
 
         return $this->events[$name]->stop();
@@ -159,11 +200,12 @@ class Section
      *
      * @param string $name The event name
      *
-     * @throws \LogicException When the event has not been started
+     * @throws StringsException
+     * @throws LogicException   When the event has not been started
      *
      * @return Event The event
      *
-     * @internal
+     *@internal
      */
     public function lap(string $name): Event
     {
@@ -175,7 +217,8 @@ class Section
      *
      * @param string $name The event name
      *
-     * @throws \LogicException When the event is not known
+     * @throws StringsException
+     * @throws LogicException   When the event is not known
      *
      * @return Event The event
      *
@@ -184,7 +227,7 @@ class Section
     public function getEvent(string $name): Event
     {
         if ( ! isset($this->events[$name])) {
-            throw new \LogicException(sprintf('Event "%s" is not known.', $name));
+            throw new LogicException(\Safe\sprintf('Event "%s" is not known.', $name));
         }
 
         return $this->events[$name];
@@ -204,6 +247,9 @@ class Section
 
     /**
      * Returns the event that measures the Section.
+     *
+     * @throws StringsException
+     * @throws LogicException   When the event is not known
      *
      * @return Event
      */
