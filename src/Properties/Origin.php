@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  *
  * This file is part of the Serendipity HQ Stopwatch Component.
@@ -18,7 +20,7 @@ namespace SerendipityHQ\Component\Stopwatch\Properties;
  */
 class Origin
 {
-    /** @var Time $originTime */
+    /** @var float $originTime */
     private $originTime;
 
     /** @var Memory $originMemory */
@@ -36,19 +38,20 @@ class Origin
     /**
      * Sets the current time and memories.
      */
-    private function __construct()
+    public function __construct()
     {
         $this->originTime              = microtime(true);
-        $this->originMemory            = memory_get_usage(true);
-        $this->originMemoryCurrent     = memory_get_usage();
-        $this->originMemoryPeak        = memory_get_peak_usage(true);
-        $this->originMemoryPeakEmalloc = memory_get_peak_usage();
+        $memories                      = Memory::measure();
+        $this->originMemory            = $memories['memory_get_usage_true'];
+        $this->originMemoryCurrent     = $memories['memory_get_usage'];
+        $this->originMemoryPeak        = $memories['memory_get_peak_usage_true'];
+        $this->originMemoryPeakEmalloc = $memories['memory_get_peak_usage'];
     }
 
     /**
-     * @return Time
+     * @return float
      */
-    public function getOriginTime(): Time
+    public function getOriginTime(): float
     {
         return $this->originTime;
     }

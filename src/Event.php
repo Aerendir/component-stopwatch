@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  *
  * This file is part of the Serendipity HQ Stopwatch Component.
@@ -13,6 +15,10 @@
 
 namespace SerendipityHQ\Component\Stopwatch;
 
+use InvalidArgumentException;
+use LogicException;
+use SerendipityHQ\Component\Stopwatch\Properties\Origin;
+
 /**
  * Represents an Event managed by Stopwatch.
  *
@@ -21,6 +27,9 @@ namespace SerendipityHQ\Component\Stopwatch;
  */
 class Event
 {
+    /** @var Origin $origin */
+    private $origin;
+
     /** @var string $category */
     private $category;
 
@@ -33,11 +42,20 @@ class Event
     /**
      * @param string|null $category The event category or null to use the default
      *
-     * @throws \InvalidArgumentException When the raw time is not valid
+     * @throws InvalidArgumentException When the raw time is not valid
      */
     public function __construct(?string $category = null)
     {
+        $this->origin   = new Origin();
         $this->category = $category ?? 'default';
+    }
+
+    /**
+     * @return Origin
+     */
+    public function getOrigin(): Origin
+    {
+        return $this->origin;
     }
 
     /**
@@ -53,13 +71,13 @@ class Event
     /**
      * Gets all event periods.
      *
-     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     * @param bool $includeStillMeasuring if the calculation should include also started but not still closed Periods
      *
      * @return Period[] An array of Period instances
      */
-    public function getPeriods(bool $includeStarted = false): array
+    public function getPeriods(bool $includeStillMeasuring = false): array
     {
-        if (false === $includeStarted) {
+        if (false === $includeStillMeasuring) {
             return $this->periods;
         }
 
@@ -105,16 +123,16 @@ class Event
     /**
      * Gets the duration of the events (including all periods, both stopped and still measuring).
      *
-     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     * @param bool $includeStillMeasuring if the calculation should include also started but not still closed Periods
      *
      * @return float The duration
      */
-    public function getDuration(bool $includeStarted = false): float
+    public function getDuration(bool $includeStillMeasuring = false): float
     {
-        $total = 0;
+        $total = (float) 0;
 
         /** @var Period $period */
-        foreach ($this->getPeriods($includeStarted) as $period) {
+        foreach ($this->getPeriods($includeStillMeasuring) as $period) {
             $total += $period->getTime()->getDuration();
         }
 
@@ -126,21 +144,43 @@ class Event
      *
      * Very similar to Event::getMemoryPeak().
      *
-     * @param bool $includeStarted if the calculation should include also started but not still closed Periods
+     * @param bool $includeStillMeasuring if the calculation should include also started but not still closed Periods
      *
      * @return int The memory usage (in bytes)
      */
-    public function getMemory(bool $includeStarted = false): int
+    public function getMemory(bool $includeStillMeasuring = false): int
     {
         $memory = 0;
 
-        foreach ($this->getPeriods($includeStarted) as $period) {
+        foreach ($this->getPeriods($includeStillMeasuring) as $period) {
             if ($period->getMemory()->getEndMemory() > $memory) {
                 $memory = $period->getMemory()->getEndMemory();
             }
         }
 
         return $memory;
+    }
+
+    /**
+     * Get the current consumed memory of the last period.
+     *
+     * If the period is stopped, returns its end current memory,
+     * while returns its start current memory if it is still measuring.
+     *
+     * Very similar to Event::getMemoryPeak().
+     *
+     * @param bool $includeStillMeasuring if the calculation should include also started but not still closed Periods
+     *
+     * @return int The memory usage (in bytes)
+     */
+    public function getMemoryCurrent(bool $includeStillMeasuring = false): int
+    {
+        $periods = $includeStillMeasuring ? $this->started : $this->getPeriods();
+        $count   = count($periods);
+        // We don't use end() to not modify the internal pointer of the array
+        $lastPeriod = $periods[$count - 1];
+
+        return $lastPeriod->getMemory()->isStopped() ? $lastPeriod->getMemory()->getEndMemoryCurrent() : $lastPeriod->getMemory()->getStartMemoryCurrent();
     }
 
     /**
@@ -170,7 +210,7 @@ class Event
     /**
      * Stops the last started event period.
      *
-     * @throws \LogicException When stop() is called without a matching call to start()
+     * @throws LogicException When stop() is called without a matching call to start()
      *
      * @return Event
      *
@@ -179,7 +219,7 @@ class Event
     public function stop(): Event
     {
         if (0 === count($this->started)) {
-            throw new \LogicException('stop() called but start() has not been called before.');
+            throw new LogicException('stop() called but start() has not been called before.');
         }
 
         /** @var Period $period */
@@ -192,6 +232,8 @@ class Event
 
     /**
      * Stops the current period and then starts a new one.
+     *
+     * @throws LogicException
      *
      * @return Event
      *

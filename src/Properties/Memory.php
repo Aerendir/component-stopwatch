@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  *
  * This file is part of the Serendipity HQ Stopwatch Component.
@@ -12,6 +14,8 @@
  */
 
 namespace SerendipityHQ\Component\Stopwatch\Properties;
+
+use LogicException;
 
 /**
  * Manages timings.
@@ -32,16 +36,16 @@ class Memory
     /** @var int $startMemoryPeakEmalloc The max amount of memory assigned to PHP and used by emalloc() */
     private $startMemoryPeakEmalloc;
 
-    /** @var int $endMemory The amount of memory assigned to PHP */
+    /** @var int|null $endMemory The amount of memory assigned to PHP */
     private $endMemory;
 
-    /** @var int $endMemoryCurrent Of the memory assigned to PHP, the amount of memory currently consumed by the script */
+    /** @var int|null $endMemoryCurrent Of the memory assigned to PHP, the amount of memory currently consumed by the script */
     private $endMemoryCurrent;
 
-    /** @var int $endMemoryPeak The max amount of memory assigned to PHP */
+    /** @var int|null $endMemoryPeak The max amount of memory assigned to PHP */
     private $endMemoryPeak;
 
-    /** @var int $endMemoryPeakEmalloc The max amount of memory assigned to PHP and used by emalloc() */
+    /** @var int|null $endMemoryPeakEmalloc The max amount of memory assigned to PHP and used by emalloc() */
     private $endMemoryPeakEmalloc;
 
     /**
@@ -112,40 +116,64 @@ class Memory
     /**
      * Gets the memory assigned to PHP.
      *
+     * @throws LogicException if the method is called before the Period to which it belongs to is stopped
+     *
      * @return int The memory usage (in bytes)
      */
     public function getEndMemory(): int
     {
+        if (null === $this->endMemory) {
+            throw new LogicException("The Period is not yet stopped: you cannot call this method if you don't stop it.");
+        }
+
         return $this->endMemory;
     }
 
     /**
      * Of the memory assigned to PHP, gets the amount of memory currently used by the script.
      *
+     * @throws LogicException if the method is called before the Period to which it belongs to is stopped
+     *
      * @return int
      */
     public function getEndMemoryCurrent(): int
     {
+        if (null === $this->endMemoryCurrent) {
+            throw new LogicException("The Period is not yet stopped: you cannot call this method if you don't stop it.");
+        }
+
         return $this->endMemoryCurrent;
     }
 
     /**
      * Gets the max amount of memory assigned to PHP.
      *
+     * @throws LogicException if the method is called before the Period to which it belongs to is stopped
+     *
      * @return int
      */
     public function getEndMemoryPeak(): int
     {
+        if (null === $this->endMemoryPeak) {
+            throw new LogicException("The Period is not yet stopped: you cannot call this method if you don't stop it.");
+        }
+
         return $this->endMemoryPeak;
     }
 
     /**
      * Gets the max amount of memory used by emalloc().
      *
+     * @throws LogicException if the method is called before the Period to which it belongs to is stopped
+     *
      * @return int
      */
     public function getEndMemoryPeakEmalloc(): int
     {
+        if (null === $this->endMemoryPeakEmalloc) {
+            throw new LogicException("The Period is not yet stopped: you cannot call this method if you don't stop it.");
+        }
+
         return $this->endMemoryPeakEmalloc;
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  *
  * This file is part of the Serendipity HQ Stopwatch Component.
@@ -25,7 +27,7 @@ use SerendipityHQ\Component\Stopwatch\Event;
  */
 class EventTest extends TestCase
 {
-    const DELTA = 0.037;
+    private const DELTA = 0.037;
 
     public function testGetCategory()
     {
@@ -69,7 +71,7 @@ class EventTest extends TestCase
         $event->start();
         usleep(200000);
         $event->stop();
-        self::assertLessThan(0.205, $event->getDuration(), null);
+        self::assertLessThan(0.205, $event->getDuration());
 
         $event = new Event();
         $event->start();
@@ -79,7 +81,7 @@ class EventTest extends TestCase
         $event->start();
         usleep(100000);
         $event->stop();
-        self::assertEquals(0.205, $event->getDuration(), null, self::DELTA);
+        self::assertEqualsWithDelta(0.205, $event->getDuration(), self::DELTA);
     }
 
     public function testDurationBeforeStop()
@@ -87,7 +89,7 @@ class EventTest extends TestCase
         $event = new Event();
         $event->start();
         usleep(200000);
-        self::assertEquals(0.0, $event->getDuration(), null, self::DELTA);
+        self::assertEqualsWithDelta(0.0, $event->getDuration(), self::DELTA);
 
         $event = new Event();
         $event->start();
@@ -96,7 +98,7 @@ class EventTest extends TestCase
         usleep(50000);
         $event->start();
         usleep(100000);
-        self::assertEquals(0.100, $event->getDuration(), null, self::DELTA);
+        self::assertEqualsWithDelta(0.100, $event->getDuration(), self::DELTA);
     }
 
     public function testDurationBeforeStopIncludingStarted()
@@ -104,7 +106,7 @@ class EventTest extends TestCase
         $event = new Event();
         $event->start();
         usleep(200000);
-        self::assertEquals(0.205, $event->getDuration(true), null, self::DELTA);
+        self::assertEqualsWithDelta(0.205, $event->getDuration(true), self::DELTA);
 
         $event = new Event();
         $event->start();
@@ -113,14 +115,12 @@ class EventTest extends TestCase
         usleep(50000);
         $event->start();
         usleep(100000);
-        self::assertEquals(0.100, $event->getDuration(), null, self::DELTA);
+        self::assertEqualsWithDelta(0.100, $event->getDuration(), self::DELTA);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testStopWithoutStart()
     {
+        $this->expectException(\LogicException::class);
         $event = new Event();
         $event->stop();
     }
@@ -147,7 +147,7 @@ class EventTest extends TestCase
         $event->start();
         usleep(100000);
         $event->ensureStopped();
-        self::assertEquals(0.301, $event->getDuration(), null, self::DELTA);
+        self::assertEqualsWithDelta(0.301, $event->getDuration(), self::DELTA);
     }
 
     public function testStartTime()
