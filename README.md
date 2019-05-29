@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/Aerendir/Stopwatch.svg?branch=master)](https://travis-ci.org/Aerendir/Stopwatch)
 [![Total Downloads](https://poser.pugx.org/serendipity_hq/stopwatch/downloads.svg)](https://packagist.org/packages/serendipity_hq/stopwatch)
 [![License](https://poser.pugx.org/serendipity_hq/stopwatch/license.svg)](https://packagist.org/packages/serendipity_hq/stopwatch)
+[![codecov](https://codecov.io/gh/Aerendir/Stopwatch/branch/master/graph/badge.svg)](https://codecov.io/gh/Aerendir/Stopwatch)
 
 Statically tested with Psalm, Phan and PHPStan.
 
