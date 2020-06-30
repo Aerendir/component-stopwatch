@@ -7,5 +7,5 @@ vendor/bin/phan --progress-bar &&
 vendor/bin/psalm &&
 vendor/bin/phpunit &&
 composer validate --strict --no-check-lock &&
-composer outdated &&
+composer outdated --direct &&
 vendor/bin/security-checker security:check
