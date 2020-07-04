@@ -20,11 +20,11 @@
         }
     ],
     "require": {
-        "php": "^7.1.3",
-        "thecodingmachine/safe": "^0.1.15"
+        "php": "^7.1",
+        "thecodingmachine/safe": "^0.1 || ^1.1"
     },
     "require-dev": {
-        "ext-ast": "^1.0",
+        "ext-ast": "*",
         "friendsofphp/php-cs-fixer": "^2.13",
         "phpunit/phpunit": "^6.0||^7.0||^8.0",
         "phan/phan": "^2",
