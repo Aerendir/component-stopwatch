@@ -25,8 +25,9 @@
     },
     "require-dev": {
         "ext-ast": "*",
+        "drenso/phan-extensions": "@stable",
         "friendsofphp/php-cs-fixer": "^2.13",
-        "phan/phan": "^2",
+        "phan/phan": "^3.0",
         "phpstan/phpstan": "^0.11",
         "phpunit/phpunit": "^6.0||^7.0||^8.0",
         "rector/rector": "^0.4.12",
@@ -48,5 +49,8 @@
     },
     "config": {
         "sort-packages": true
+    },
+    "conflict": {
+        "nikic/php-parser": "4.6.0"
     }
 }
