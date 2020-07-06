@@ -32,7 +32,7 @@
         "rector/rector": "^0.4.12",
         "roave/security-advisories": "dev-master",
         "sensiolabs/security-checker": "^5",
-        "symfony/var-dumper": "^4.2",
+        "symfony/var-dumper": "^4.0|^5.0",
         "thecodingmachine/phpstan-safe-rule": "@stable",
         "vimeo/psalm": "^3.3"
     },
