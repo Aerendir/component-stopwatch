@@ -38,7 +38,11 @@
     },
     "autoload": {
         "psr-4": {
-            "SerendipityHQ\\Component\\Stopwatch\\": "src",
+            "SerendipityHQ\\Component\\Stopwatch\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "SerendipityHQ\\Component\\Stopwatch\\Tests\\": "tests"
         }
     },
