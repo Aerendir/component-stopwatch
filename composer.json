@@ -41,5 +41,8 @@
             "SerendipityHQ\\Component\\Stopwatch\\": "src",
             "SerendipityHQ\\Component\\Stopwatch\\Tests\\": "tests"
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
