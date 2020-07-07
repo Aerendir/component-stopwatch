@@ -30,11 +30,11 @@
         "phan/phan": "^2",
         "phpstan/phpstan": "^0.11",
         "phpstan/phpstan-phpunit": "@stable",
-        "phpunit/phpunit": "^6.0||^7.0||^8.0",
         "psalm/plugin-phpunit": "@stable",
         "rector/rector": "^0.4.12",
         "roave/security-advisories": "dev-master",
         "sensiolabs/security-checker": "^5",
+        "symfony/phpunit-bridge": "^5.1",
         "symfony/var-dumper": "^4.0|^5.0",
         "thecodingmachine/phpstan-safe-rule": "@stable",
         "vimeo/psalm": "^3.12"
