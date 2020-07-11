@@ -15,6 +15,7 @@ STOPWATCH
 [![Latest Stable Version](https://poser.pugx.org/serendipity_hq/stopwatch/v/stable.png)](https://packagist.org/packages/serendipity_hq/stopwatch)
 [![Total Downloads](https://poser.pugx.org/serendipity_hq/stopwatch/downloads.svg)](https://packagist.org/packages/serendipity_hq/stopwatch)
 [![License](https://poser.pugx.org/serendipity_hq/stopwatch/license.svg)](https://packagist.org/packages/serendipity_hq/stopwatch)
+[![codecov](https://codecov.io/gh/Aerendir/Stopwatch/branch/master/graph/badge.svg)](https://codecov.io/gh/Aerendir/Stopwatch)
 
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=coverage)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
