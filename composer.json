@@ -1,9 +1,9 @@
 {
-    "name": "serendipity_hq/stopwatch",
+    "name": "serendipity_hq/component-stopwatch",
     "type": "library",
-    "description": "Symfony Stopwatch Component",
+    "description": "Measure your scripts (forked and improved from the Symofny's one)",
     "keywords": [],
-    "homepage": "https://symfony.com",
+    "homepage": "https://github.com/Aerendir/component-stopwatch",
     "license": "MIT",
     "authors": [
         {
