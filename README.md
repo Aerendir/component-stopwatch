@@ -1,13 +1,37 @@
+<p align="center">
+    <a href="http://www.serendipityhq.com" target="_blank">
+        <img src="http://www.serendipityhq.com/assets/open-source-projects/Logo-SerendipityHQ-Icon-Text-Purple.png">
+    </a>
+</p>
+
+STOPWATCH
+=========
+
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/serendipity_hq/stopwatch?color=%238892BF)](https://packagist.org/packages/serendipity_hq/stopwatch)
+[![Tested with Symfony ^3.0](https://img.shields.io/badge/Symfony-%5E3.0-333)](https://github.com/Aerendir/component-stopwatch/actions)
+[![Tested with Symfony ^4.0](https://img.shields.io/badge/Symfony-%5E4.0-333)](https://github.com/Aerendir/component-stopwatch/actions)
+[![Tested with Symfony ^5.0](https://img.shields.io/badge/Symfony-%5E5.0-333)](https://github.com/Aerendir/component-stopwatch/actions)
+
 [![Latest Stable Version](https://poser.pugx.org/serendipity_hq/stopwatch/v/stable.png)](https://packagist.org/packages/serendipity_hq/stopwatch)
-[![Build Status](https://travis-ci.org/Aerendir/Stopwatch.svg?branch=master)](https://travis-ci.org/Aerendir/Stopwatch)
 [![Total Downloads](https://poser.pugx.org/serendipity_hq/stopwatch/downloads.svg)](https://packagist.org/packages/serendipity_hq/stopwatch)
 [![License](https://poser.pugx.org/serendipity_hq/stopwatch/license.svg)](https://packagist.org/packages/serendipity_hq/stopwatch)
 [![codecov](https://codecov.io/gh/Aerendir/Stopwatch/branch/master/graph/badge.svg)](https://codecov.io/gh/Aerendir/Stopwatch)
 
-Statically tested with Psalm, Phan and PHPStan.
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=coverage)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=alert_status)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=security_rating)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=sqale_index)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
 
-The Stopwatch Component
-=======================
+![Phan](https://github.com/Aerendir/component-stopwatch/workflows/Phan/badge.svg)
+![PHPStan](https://github.com/Aerendir/component-stopwatch/workflows/PHPStan/badge.svg)
+![PSalm](https://github.com/Aerendir/component-stopwatch/workflows/PSalm/badge.svg)
+![PHPUnit](https://github.com/Aerendir/component-stopwatch/workflows/PHPunit/badge.svg)
+![Composer](https://github.com/Aerendir/component-stopwatch/workflows/Composer/badge.svg)
+![PHP CS Fixer](https://github.com/Aerendir/component-stopwatch/workflows/PHP%20CS%20Fixer/badge.svg)
+![Rector](https://github.com/Aerendir/component-stopwatch/workflows/Rector/badge.svg)
 
     The Stopwatch component provides a way to profile code, measuring both timing and memory usage.
 
@@ -68,19 +92,19 @@ always measures time with microsecond precision, so you don't need to pass any p
 
     // This is the Symfony's Stopwatch way
     $stopwatch = new Stopwatch(true);
-    
+
     // This is the SerendipityHQ's Stopwatch way: always microseconds precision
     $stopwatch = new Stopwatch();
 
 Now you can start measurements:
 
     // ...
-    
+
     // Starts event named 'event_name'
     $stopwatch->start('event_name');
 
     // ... some code goes here
-    
+
     // Stop the event and get it
     $event = $stopwatch->stop('event_name');
 
@@ -108,11 +132,11 @@ The `Stopwatch` class exposes those methods for measurements:
     $stopwatch->stop('event_name');                    // Stops the current Period
     $stopwatch->lap('event_name');                     // Stops the current Period and starts a new one.
                                                        // Equals to $stopwatch->stop('event_name')->start('event_name')
-    
+
     // To manage Sections
     $stopwatch->openSection();
     $stopwatch->stopSection('section_name');
-    
+
     // Other methods
     $stopwatch->reset();
 
@@ -173,23 +197,23 @@ This is exactly what the `Stopwatch::lap()` method does::
 
 ```php
     // ...
-    
+
     // starts event named 'process_elements'
     $stopwatch->start('process_elements');
-    
+
     // Maybe here some other code
-    
+
     // Start cycling the elements
     foreach ($lements as $element) {
         // Process the $element
-        
+
         // At the end use lap() to stop the timer and start a new Period
         $stopwatch->lap('process_elements');
-        
+
     }
-    
+
     // ... Some other code goes here
-    
+
     // Finally stop the Event and get it to get information about timing and memory
     $event = $stopwatch->stop('process_elements');
 ```
@@ -215,7 +239,7 @@ dump(Formatter::formatTime($event->getDuration()), Formatter::formatMemory($even
 
 ### Sections
 
-Sections are a way to logically split the timeline into groups. 
+Sections are a way to logically split the timeline into groups.
 
 You can see how Symfony uses sections to nicely visualize the framework lifecycle in the Symfony Profiler tool:
 
@@ -230,10 +254,10 @@ Exapanding on the previous example, try implment somthing to use the `Section`s:
 
     // Open a section
     $stopwatch->openSection();
-    
+
     // Start the event assigning the category "numbers"
     $stopwatch->start('fibonacci_event', 'numbers');
-    
+
     // Execute the code
     dump('fibonacci_event result', '-------------', '');
     $prev = 0;
@@ -255,7 +279,7 @@ Exapanding on the previous example, try implment somthing to use the `Section`s:
 
     // Start a new event assigning the category "geometry"
     $stopwatch->start('square_numbers_event', 'geometry');
-    
+
     // Execute the code
     dump('square_numbers_event result', '-------------', '');
     $root = 0;
@@ -270,7 +294,7 @@ Exapanding on the previous example, try implment somthing to use the `Section`s:
 
     // Stop the event
     $stopwatch->stop('square_numbers_event');
-    
+
     // Stop the section assigning it a name (yes, when closing, not when opening!)
     $stopwatch->stopSection('fibonacci_and_squares');
 
@@ -294,7 +318,7 @@ Exapanding on the previous example, try implment somthing to use the `Section`s:
         // Get a lap (returns the current event to be used if you like!)
         $stopwatch->lap('triangle_numbers_event');
     }
-    
+
     // Stop the event
     $stopwatch->stop('triangle_numbers_event');
 
@@ -335,9 +359,9 @@ You can reopen a closed section by calling `$stopwatch::openSection('section_nam
 So, for example, if we would like to add to the section `fibonacci_and_squares` another `Event`, we do:
 
     $stopwatch->openSection('fibonacci_and_squares');
-    
+
     // Start another event, execute other code...
-    
+
     // Stop the event and then stop the section again
 
 #### Get measurement of a Section
@@ -354,7 +378,7 @@ use SerendipityHQ\Component\Stopwatch\Utils\Formatter;
 $sectionEvent = $stopwatch->getSection('section_name')->getEvent(Stopwatch::SECTION);
 
 dump(Formatter::formatTime($sectionEvent->getDuration()), Formatter::formatMemory($sectionEvent->getMemory());
-``` 
+```
 
 You can also use the shortcut `Section::getSectionEvent()` to get the `Section`s `Event`:
 
