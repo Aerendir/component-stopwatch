@@ -1,22 +1,21 @@
 <p align="center">
     <a href="http://www.serendipityhq.com" target="_blank">
-        <img src="http://www.serendipityhq.com/assets/open-source-projects/Logo-SerendipityHQ-Icon-Text-Purple.png">
+        <img style="max-width: 350px" src="http://www.serendipityhq.com/assets/open-source-projects/Logo-SerendipityHQ-Icon-Text-Purple.png">
     </a>
 </p>
 
-STOPWATCH
-=========
+<h1 align="center">Serendipity HQ Stopwatch</h1>
+<p align="center">Profile your code, measuring both timing and memory usage.</p>
+<p align="center">
+    <a href="https://github.com/Aerendir/component-stopwatch/releases"><img src="https://img.shields.io/packagist/v/serendipity_hq/component-stopwatch.svg?style=flat-square"></a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square"></a>
+    <a href="https://github.com/Aerendir/component-stopwatch/releases"><img src="https://img.shields.io/packagist/php-v/serendipity_hq/component-stopwatch?color=%238892BF&style=flat-square&logo=php" /></a>
+    <a title="Tested with Symfony ^3.4" href="https://github.com/Aerendir/component-stopwatch/actions"><img title="Tested with Symfony ^3.4" src="https://img.shields.io/badge/Symfony-%5E3.4-333?style=flat-square&logo=symfony" /></a>
+    <a title="Tested with Symfony ^4.4" href="https://github.com/Aerendir/component-stopwatch/actions"><img title="Tested with Symfony ^4.4" src="https://img.shields.io/badge/Symfony-%5E4.4-333?style=flat-square&logo=symfony" /></a>
+    <a title="Tested with Symfony ^5.0" href="https://github.com/Aerendir/component-stopwatch/actions"><img title="Tested with Symfony ^5.0" src="https://img.shields.io/badge/Symfony-%5E5.0-333?style=flat-square&logo=symfony" /></a>
+</p>
 
-[![PHP from Packagist](https://img.shields.io/packagist/php-v/serendipity_hq/stopwatch?color=%238892BF)](https://packagist.org/packages/serendipity_hq/stopwatch)
-[![Tested with Symfony ^3.0](https://img.shields.io/badge/Symfony-%5E3.0-333)](https://github.com/Aerendir/component-stopwatch/actions)
-[![Tested with Symfony ^4.0](https://img.shields.io/badge/Symfony-%5E4.0-333)](https://github.com/Aerendir/component-stopwatch/actions)
-[![Tested with Symfony ^5.0](https://img.shields.io/badge/Symfony-%5E5.0-333)](https://github.com/Aerendir/component-stopwatch/actions)
-
-[![Latest Stable Version](https://poser.pugx.org/serendipity_hq/stopwatch/v/stable.png)](https://packagist.org/packages/serendipity_hq/stopwatch)
-[![Total Downloads](https://poser.pugx.org/serendipity_hq/stopwatch/downloads.svg)](https://packagist.org/packages/serendipity_hq/stopwatch)
-[![License](https://poser.pugx.org/serendipity_hq/stopwatch/license.svg)](https://packagist.org/packages/serendipity_hq/stopwatch)
-[![codecov](https://codecov.io/gh/Aerendir/Stopwatch/branch/master/graph/badge.svg)](https://codecov.io/gh/Aerendir/Stopwatch)
-
+## Current Status
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=coverage)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=alert_status)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
@@ -25,26 +24,26 @@ STOPWATCH
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=sqale_index)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Aerendir_component-stopwatch&metric=vulnerabilities)](https://sonarcloud.io/dashboard?id=Aerendir_component-stopwatch)
 
-![Phan](https://github.com/Aerendir/component-stopwatch/workflows/Phan/badge.svg)
-![PHPStan](https://github.com/Aerendir/component-stopwatch/workflows/PHPStan/badge.svg)
-![PSalm](https://github.com/Aerendir/component-stopwatch/workflows/PSalm/badge.svg)
-![PHPUnit](https://github.com/Aerendir/component-stopwatch/workflows/PHPunit/badge.svg)
-![Composer](https://github.com/Aerendir/component-stopwatch/workflows/Composer/badge.svg)
-![PHP CS Fixer](https://github.com/Aerendir/component-stopwatch/workflows/PHP%20CS%20Fixer/badge.svg)
-![Rector](https://github.com/Aerendir/component-stopwatch/workflows/Rector/badge.svg)
+[![Phan](https://github.com/Aerendir/component-stopwatch/workflows/Phan/badge.svg)](https://github.com/Aerendir/component-stopwatch/actions?query=branch%3Adev)
+[![PHPStan](https://github.com/Aerendir/component-stopwatch/workflows/PHPStan/badge.svg)](https://github.com/Aerendir/component-stopwatch/actions?query=branch%3Adev)
+[![PSalm](https://github.com/Aerendir/component-stopwatch/workflows/PSalm/badge.svg)](https://github.com/Aerendir/component-stopwatch/actions?query=branch%3Adev)
+[![PHPUnit](https://github.com/Aerendir/component-stopwatch/workflows/PHPunit/badge.svg)](https://github.com/Aerendir/component-stopwatch/actions?query=branch%3Adev)
+[![Composer](https://github.com/Aerendir/component-stopwatch/workflows/Composer/badge.svg)](https://github.com/Aerendir/component-stopwatch/actions?query=branch%3Adev)
+[![PHP CS Fixer](https://github.com/Aerendir/component-stopwatch/workflows/PHP%20CS%20Fixer/badge.svg)](https://github.com/Aerendir/component-stopwatch/actions?query=branch%3Adev)
+[![Rector](https://github.com/Aerendir/component-stopwatch/workflows/Rector/badge.svg)](https://github.com/Aerendir/component-stopwatch/actions?query=branch%3Adev)
 
-    The Stopwatch component provides a way to profile code, measuring both timing and memory usage.
-
-**ATTENTION**
-*Memory usage measurement is a really complex topic in PHP: please, be careful and use this component
-only for basic purposes. For more advanced measurements, use a more accurate tool like xDebug or Blackfire.*
+## Why
 
 *This component is a fork of the Symfony's Stopwatch component, so you can check
 [its Documentation](https://symfony.com/doc/current/components/stopwatch.html) for further information.*
 
 We decided to fork it as the proposed changes about memory measurement were [rejected](https://github.com/symfony/symfony/pull/27711).
 
-### Features:
+**ATTENTION**
+*Memory usage measurement is a really complex topic in PHP: please, be careful and use this component
+only for basic purposes. For more advanced measurements, use a more accurate tool like xDebug or Blackfire.*
+
+## Features:
 
 - Timing measurement
 - Memory measurement (consumed, allocated, peak consumed by `emalloc()`, peak allocated)
@@ -55,23 +54,17 @@ We decided to fork it as the proposed changes about memory measurement were [rej
 - Lap functionality
 - Precision measurement
 
-### Requirements
-
-- PHP: >= 7.2
-
-Installation
-------------
+## Install Serendipity HQ Stopwatch
 
 .. code-block:: terminal
 
-    $ composer require serendipity_hq/stopwatch
+    $ composer require serendipity_hq/component-stopwatch
 
 Alternatively, you can clone the `<https://github.com/aerendir/stopwatch>`_ repository.
 
 This library follows the http://semver.org/ versioning conventions.
 
-How to use Stopwatch
---------------------
+## How to use Stopwatch
 
 Stopwatch component allows to profile each part of your code as you like, being really precise.
 
@@ -110,8 +103,7 @@ Now you can start measurements:
 
 `$event` is a `Event` object from which you can get the profiling information.
 
-Basic concepts
---------------
+## Basic concepts
 
 ### Measurements
 
@@ -408,8 +400,7 @@ So, if you like, you can call `$stopwatch->reset()` method to erease from the `S
 
 Obviously, once called, the information collected until that moment will not be available anymore, so it is a good idea to "save" them somewhere (in the database, in the logs or anywhere else).
 
-Resources
----------
+## Resources
 
   * [Documentation](https://symfony.com/doc/current/components/stopwatch.html)
   * [Contributing](https://symfony.com/doc/current/contributing/index.html)
