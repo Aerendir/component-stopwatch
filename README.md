@@ -32,17 +32,6 @@
 [![PHP CS Fixer](https://github.com/Aerendir/component-stopwatch/workflows/PHP%20CS%20Fixer/badge.svg)](https://github.com/Aerendir/component-stopwatch/actions?query=branch%3Adev)
 [![Rector](https://github.com/Aerendir/component-stopwatch/workflows/Rector/badge.svg)](https://github.com/Aerendir/component-stopwatch/actions?query=branch%3Adev)
 
-## Why
-
-*This component is a fork of the Symfony's Stopwatch component, so you can check
-[its Documentation](https://symfony.com/doc/current/components/stopwatch.html) for further information.*
-
-We decided to fork it as the proposed changes about memory measurement were [rejected](https://github.com/symfony/symfony/pull/27711).
-
-**ATTENTION**
-*Memory usage measurement is a really complex topic in PHP: please, be careful and use this component
-only for basic purposes. For more advanced measurements, use a more accurate tool like xDebug or Blackfire.*
-
 ## Features:
 
 - Timing measurement
@@ -53,6 +42,29 @@ only for basic purposes. For more advanced measurements, use a more accurate too
 - Start and stop
 - Lap functionality
 - Precision measurement
+
+<hr />
+<h3 align="center">
+    <b>Do you like this bundle?</b><br />
+    <b><a href="#js-repo-pjax-container">LEAVE A &#9733;</a></b>
+</h3>
+<p align="center">
+    or run<br />
+    <code>composer global require symfony/thanks && composer thanks</code><br />
+    to say thank you to all libraries you use in your current project, this included!
+</p>
+<hr />
+
+## Why
+
+*This component is a fork of the Symfony's Stopwatch component, so you can check
+[its Documentation](https://symfony.com/doc/current/components/stopwatch.html) for further information.*
+
+We decided to fork it as the proposed changes about memory measurement were [rejected](https://github.com/symfony/symfony/pull/27711).
+
+**ATTENTION**
+*Memory usage measurement is a really complex topic in PHP: please, be careful and use this component
+only for basic purposes. For more advanced measurements, use a more accurate tool like xDebug or Blackfire.*
 
 ## Install Serendipity HQ Stopwatch
 
@@ -407,3 +419,15 @@ Obviously, once called, the information collected until that moment will not be 
   * [Report issues](https://github.com/symfony/symfony/issues) and
     [send Pull Requests](https://github.com/symfony/symfony/pulls)
     in the [main Symfony repository](https://github.com/symfony/symfony)
+
+<hr />
+<h3 align="center">
+    <b>Do you like this bundle?</b><br />
+    <b><a href="#js-repo-pjax-container">LEAVE A &#9733;</a></b>
+</h3>
+<p align="center">
+    or run<br />
+    <code>composer global require symfony/thanks && composer thanks</code><br />
+    to say thank you to all libraries you use in your current project, this included!
+</p>
+<hr />
