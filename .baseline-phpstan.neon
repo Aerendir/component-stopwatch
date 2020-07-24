@@ -1,0 +1,117 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Properties\\\\Memory\\:\\:measure\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Properties/Memory.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\EventTest\\:\\:testGetCategory\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/EventTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\EventTest\\:\\:testGetPeriods\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/EventTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\EventTest\\:\\:testLap\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/EventTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\EventTest\\:\\:testDuration\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/EventTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\EventTest\\:\\:testDurationBeforeStop\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/EventTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\EventTest\\:\\:testDurationBeforeStopIncludingStarted\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/EventTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\EventTest\\:\\:testStopWithoutStart\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/EventTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\EventTest\\:\\:testIsStarted\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/EventTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\EventTest\\:\\:testIsNotStarted\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/EventTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\EventTest\\:\\:testEnsureStopped\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/EventTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\EventTest\\:\\:testStartTime\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/EventTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\StopwatchTest\\:\\:testStart\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/StopwatchTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\StopwatchTest\\:\\:testIsStarted\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/StopwatchTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\StopwatchTest\\:\\:testIsNotStarted\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/StopwatchTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\StopwatchTest\\:\\:testIsNotStartedEvent\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/StopwatchTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\StopwatchTest\\:\\:testStop\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/StopwatchTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\StopwatchTest\\:\\:testUnknownEvent\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/StopwatchTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\StopwatchTest\\:\\:testStopWithoutStart\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/StopwatchTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\StopwatchTest\\:\\:testSection\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/StopwatchTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\StopwatchTest\\:\\:testReopenASection\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/StopwatchTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\StopwatchTest\\:\\:testReopenANewSectionShouldThrowAnException\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/StopwatchTest.php
+
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Tests\\\\StopwatchTest\\:\\:testReset\\(\\) has no return typehint specified\\.$#"
+			count: 1
+			path: tests/StopwatchTest.php
+
