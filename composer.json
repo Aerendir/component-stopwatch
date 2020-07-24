@@ -2,9 +2,12 @@
     "name": "serendipity_hq/component-stopwatch",
     "type": "library",
     "description": "Measure your scripts (forked and improved from the Symofny's one)",
-    "keywords": [],
+    "keywords": ["profiling", "performances", "measurements", "memory"],
     "homepage": "https://github.com/Aerendir/component-stopwatch",
     "license": "MIT",
+    "support": {
+        "issues": "https://github.com/Aerendir/component-stopwatch/issues"
+    },
     "authors": [
         {
             "name": "Fabien Potencier",
