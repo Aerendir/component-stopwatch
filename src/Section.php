@@ -3,14 +3,12 @@
 declare(strict_types=1);
 
 /*
- *
  * This file is part of the Serendipity HQ Stopwatch Component.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
- * (c) Adamo Crespi <hello@aerendir.me>
+ * Copyright (c) Adamo Aerendir Crespi <aerendir@serendipityhq.com>.
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with the Symfony Framework.
+ * file that was distributed with this source code.
  */
 
 namespace SerendipityHQ\Component\Stopwatch;
@@ -27,7 +25,7 @@ use SerendipityHQ\Component\Stopwatch\Properties\Origin;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Adamo Crespi <hello@aerendir.me>
  */
-class Section
+final class Section
 {
     /** @var Origin $origin */
     private $origin;
@@ -76,11 +74,9 @@ class Section
      *
      * @param string $id The Section identifier
      *
-     * @return Section
-     *
      * @internal
      */
-    public function stopSection(string $id): Section
+    public function stopSection(string $id): self
     {
         $this->id = $id;
 
@@ -104,7 +100,7 @@ class Section
     {
         $section = null;
 
-        if (is_string($id)) {
+        if (\is_string($id)) {
             $section = $this->getChildSection($id);
         }
 

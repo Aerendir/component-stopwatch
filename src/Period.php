@@ -3,14 +3,12 @@
 declare(strict_types=1);
 
 /*
- *
  * This file is part of the Serendipity HQ Stopwatch Component.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
- * (c) Adamo Crespi <hello@aerendir.me>
+ * Copyright (c) Adamo Aerendir Crespi <aerendir@serendipityhq.com>.
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with the Symfony Framework.
+ * file that was distributed with this source code.
  */
 
 namespace SerendipityHQ\Component\Stopwatch;
@@ -24,7 +22,7 @@ use SerendipityHQ\Component\Stopwatch\Properties\Time;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Adamo Crespi <hello@aerendir.me>
  */
-class Period
+final class Period
 {
     /** @var Time $time */
     private $time;
@@ -66,11 +64,9 @@ class Period
     /**
      * Stops the Period.
      *
-     * @return Period
-     *
      * @internal use Stopwatch::stop() or Stopwatch::stopSection()
      */
-    public function stop(): Period
+    public function stop(): self
     {
         $this->getTime()->stop();
         $this->getMemory()->stop();
