@@ -11,10 +11,7 @@ return [
     // # Issue statistics:
     // PhanUnreferencedPublicMethod : 50+ occurrences
     // PhanAccessMethodInternal : 35+ occurrences
-    // PhanUndeclaredStaticMethod : 7 occurrences
     // PhanUnreferencedClass : 4 occurrences
-    // PhanRedefinedExtendedClass : 2 occurrences
-    // PhanRedefinedClassReference : 1 occurrence
     // PhanTypePossiblyInvalidDimOffset : 1 occurrence
 
     // Currently, file_suppressions and directory_suppressions are the only supported suppressions
@@ -26,8 +23,8 @@ return [
         'src/Stopwatch.php' => ['PhanUnreferencedPublicMethod'],
         'src/Utils/Formatter.php' => ['PhanTypePossiblyInvalidDimOffset', 'PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
         'src/Utils/MemoryCalc.php' => ['PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
-        'tests/EventTest.php' => ['PhanAccessMethodInternal', 'PhanRedefinedExtendedClass', 'PhanUndeclaredStaticMethod', 'PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
-        'tests/StopwatchTest.php' => ['PhanAccessMethodInternal', 'PhanRedefinedClassReference', 'PhanRedefinedExtendedClass', 'PhanUndeclaredStaticMethod', 'PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
+        'tests/EventTest.php' => ['PhanAccessMethodInternal', 'PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
+        'tests/StopwatchTest.php' => ['PhanAccessMethodInternal', 'PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
     ],
     // 'directory_suppressions' => ['src/directory_name' => ['PhanIssueName1', 'PhanIssueName2']] can be manually added if needed.
     // (directory_suppressions will currently be ignored by subsequent calls to --save-baseline, but may be preserved in future Phan releases)

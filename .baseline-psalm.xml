@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="3.12.2@7c7ebd068f8acaba211d4a2c707c4ba90874fa26">
   <file src="src/Stopwatch.php">
-    <PropertyNotSetInConstructor occurrences="2">
-      <code>$sections</code>
-      <code>$activeSections</code>
-    </PropertyNotSetInConstructor>
+    <DocblockTypeContradiction occurrences="2">
+      <code>\is_array($this-&gt;activeSections) || $this-&gt;activeSections instanceof \Countable</code>
+      <code>0</code>
+    </DocblockTypeContradiction>
+    <PossiblyInvalidArgument occurrences="1">
+      <code>$this-&gt;activeSections</code>
+    </PossiblyInvalidArgument>
+    <RedundantConditionGivenDocblockType occurrences="1">
+      <code>\is_array($this-&gt;activeSections)</code>
+    </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/Utils/Formatter.php">
-    <PossiblyUndefinedMethod occurrences="5">
-      <code>$timeFormats</code>
-      <code>$timeFormats</code>
+    <PossiblyUndefinedMethod occurrences="3">
       <code>$format</code>
       <code>$format</code>
       <code>$format</code>
@@ -17,10 +21,17 @@
   </file>
   <file src="tests/StopwatchTest.php">
     <InvalidOperand occurrences="1">
-      <code>microtime(true) * 1000</code>
+      <code>\microtime(true) * 1000</code>
     </InvalidOperand>
     <RedundantCondition occurrences="1">
       <code>assertInstanceOf</code>
     </RedundantCondition>
+  </file>
+  <file src="vendor-bin/phpunit/vendor/phpunit/phpunit/src/Framework/MockObject/Builder/ParametersMatch.php">
+    <ParseError occurrences="3">
+      <code>Match</code>
+      <code>;</code>
+      <code>;</code>
+    </ParseError>
   </file>
 </files>
