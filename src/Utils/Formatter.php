@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace SerendipityHQ\Component\Stopwatch\Utils;
 
-use Countable;
 use RuntimeException;
 use Safe\Exceptions\StringsException;
 
@@ -55,8 +54,8 @@ final class Formatter
         ];
 
         foreach ($timeFormats as $index => $format) {
-            if ($microtime >= $format[0] && ((isset($timeFormats[$index + 1]) && $microtime < $timeFormats[$index + 1][0]) || $index === (\is_array($timeFormats) || $timeFormats instanceof Countable ? \count($timeFormats) : 0) - 1)) {
-                if (2 === (\is_array($format) || $format instanceof Countable ? \count($format) : 0)) {
+            if ($microtime >= $format[0] && ((isset($timeFormats[$index + 1]) && $microtime < $timeFormats[$index + 1][0]) || $index === (\is_countable($timeFormats) ? \count($timeFormats) : 0) - 1)) {
+                if (2 === (\is_countable($format) ? \count($format) : 0)) {
                     return \Safe\sprintf('%s %s', \round($microtime, $precision), $format[1]);
                 }
 
