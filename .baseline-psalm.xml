@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="3.13.1@afd8874a9e4562eac42a02de90e42e430c3a1db1">
+<files psalm-version="4.4.1@9fd7a7d885b3a216cff8dec9d8c21a132f275224">
   <file src="src/Stopwatch.php">
-    <DocblockTypeContradiction occurrences="2">
-      <code>\is_array($this-&gt;activeSections) || $this-&gt;activeSections instanceof \Countable</code>
+    <DocblockTypeContradiction occurrences="1">
       <code>0</code>
     </DocblockTypeContradiction>
-    <PossiblyInvalidArgument occurrences="1">
-      <code>$this-&gt;activeSections</code>
-    </PossiblyInvalidArgument>
     <RedundantConditionGivenDocblockType occurrences="1">
       <code>\is_array($this-&gt;activeSections)</code>
     </RedundantConditionGivenDocblockType>
@@ -23,8 +19,5 @@
     <InvalidOperand occurrences="1">
       <code>\microtime(true) * 1000</code>
     </InvalidOperand>
-    <RedundantCondition occurrences="1">
-      <code>assertInstanceOf</code>
-    </RedundantCondition>
   </file>
 </files>
