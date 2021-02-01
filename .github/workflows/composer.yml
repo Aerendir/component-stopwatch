@@ -30,4 +30,4 @@ jobs:
             - name: Run Composer
               run: |
                   symfony security:check
-                  composer validate --strict
+                  composer validate --strict --no-check-lock

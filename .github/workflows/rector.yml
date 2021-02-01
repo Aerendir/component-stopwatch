@@ -3,29 +3,30 @@ name: Rector
 on: [push, pull_request]
 
 jobs:
-  serendipity_hq:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        php: ['7.4', '8.0']
-    name: PHP ${{ matrix.php }} on ${{ matrix.os }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    serendipity_hq:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest]
+                php: ['7.3', '7.4', '8.0']
+        name: PHP ${{ matrix.php }} on ${{ matrix.os }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@2.9.0
-        with:
-          php-version: ${{ matrix.php }}
-          coverage: none # disable xdebug, pcov
-          extensions: ast
+            - name: Setup PHP
+              uses: shivammathur/setup-php@2.9.0
+              with:
+                  php-version: ${{ matrix.php }}
+                  coverage: none # disable xdebug, pcov
+                  extensions: ast
 
-      - name: Install Composer deps
-        run: |
-          composer update --no-interaction --no-suggest
+            - name: Install Composer deps
+              run: |
+                  composer update --no-interaction --no-suggest --no-scripts
+                  composer bin phpunit update
 
-      - name: Run Rector
-        run: |
-          ./vendor/bin/rector process --dry-run
+            - name: Run Rector
+              run: |
+                  ./vendor/bin/rector process --dry-run

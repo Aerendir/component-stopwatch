@@ -3,39 +3,40 @@ name: PHPunit
 on: [push, pull_request]
 
 jobs:
-  phpunit:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        php: ['7.4', '8.0']
-    name: PHP ${{ matrix.php }} on ${{ matrix.os }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+    phpunit:
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: [ubuntu-latest]
+                php: ['7.3', '7.4', '8.0']
+        name: PHP ${{ matrix.php }} on ${{ matrix.os }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@2.9.0
-        with:
-          php-version: ${{ matrix.php }}
-          coverage: pcov
-          extensions: ast
+            - name: Setup PHP
+              uses: shivammathur/setup-php@2.9.0
+              with:
+                  php-version: ${{ matrix.php }}
+                  coverage: pcov
+                  extensions: ast
 
-      - name: Install Composer deps
-        run: |
-          composer update --no-interaction --no-suggest
+            - name: Install Composer deps
+              run: |
+                  composer update --no-interaction --no-suggest --no-scripts
+                  composer bin phpunit update
 
-      - name: Run PHPunit
-        run: |
-          ./vendor/bin/phpunit
+            - name: Run PHPunit
+              run: |
+                  ./vendor/bin/phpunit --coverage-clover var/coverage/clover.xml
 
-      - name: Change paths in clover.xml
-        run: |
-          sed -i 's+/home/runner/work/component-stopwatch/component-stopwatch+/github/workspace+g' ./var/coverage/clover.xml
+            - name: Change paths in clover.xml
+              run: |
+                  sed -i 's+/home/runner/work/component-stopwatch/component-stopwatch+/github/workspace+g' ./var/coverage/clover.xml
 
-      - name: Sonarcloud
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            - name: Sonarcloud
+              uses: sonarsource/sonarcloud-github-action@master
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
