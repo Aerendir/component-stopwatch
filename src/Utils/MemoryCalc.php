@@ -3,14 +3,12 @@
 declare(strict_types=1);
 
 /*
- *
  * This file is part of the Serendipity HQ Stopwatch Component.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
- * (c) Adamo Crespi <hello@aerendir.me>
+ * Copyright (c) Adamo Aerendir Crespi <aerendir@serendipityhq.com>.
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with the Symfony Framework.
+ * file that was distributed with this source code.
  */
 
 namespace SerendipityHQ\Component\Stopwatch\Utils;
@@ -24,7 +22,7 @@ use SerendipityHQ\Component\Stopwatch\Period;
  *
  * @author Adamo Crespi <hello@aerendir.me>
  */
-class MemoryCalc
+final class MemoryCalc
 {
     /** @var Period[]|null */
     private $periods;
@@ -242,7 +240,7 @@ class MemoryCalc
      */
     private function getLastPeriod(): Period
     {
-        $count = count($this->getPeriods());
+        $count = \count($this->getPeriods());
 
         // We don't use end() to not modify the internal pointer of the array
         return $this->getPeriods()[$count - 1];

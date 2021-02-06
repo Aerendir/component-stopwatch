@@ -3,14 +3,12 @@
 declare(strict_types=1);
 
 /*
- *
  * This file is part of the Serendipity HQ Stopwatch Component.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
- * (c) Adamo Crespi <hello@aerendir.me>
+ * Copyright (c) Adamo Aerendir Crespi <aerendir@serendipityhq.com>.
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with the Symfony Framework.
+ * file that was distributed with this source code.
  */
 
 namespace SerendipityHQ\Component\Stopwatch\Properties;
@@ -22,8 +20,19 @@ use LogicException;
  *
  * @author Adamo Crespi <hello@aerendir.me>
  */
-class Memory
+final class Memory
 {
+    /** @var string */
+    private const MEMORY_GET_USAGE_TRUE = 'memory_get_usage_true';
+
+    /** @var string */
+    private const MEMORY_GET_USAGE = 'memory_get_usage';
+
+    /** @var string */
+    private const MEMORY_GET_PEAK_USAGE_TRUE = 'memory_get_peak_usage_true';
+
+    /** @var string */
+    private const MEMORY_GET_PEAK_USAGE = 'memory_get_peak_usage';
     /** @var int $startMemory The amount of memory assigned to PHP */
     private $startMemory;
 
@@ -54,10 +63,10 @@ class Memory
     public function __construct()
     {
         $memories                     = self::measure();
-        $this->startMemory            = $memories['memory_get_usage_true'];
-        $this->startMemoryCurrent     = $memories['memory_get_usage'];
-        $this->startMemoryPeak        = $memories['memory_get_peak_usage_true'];
-        $this->startMemoryPeakEmalloc = $memories['memory_get_peak_usage'];
+        $this->startMemory            = $memories[self::MEMORY_GET_USAGE_TRUE];
+        $this->startMemoryCurrent     = $memories[self::MEMORY_GET_USAGE];
+        $this->startMemoryPeak        = $memories[self::MEMORY_GET_PEAK_USAGE_TRUE];
+        $this->startMemoryPeakEmalloc = $memories[self::MEMORY_GET_PEAK_USAGE];
     }
 
     /**
@@ -66,10 +75,10 @@ class Memory
     public static function measure(): array
     {
         return [
-            'memory_get_usage_true'      => memory_get_usage(true),
-            'memory_get_usage'           => memory_get_usage(),
-            'memory_get_peak_usage_true' => memory_get_peak_usage(true),
-            'memory_get_peak_usage'      => memory_get_peak_usage(),
+            self::MEMORY_GET_USAGE_TRUE      => \memory_get_usage(true),
+            self::MEMORY_GET_USAGE           => \memory_get_usage(),
+            self::MEMORY_GET_PEAK_USAGE_TRUE => \memory_get_peak_usage(true),
+            self::MEMORY_GET_PEAK_USAGE      => \memory_get_peak_usage(),
         ];
     }
 
@@ -185,10 +194,10 @@ class Memory
     public function stop(): void
     {
         $memories                   = self::measure();
-        $this->endMemory            = $memories['memory_get_usage_true'];
-        $this->endMemoryCurrent     = $memories['memory_get_usage'];
-        $this->endMemoryPeak        = $memories['memory_get_peak_usage_true'];
-        $this->endMemoryPeakEmalloc = $memories['memory_get_peak_usage'];
+        $this->endMemory            = $memories[self::MEMORY_GET_USAGE_TRUE];
+        $this->endMemoryCurrent     = $memories[self::MEMORY_GET_USAGE];
+        $this->endMemoryPeak        = $memories[self::MEMORY_GET_PEAK_USAGE_TRUE];
+        $this->endMemoryPeakEmalloc = $memories[self::MEMORY_GET_PEAK_USAGE];
     }
 
     /**

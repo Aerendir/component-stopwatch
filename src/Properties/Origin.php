@@ -3,14 +3,12 @@
 declare(strict_types=1);
 
 /*
- *
  * This file is part of the Serendipity HQ Stopwatch Component.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
- * (c) Adamo Crespi <hello@aerendir.me>
+ * Copyright (c) Adamo Aerendir Crespi <aerendir@serendipityhq.com>.
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with the Symfony Framework.
+ * file that was distributed with this source code.
  */
 
 namespace SerendipityHQ\Component\Stopwatch\Properties;
@@ -18,7 +16,7 @@ namespace SerendipityHQ\Component\Stopwatch\Properties;
 /**
  * Used by Section and Event to save the origin time and memory.
  */
-class Origin
+final class Origin
 {
     /** @var float $originTime */
     private $originTime;
@@ -40,7 +38,7 @@ class Origin
      */
     public function __construct()
     {
-        $this->originTime              = microtime(true);
+        $this->originTime              = \microtime(true);
         $memories                      = Memory::measure();
         $this->originMemory            = $memories['memory_get_usage_true'];
         $this->originMemoryCurrent     = $memories['memory_get_usage'];

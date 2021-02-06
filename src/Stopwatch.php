@@ -3,14 +3,12 @@
 declare(strict_types=1);
 
 /*
- *
  * This file is part of the Serendipity HQ Stopwatch Component.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
- * (c) Adamo Crespi <hello@aerendir.me>
+ * Copyright (c) Adamo Aerendir Crespi <aerendir@serendipityhq.com>.
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with the Symfony Framework.
+ * file that was distributed with this source code.
  */
 
 namespace SerendipityHQ\Component\Stopwatch;
@@ -26,7 +24,7 @@ use Safe\Exceptions\StringsException;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Adamo Crespi <hello@aerendir.me>
  */
-class Stopwatch
+final class Stopwatch
 {
     /** @var string Identifier of the event that measures the start and stop of a section */
     public const SECTION = '__section__';
@@ -186,13 +184,13 @@ class Stopwatch
         $this->stop(self::SECTION);
 
         // This happens if the only active section is the self::STOPWATCH_ROOT one.
-        if (1 === count($this->activeSections)) {
+        if (1 === (\is_array($this->activeSections) || $this->activeSections instanceof \Countable ? \count($this->activeSections) : 0)) {
             throw new LogicException('There is no started section to stop.');
         }
 
         // Remove the closing section from the active ones
         /** @var Section $section */
-        $section = array_pop($this->activeSections);
+        $section = \array_pop($this->activeSections);
 
         // Add the closing section to list of Sections managed by Stopwatch
         // AND ASSIGN THE GIVEN ID TO IT
@@ -261,7 +259,8 @@ class Stopwatch
     public function reset(): void
     {
         // On initialization, Section doesn't collect anything nor has any Event
-        $this->sections = $this->activeSections = [self::STOPWATCH_ROOT => new Section()];
+        $this->sections       = [self::STOPWATCH_ROOT => new Section()];
+        $this->activeSections = [self::STOPWATCH_ROOT => new Section()];
     }
 
     /**
@@ -271,7 +270,7 @@ class Stopwatch
      */
     private function getCurrentSection(): Section
     {
-        $currentSection = end($this->activeSections);
+        $currentSection = \end($this->activeSections);
 
         if (false === $currentSection) {
             throw new RuntimeException('There is no opened Section. This is not possible and is a bug: investigate it further.');

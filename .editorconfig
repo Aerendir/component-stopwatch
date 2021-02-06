@@ -5,7 +5,7 @@ end_of_line = lf
 charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
-[*.php]
+[*.{php,yml,yaml,neon}]
 indent_size = 4
-[*.{yml,yaml}]
+[*.{js,jsx,css,scss}]
 indent_size = 2

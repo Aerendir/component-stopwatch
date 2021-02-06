@@ -1,0 +1,17 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Properties\\\\Memory\\:\\:measure\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Properties/Memory.php
+
+		-
+			message: "#^Instanceof between \\*NEVER\\* and Countable will always evaluate to false\\.$#"
+			count: 1
+			path: src/Stopwatch.php
+
+		-
+			message: "#^Result of \\|\\| is always true\\.$#"
+			count: 1
+			path: src/Stopwatch.php
+

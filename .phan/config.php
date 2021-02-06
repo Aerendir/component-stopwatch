@@ -9,7 +9,7 @@ declare(strict_types=1);
 use Phan\Issue;
 
 return [
-    'target_php_version' => '7.1',
+    'target_php_version' => '7.3',
     'minimum_severity' => Issue::SEVERITY_LOW,
 
     // A list of directories that should be parsed for class and
@@ -20,7 +20,10 @@ return [
     // Thus, both first-party and third-party code being used by
     // your application should be included in this list.
     'directory_list' => [
-        'src', 'vendor'
+        'src',
+        'tests',
+        'vendor',
+        'vendor-bin/phpunit/vendor'
     ],
 
     // A directory list that defines files that will be excluded
@@ -36,7 +39,7 @@ return [
     //       and `exclude_analysis_directory_list` arrays.
     'exclude_analysis_directory_list' => [
         'vendor/',
-        'docs/',
+        'vendor-bin/phpunit/vendor',
     ],
 
     'quick_mode' => false,
@@ -47,22 +50,6 @@ return [
     'array_casts_as_null' => false,
     'scalar_implicit_cast' => false,
     'ignore_undeclared_variables_in_global_scope' => false,
-    'suppress_issue_types' => [
-        //'PhanTypeInvalidThrowsIsInterface',
-        // This is used in the bundle, so it has to stay where it is
-        //'AnnotationNotImported',
-        // Causes an error as it ignores the use of method_exists
-        // Check https://github.com/phan/phan/issues/2628
-        //'PhanUndeclaredMethod',
-        // @todo Temporary disable this waiting for the removal of the property
-        'PhanDeprecatedProperty',
-        // @todo Temporary disable waiting for the decision about what to do
-        'PhanAccessMethodInternal',
-        // Temporary disable as causes errors not easy to fix
-        //'PhanTypeMismatchReturn',
-        // This issues is a false positive: don't know how to fix it
-        //'PhanTypeExpectedObjectOrClassName'
-    ],
 
     // A regular expression to match files to be excluded
     // from parsing and analysis and will not be read at all.
@@ -72,4 +59,8 @@ return [
     // can't be removed for whatever reason.
     // (e.g. '@Test\.php$@', or '@vendor/.*/(tests|Tests)/@')
     'exclude_file_regex' => '@^vendor/.*/(tests?|Tests?)/@',
+    'plugins' => [
+        'vendor-bin/phan/vendor/drenso/phan-extensions/Plugin/DocComment/InlineVarPlugin.php',
+        'vendor-bin/phan/vendor/drenso/phan-extensions/Plugin/DocComment/MethodPlugin.php'
+    ]
 ];

@@ -3,14 +3,12 @@
 declare(strict_types=1);
 
 /*
- *
  * This file is part of the Serendipity HQ Stopwatch Component.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
- * (c) Adamo Crespi <hello@aerendir.me>
+ * Copyright (c) Adamo Aerendir Crespi <aerendir@serendipityhq.com>.
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with the Symfony Framework.
+ * file that was distributed with this source code.
  */
 
 namespace SerendipityHQ\Component\Stopwatch\Properties;
@@ -22,7 +20,7 @@ use LogicException;
  *
  * @author Adamo Crespi <hello@aerendir.me>
  */
-class Time
+final class Time
 {
     /** @var float $startTime */
     private $startTime;
@@ -35,7 +33,7 @@ class Time
      */
     public function __construct()
     {
-        $this->startTime = microtime(true);
+        $this->startTime = \microtime(true);
     }
 
     /**
@@ -83,7 +81,7 @@ class Time
      */
     public function stop(): void
     {
-        $this->endTime = microtime(true);
+        $this->endTime = \microtime(true);
     }
 
     /**

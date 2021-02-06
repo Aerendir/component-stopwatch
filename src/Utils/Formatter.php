@@ -3,19 +3,16 @@
 declare(strict_types=1);
 
 /*
- *
  * This file is part of the Serendipity HQ Stopwatch Component.
  *
- * (c) Fabien Potencier <fabien@symfony.com>
- * (c) Adamo Crespi <hello@aerendir.me>
+ * Copyright (c) Adamo Aerendir Crespi <aerendir@serendipityhq.com>.
  *
  * For the full copyright and license information, please view the LICENSE
- * file that was distributed with the Symfony Framework.
+ * file that was distributed with this source code.
  */
 
 namespace SerendipityHQ\Component\Stopwatch\Utils;
 
-use Countable;
 use RuntimeException;
 use Safe\Exceptions\StringsException;
 
@@ -28,7 +25,7 @@ use Safe\Exceptions\StringsException;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Adamo Crespi <hello@aerendir.me>
  */
-class Formatter
+final class Formatter
 {
     /**
      * If you need more precise measurements, increase the $precision to get more decimal digits.
@@ -57,16 +54,12 @@ class Formatter
         ];
 
         foreach ($timeFormats as $index => $format) {
-            if ($microtime >= $format[0]) {
-                if ((isset($timeFormats[$index + 1]) && $microtime < $timeFormats[$index + 1][0])
-                    || $index === (is_array($timeFormats) || $timeFormats instanceof Countable ? count($timeFormats) : 0) - 1
-                ) {
-                    if (2 === (is_array($format) || $format instanceof Countable ? count($format) : 0)) {
-                        return \Safe\sprintf('%s %s', round($microtime, $precision), $format[1]);
-                    }
-
-                    return \Safe\sprintf('%s %s', round($microtime / $format[2], $precision), $format[1]);
+            if ($microtime >= $format[0] && ((isset($timeFormats[$index + 1]) && $microtime < $timeFormats[$index + 1][0]) || $index === (\is_countable($timeFormats) ? \count($timeFormats) : 0) - 1)) {
+                if (2 === (\is_countable($format) ? \count($format) : 0)) {
+                    return \Safe\sprintf('%s %s', \round($microtime, $precision), $format[1]);
                 }
+
+                return \Safe\sprintf('%s %s', \round($microtime / $format[2], $precision), $format[1]);
             }
         }
 
@@ -83,24 +76,24 @@ class Formatter
      */
     public static function formatMemory(int $memory, int $precision = 2): string
     {
-        if (abs($memory) >= 1024 * 1024 * 1024) {
+        if (\abs($memory) >= 1024 * 1024 * 1024) {
             /** @psalm-suppress InvalidOperand */
             $print = $memory / 1024 / 1024 / 1024;
 
-            return \Safe\sprintf('%s GiB', round($print, $precision));
+            return \Safe\sprintf('%s GiB', \round($print, $precision));
         }
 
-        if (abs($memory) >= 1024 * 1024) {
+        if (\abs($memory) >= 1024 * 1024) {
             /** @psalm-suppress InvalidOperand */
             $print = $memory / 1024 / 1024;
 
-            return \Safe\sprintf('%s MiB', round($print, $precision));
+            return \Safe\sprintf('%s MiB', \round($print, $precision));
         }
 
-        if (abs($memory) >= 1024) {
+        if (\abs($memory) >= 1024) {
             $print = $memory / 1024;
 
-            return \Safe\sprintf('%d KiB', round($print, $precision));
+            return \Safe\sprintf('%d KiB', \round($print, $precision));
         }
 
         return \Safe\sprintf('%d B', $memory);
