@@ -41,7 +41,7 @@ final class Period
      */
     public function __construct(Time $time = null, Memory $memory = null)
     {
-        $this->time   = $time ?? new Time();
+        $this->time   = $time   ?? new Time();
         $this->memory = $memory ?? new Memory();
     }
 
