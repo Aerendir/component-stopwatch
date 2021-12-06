@@ -186,7 +186,7 @@ final class Event
      */
     public function ensureStopped(): void
     {
-        while (0 !== \count($this->started)) {
+        while ([] !== $this->started) {
             $this->stop();
         }
     }
@@ -212,7 +212,7 @@ final class Event
      */
     public function stop(): self
     {
-        if (0 === \count($this->started)) {
+        if ([] === $this->started) {
             throw new LogicException('stop() called but start() has not been called before.');
         }
 

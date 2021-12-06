@@ -73,6 +73,10 @@ final class StopwatchTest extends TestCase
             ->setConstructorArgs([\microtime(true) * 1000])
             ->getMock();
 
+        if (false === is_array($section)) {
+            throw new \InvalidArgumentException('$section must be an array but it isn\'t.');
+        }
+
         $events->setValue(\end($section), ['foo' => $stopwatchMockEvent]);
 
         self::assertFalse($stopwatch->isStarted('foo'));

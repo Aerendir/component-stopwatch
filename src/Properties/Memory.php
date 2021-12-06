@@ -33,6 +33,7 @@ final class Memory
 
     /** @var string */
     private const MEMORY_GET_PEAK_USAGE = 'memory_get_peak_usage';
+
     /** @var int $startMemory The amount of memory assigned to PHP */
     private $startMemory;
 

@@ -19,5 +19,8 @@
     <InvalidOperand occurrences="1">
       <code>\microtime(true) * 1000</code>
     </InvalidOperand>
+    <PossiblyFalseArgument occurrences="1">
+      <code>\end($section)</code>
+    </PossiblyFalseArgument>
   </file>
 </files>
