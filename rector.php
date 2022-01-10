@@ -46,12 +46,13 @@ return static function (ContainerConfigurator $containerConfigurator) : void {
     $containerConfigurator->import(SetList::SAFE_07);
     $containerConfigurator->import(SetList::TYPE_DECLARATION);
 
+    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
+    $parameters->set(Option::IMPORT_DOC_BLOCKS, true);
+    $parameters->set(Option::IMPORT_SHORT_CLASSES, false);
+
     $parameters->set(
         Option::SKIP,
         [
-            __DIR__ . '/tests/bootstrap.php',
-            __DIR__ . '/tests/EventTest.php',
-            __DIR__ . '/tests/StopwatchTest.php',
             Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector::class,
             Rector\CodeQuality\Rector\Concat\JoinStringConcatRector::class,
             Rector\CodeQuality\Rector\Identical\SimplifyBoolIdenticalTrueRector::class,

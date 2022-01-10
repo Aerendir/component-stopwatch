@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
 use Safe\Exceptions\StringsException;
+use function Safe\sprintf;
 
 /**
  * Stopwatch provides a way to profile code.
@@ -145,7 +146,7 @@ final class Stopwatch
     {
         // The $id is accepted only to re-open a previously closed section
         if (null !== $id && null === $this->getCurrentSection()->getChildSection($id)) {
-            throw new LogicException(\Safe\sprintf('The section "%s" has been started at an other level and can not be opened.', $id));
+            throw new LogicException(sprintf('The section "%s" has been started at an other level and can not be opened.', $id));
         }
 
         // Create a new Event meant to measure the timing and memory of the opening child section
@@ -212,7 +213,7 @@ final class Stopwatch
     public function getSection(string $id): Section
     {
         if (false === $this->hasSection($id)) {
-            throw new InvalidArgumentException(\Safe\sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id));
+            throw new InvalidArgumentException(sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id));
         }
 
         return $this->sections[$id];
