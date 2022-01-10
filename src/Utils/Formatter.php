@@ -15,6 +15,7 @@ namespace SerendipityHQ\Component\Stopwatch\Utils;
 
 use RuntimeException;
 use Safe\Exceptions\StringsException;
+use function Safe\sprintf;
 
 /**
  * Helper to format times and memories.
@@ -56,10 +57,10 @@ final class Formatter
         foreach ($timeFormats as $index => $format) {
             if ($microtime >= $format[0] && ((isset($timeFormats[$index + 1]) && $microtime < $timeFormats[$index + 1][0]) || $index === (\is_countable($timeFormats) ? \count($timeFormats) : 0) - 1)) {
                 if (2 === (\is_countable($format) ? \count($format) : 0)) {
-                    return \Safe\sprintf('%s %s', \round($microtime, $precision), $format[1]);
+                    return sprintf('%s %s', \round($microtime, $precision), $format[1]);
                 }
 
-                return \Safe\sprintf('%s %s', \round($microtime / $format[2], $precision), $format[1]);
+                return sprintf('%s %s', \round($microtime / $format[2], $precision), $format[1]);
             }
         }
 
@@ -80,22 +81,22 @@ final class Formatter
             /** @psalm-suppress InvalidOperand */
             $print = $memory / 1024 / 1024 / 1024;
 
-            return \Safe\sprintf('%s GiB', \round($print, $precision));
+            return sprintf('%s GiB', \round($print, $precision));
         }
 
         if (\abs($memory) >= 1024 * 1024) {
             /** @psalm-suppress InvalidOperand */
             $print = $memory / 1024 / 1024;
 
-            return \Safe\sprintf('%s MiB', \round($print, $precision));
+            return sprintf('%s MiB', \round($print, $precision));
         }
 
         if (\abs($memory) >= 1024) {
             $print = $memory / 1024;
 
-            return \Safe\sprintf('%d KiB', \round($print, $precision));
+            return sprintf('%d KiB', \round($print, $precision));
         }
 
-        return \Safe\sprintf('%d B', $memory);
+        return sprintf('%d B', $memory);
     }
 }

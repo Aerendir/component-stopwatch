@@ -17,6 +17,7 @@ use InvalidArgumentException;
 use LogicException;
 use RuntimeException;
 use Safe\Exceptions\StringsException;
+use function Safe\sprintf;
 use SerendipityHQ\Component\Stopwatch\Properties\Origin;
 
 /**
@@ -185,7 +186,7 @@ final class Section
     public function stopEvent(string $name): Event
     {
         if ( ! isset($this->events[$name])) {
-            throw new LogicException(\Safe\sprintf('Event "%s" is not started.', $name));
+            throw new LogicException(sprintf('Event "%s" is not started.', $name));
         }
 
         return $this->events[$name]->stop();
@@ -223,7 +224,7 @@ final class Section
     public function getEvent(string $name): Event
     {
         if ( ! isset($this->events[$name])) {
-            throw new LogicException(\Safe\sprintf('Event "%s" is not known.', $name));
+            throw new LogicException(sprintf('Event "%s" is not known.', $name));
         }
 
         return $this->events[$name];
