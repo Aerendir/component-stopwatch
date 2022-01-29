@@ -31,13 +31,8 @@ final class Formatter
     /**
      * If you need more precise measurements, increase the $precision to get more decimal digits.
      *
-     * @param float $microtime
-     * @param int   $precision
-     *
      * @throws StringsException
      * @throws RuntimeException If the passed time cannot be formatted
-     *
-     * @return string
      */
     public static function formatTime(float $microtime, int $precision = 2): string
     {
@@ -68,12 +63,7 @@ final class Formatter
     }
 
     /**
-     * @param int $memory
-     * @param int $precision
-     *
      * @throws StringsException
-     *
-     * @return string
      */
     public static function formatMemory(int $memory, int $precision = 2): string
     {

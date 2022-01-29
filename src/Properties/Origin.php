@@ -46,17 +46,11 @@ final class Origin
         $this->originMemoryPeakEmalloc = $memories['memory_get_peak_usage'];
     }
 
-    /**
-     * @return float
-     */
     public function getOriginTime(): float
     {
         return $this->originTime;
     }
 
-    /**
-     * @return Memory
-     */
     public function getOriginMemory(): Memory
     {
         return $this->originMemory;
@@ -64,8 +58,6 @@ final class Origin
 
     /**
      * Of the memory assigned to PHP, gets the amount of memory currently used by the script.
-     *
-     * @return int
      */
     public function getOriginMemoryCurrent(): int
     {
@@ -74,8 +66,6 @@ final class Origin
 
     /**
      * Gets the max amount of memory assigned to PHP.
-     *
-     * @return int
      */
     public function getOriginMemoryPeak(): int
     {
@@ -84,8 +74,6 @@ final class Origin
 
     /**
      * Gets the max amount of memory used by emalloc().
-     *
-     * @return int
      */
     public function getOriginMemoryPeakEmalloc(): int
     {

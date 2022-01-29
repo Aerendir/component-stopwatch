@@ -70,9 +70,6 @@ final class Memory
         $this->startMemoryPeakEmalloc = $memories[self::MEMORY_GET_PEAK_USAGE];
     }
 
-    /**
-     * @return array
-     */
     public static function measure(): array
     {
         return [
@@ -95,8 +92,6 @@ final class Memory
 
     /**
      * Of the memory assigned to PHP, gets the amount of memory currently used by the script.
-     *
-     * @return int
      */
     public function getStartMemoryCurrent(): int
     {
@@ -105,8 +100,6 @@ final class Memory
 
     /**
      * Gets the max amount of memory assigned to PHP.
-     *
-     * @return int
      */
     public function getStartMemoryPeak(): int
     {
@@ -115,8 +108,6 @@ final class Memory
 
     /**
      * Gets the max amount of memory used by emalloc().
-     *
-     * @return int
      */
     public function getStartMemoryPeakEmalloc(): int
     {
@@ -143,8 +134,6 @@ final class Memory
      * Of the memory assigned to PHP, gets the amount of memory currently used by the script.
      *
      * @throws LogicException if the method is called before the Period to which it belongs to is stopped
-     *
-     * @return int
      */
     public function getEndMemoryCurrent(): int
     {
@@ -159,8 +148,6 @@ final class Memory
      * Gets the max amount of memory assigned to PHP.
      *
      * @throws LogicException if the method is called before the Period to which it belongs to is stopped
-     *
-     * @return int
      */
     public function getEndMemoryPeak(): int
     {
@@ -175,8 +162,6 @@ final class Memory
      * Gets the max amount of memory used by emalloc().
      *
      * @throws LogicException if the method is called before the Period to which it belongs to is stopped
-     *
-     * @return int
      */
     public function getEndMemoryPeakEmalloc(): int
     {
@@ -201,9 +186,6 @@ final class Memory
         $this->endMemoryPeakEmalloc = $memories[self::MEMORY_GET_PEAK_USAGE];
     }
 
-    /**
-     * @return bool
-     */
     public function isStopped(): bool
     {
         return null !== $this->endMemory || null !== $this->endMemoryCurrent || null !== $this->endMemoryPeak || null !== $this->endMemoryPeakEmalloc;

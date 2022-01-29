@@ -28,8 +28,7 @@ final class MemoryCalc
     private $periods;
 
     /**
-     * @param Event $event
-     * @param bool  $includeStillMeasuring if the calculation should include also started but not still closed Periods
+     * @param bool $includeStillMeasuring if the calculation should include also started but not still closed Periods
      */
     public function setEvent(Event $event, bool $includeStillMeasuring = false): void
     {
@@ -173,8 +172,6 @@ final class MemoryCalc
      * Of the last Period, returns the difference between end and start values of memory current.
      *
      * @throws LogicException if the Event to calc is not passed
-     *
-     * @return int
      */
     public function getMemoryDiff(): int
     {
@@ -185,8 +182,6 @@ final class MemoryCalc
      * Of the last Period, returns the difference between end and start values of memory current.
      *
      * @throws LogicException if the Event to calc is not passed
-     *
-     * @return int
      */
     public function getMemoryCurrentDiff(): int
     {
@@ -197,8 +192,6 @@ final class MemoryCalc
      * Of the last Period, returns the difference between end and start values of memory peak.
      *
      * @throws LogicException if the Event to calc is not passed
-     *
-     * @return int
      */
     public function getMemoryPeakDiff(): int
     {
@@ -209,8 +202,6 @@ final class MemoryCalc
      * Of the last Period, returns the difference between end and start values of memory peak emalloc.
      *
      * @throws LogicException if the Event to calc is not passed
-     *
-     * @return int
      */
     public function getMemoryPeakEmallocDiff(): int
     {
@@ -235,8 +226,6 @@ final class MemoryCalc
      * Returns the last recorded Period.
      *
      * @throws LogicException if the Event to calc is not passed
-     *
-     * @return Period
      */
     private function getLastPeriod(): Period
     {

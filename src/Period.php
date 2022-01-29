@@ -45,17 +45,11 @@ final class Period
         $this->memory = $memory ?? new Memory();
     }
 
-    /**
-     * @return Time
-     */
     public function getTime(): Time
     {
         return $this->time;
     }
 
-    /**
-     * @return Memory
-     */
     public function getMemory(): Memory
     {
         return $this->memory;
@@ -74,9 +68,6 @@ final class Period
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isStopped(): bool
     {
         return $this->getTime()->isStopped() && $this->getMemory()->isStopped();

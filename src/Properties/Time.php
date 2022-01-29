@@ -36,9 +36,6 @@ final class Time
         $this->startTime = \microtime(true);
     }
 
-    /**
-     * @return float
-     */
     public function getStartTime(): float
     {
         return $this->startTime;
@@ -46,8 +43,6 @@ final class Time
 
     /**
      * @throws LogicException If the end time is retrieved before the Period is stopped
-     *
-     * @return float
      */
     public function getEndTime(): float
     {
@@ -62,8 +57,6 @@ final class Time
      * The difference between the stop time and the start time = the duration.
      *
      * @throws LogicException if the method is called before the Period to which it belongs to is stopped
-     *
-     * @return float
      */
     public function getDuration(): float
     {
@@ -84,9 +77,6 @@ final class Time
         $this->endTime = \microtime(true);
     }
 
-    /**
-     * @return bool
-     */
     public function isStopped(): bool
     {
         return null !== $this->endTime;

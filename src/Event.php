@@ -48,9 +48,6 @@ final class Event
         $this->category = $category ?? 'default';
     }
 
-    /**
-     * @return Origin
-     */
     public function getOrigin(): Origin
     {
         return $this->origin;
@@ -229,8 +226,6 @@ final class Event
      *
      * @throws LogicException
      *
-     * @return Event
-     *
      * @internal Use the Stopwatch object instead
      */
     public function lap(): Event
@@ -240,8 +235,6 @@ final class Event
 
     /**
      * Checks if the event was started.
-     *
-     * @return bool
      *
      * @internal
      */

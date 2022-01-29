@@ -61,8 +61,6 @@ final class Stopwatch
      *
      * @throws RuntimeException         If there is no opened section
      * @throws InvalidArgumentException If the Event cannot be created
-     *
-     * @return Event
      */
     public function start(string $name, string $category = null): Event
     {
@@ -77,8 +75,6 @@ final class Stopwatch
      * @throws LogicException   When the event has not been started
      * @throws StringsException
      * @throws RuntimeException If there is no opened section
-     *
-     * @return Event
      */
     public function stop(string $name): Event
     {
@@ -93,8 +89,6 @@ final class Stopwatch
      * @throws StringsException
      * @throws RuntimeException If there is no opened section
      * @throws LogicException   When the event has not been started
-     *
-     * @return Event
      */
     public function lap(string $name): Event
     {
@@ -111,8 +105,6 @@ final class Stopwatch
      * @throws LogicException   When the event is not known*@internal
      * @throws StringsException
      * @throws RuntimeException if there is no opened section
-     *
-     * @return Event
      */
     public function getEvent(string $name): Event
     {
@@ -125,8 +117,6 @@ final class Stopwatch
      * @param string $name The event name
      *
      * @throws RuntimeException if there is no opened section
-     *
-     * @return bool
      */
     public function isStarted(string $name): bool
     {
@@ -203,12 +193,8 @@ final class Stopwatch
     }
 
     /**
-     * @param string $id
-     *
      * @throws StringsException
      * @throws InvalidArgumentException If the passed Section doesn't exist or is not closed
-     *
-     * @return Section
      */
     public function getSection(string $id): Section
     {
@@ -227,11 +213,6 @@ final class Stopwatch
         return $this->sections;
     }
 
-    /**
-     * @param string $id
-     *
-     * @return bool
-     */
     public function hasSection(string $id): bool
     {
         return isset($this->sections[$id]);
@@ -266,8 +247,6 @@ final class Stopwatch
 
     /**
      * @throws RuntimeException if there is no opened section
-     *
-     * @return Section
      */
     private function getCurrentSection(): Section
     {

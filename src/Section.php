@@ -48,9 +48,6 @@ final class Section
         $this->origin = new Origin();
     }
 
-    /**
-     * @return Origin
-     */
     public function getOrigin(): Origin
     {
         return $this->origin;
@@ -92,8 +89,6 @@ final class Section
      * @param string|null $id Null to create a new section, the identifier to re-open an existing one
      *
      * @throws RuntimeException If the child section is not found
-     *
-     * @return Section
      *
      * @internal
      */
@@ -161,8 +156,6 @@ final class Section
      * Checks if the event was started.
      *
      * @param string $name The event name
-     *
-     * @return bool
      *
      * @internal
      */
@@ -247,8 +240,6 @@ final class Section
      *
      * @throws StringsException
      * @throws LogicException   When the event is not known
-     *
-     * @return Event
      */
     public function getSectionEvent(): Event
     {
