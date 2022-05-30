@@ -16,7 +16,7 @@ use SerendipityHQ\Integration\Rector\SerendipityHQ;
 use Rector\Core\ValueObject\PhpVersion;
 
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->phpVersion(PhpVersion::PHP_81);
+    $rectorConfig->phpVersion(PhpVersion::PHP_74);
     $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
     $rectorConfig->bootstrapFiles([__DIR__ . '/vendor-bin/phpunit/vendor/autoload.php']);
     $rectorConfig->import(SerendipityHQ::SHQ_LIBRARY);
