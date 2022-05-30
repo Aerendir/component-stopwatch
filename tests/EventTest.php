@@ -70,7 +70,7 @@ final class EventTest extends TestCase
         $event->start();
         \usleep(200000);
         $event->stop();
-        self::assertLessThan(0.205, $event->getDuration());
+        self::assertLessThan(0.206, $event->getDuration());
 
         $event = new Event();
         $event->start();
