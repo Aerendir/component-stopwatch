@@ -10,7 +10,7 @@
 return [
     // # Issue statistics:
     // PhanUnreferencedPublicMethod : 50+ occurrences
-    // PhanAccessMethodInternal : 35+ occurrences
+    // PhanAccessMethodInternal : 30+ occurrences
     // PhanUndeclaredStaticMethod : 30+ occurrences
     // PhanUndeclaredMethod : 5 occurrences
     // PhanUnreferencedClass : 4 occurrences
