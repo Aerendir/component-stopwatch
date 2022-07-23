@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace SerendipityHQ\Component\Stopwatch\Utils;
 
-use LogicException;
 use SerendipityHQ\Component\Stopwatch\Event;
 use SerendipityHQ\Component\Stopwatch\Period;
 
@@ -40,8 +39,6 @@ final class MemoryCalc
      *
      * Very similar to Event::getMemoryPeak().
      *
-     * @throws LogicException if the Event to calc is not passed
-     *
      * @return int The memory usage (in bytes)
      */
     public function getAbsoluteEndMemory(): int
@@ -62,8 +59,6 @@ final class MemoryCalc
      *
      * Very similar to Event::getMemoryPeakEmalloc().
      *
-     * @throws LogicException if the Event to calc is not passed
-     *
      * @return int The memory usage (in bytes)
      */
     public function getAbsoluteEndMemoryCurrent(): int
@@ -81,8 +76,6 @@ final class MemoryCalc
     /**
      * Of all periods, gets the max peak amount of memory assigned to PHP recorded by the Period when stopped.
      *
-     * @throws LogicException if the Event to calc is not passed
-     *
      * @return int The memory usage (in bytes)
      */
     public function getAbsoluteEndMemoryPeak(): int
@@ -99,8 +92,6 @@ final class MemoryCalc
 
     /**
      * Of all periods, gets the max amount of memory assigned to PHP and used by emalloc() recorded by the Period when stopped.
-     *
-     * @throws LogicException if the Event to calc is not passed
      *
      * @return int The memory usage (in bytes)
      */
@@ -121,8 +112,6 @@ final class MemoryCalc
      *
      * Very similar to Event::getMemoryPeak().
      *
-     * @throws LogicException if the Event to calc is not passed
-     *
      * @return int The memory usage (in bytes)
      */
     public function getMemory(): int
@@ -135,8 +124,6 @@ final class MemoryCalc
      *
      * Very similar to Event::getMemoryPeakEmalloc().
      *
-     * @throws LogicException if the Event to calc is not passed
-     *
      * @return int The memory usage (in bytes)
      */
     public function getMemoryCurrent(): int
@@ -146,8 +133,6 @@ final class MemoryCalc
 
     /**
      * Of the last Period, gets the max peak amount of memory assigned to PHP recorded by the Period when stopped.
-     *
-     * @throws LogicException if the Event to calc is not passed
      *
      * @return int The memory usage (in bytes)
      */
@@ -159,8 +144,6 @@ final class MemoryCalc
     /**
      * Of the last Period, gets the max amount of memory assigned to PHP and used by emalloc() recorded by the Period when stopped.
      *
-     * @throws LogicException if the Event to calc is not passed
-     *
      * @return int The memory usage (in bytes)
      */
     public function getMemoryPeakEmalloc(): int
@@ -170,8 +153,6 @@ final class MemoryCalc
 
     /**
      * Of the last Period, returns the difference between end and start values of memory current.
-     *
-     * @throws LogicException if the Event to calc is not passed
      */
     public function getMemoryDiff(): int
     {
@@ -180,8 +161,6 @@ final class MemoryCalc
 
     /**
      * Of the last Period, returns the difference between end and start values of memory current.
-     *
-     * @throws LogicException if the Event to calc is not passed
      */
     public function getMemoryCurrentDiff(): int
     {
@@ -190,8 +169,6 @@ final class MemoryCalc
 
     /**
      * Of the last Period, returns the difference between end and start values of memory peak.
-     *
-     * @throws LogicException if the Event to calc is not passed
      */
     public function getMemoryPeakDiff(): int
     {
@@ -200,8 +177,6 @@ final class MemoryCalc
 
     /**
      * Of the last Period, returns the difference between end and start values of memory peak emalloc.
-     *
-     * @throws LogicException if the Event to calc is not passed
      */
     public function getMemoryPeakEmallocDiff(): int
     {
@@ -209,14 +184,12 @@ final class MemoryCalc
     }
 
     /**
-     * @throws LogicException if the Event to calc is not passed
-     *
      * @return Period[]
      */
     private function getPeriods(): array
     {
         if (null === $this->periods || empty($this->periods)) {
-            throw new LogicException("There is no period set. This means you didn't passed any event. Before using this class, please set an Event using MemoryCalc::setEvent().");
+            throw new \LogicException("There is no period set. This means you didn't passed any event. Before using this class, please set an Event using MemoryCalc::setEvent().");
         }
 
         return $this->periods;
@@ -224,8 +197,6 @@ final class MemoryCalc
 
     /**
      * Returns the last recorded Period.
-     *
-     * @throws LogicException if the Event to calc is not passed
      */
     private function getLastPeriod(): Period
     {

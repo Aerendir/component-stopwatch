@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace SerendipityHQ\Component\Stopwatch;
 
-use InvalidArgumentException;
-use LogicException;
 use SerendipityHQ\Component\Stopwatch\Properties\Origin;
 
 /**
@@ -39,8 +37,6 @@ final class Event
 
     /**
      * @param string|null $category The event category or null to use the default
-     *
-     * @throws InvalidArgumentException When the raw time is not valid
      */
     public function __construct(?string $category = null)
     {
@@ -203,14 +199,12 @@ final class Event
     /**
      * Stops the last started event period.
      *
-     * @throws LogicException When stop() is called without a matching call to start()
-     *
      * @internal Use the Stopwatch object instead
      */
     public function stop(): self
     {
         if ([] === $this->started) {
-            throw new LogicException('stop() called but start() has not been called before.');
+            throw new \LogicException('stop() called but start() has not been called before.');
         }
 
         /** @var Period $period */
@@ -223,8 +217,6 @@ final class Event
 
     /**
      * Stops the current period and then starts a new one.
-     *
-     * @throws LogicException
      *
      * @internal Use the Stopwatch object instead
      */
