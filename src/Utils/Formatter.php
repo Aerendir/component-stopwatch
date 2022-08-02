@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace SerendipityHQ\Component\Stopwatch\Utils;
 
-use RuntimeException;
-use Safe\Exceptions\StringsException;
 use function Safe\sprintf;
 
 /**
@@ -30,14 +28,6 @@ final class Formatter
 {
     /**
      * If you need more precise measurements, increase the $precision to get more decimal digits.
-     *
-     * @param float $microtime
-     * @param int   $precision
-     *
-     * @throws StringsException
-     * @throws RuntimeException If the passed time cannot be formatted
-     *
-     * @return string
      */
     public static function formatTime(float $microtime, int $precision = 2): string
     {
@@ -64,17 +54,9 @@ final class Formatter
             }
         }
 
-        throw new RuntimeException('Impossible to format the time value you passed. This should never happen.');
+        throw new \RuntimeException('Impossible to format the time value you passed. This should never happen.');
     }
 
-    /**
-     * @param int $memory
-     * @param int $precision
-     *
-     * @throws StringsException
-     *
-     * @return string
-     */
     public static function formatMemory(int $memory, int $precision = 2): string
     {
         if (\abs($memory) >= 1024 * 1024 * 1024) {

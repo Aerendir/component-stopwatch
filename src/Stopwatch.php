@@ -13,10 +13,6 @@ declare(strict_types=1);
 
 namespace SerendipityHQ\Component\Stopwatch;
 
-use InvalidArgumentException;
-use LogicException;
-use RuntimeException;
-use Safe\Exceptions\StringsException;
 use function Safe\sprintf;
 
 /**
@@ -58,11 +54,6 @@ final class Stopwatch
      *
      * @param string      $name     The event name
      * @param string|null $category The eventcategory
-     *
-     * @throws RuntimeException         If there is no opened section
-     * @throws InvalidArgumentException If the Event cannot be created
-     *
-     * @return Event
      */
     public function start(string $name, string $category = null): Event
     {
@@ -73,12 +64,6 @@ final class Stopwatch
      * Stops an event.
      *
      * @param string $name The event name
-     *
-     * @throws LogicException   When the event has not been started
-     * @throws StringsException
-     * @throws RuntimeException If there is no opened section
-     *
-     * @return Event
      */
     public function stop(string $name): Event
     {
@@ -89,12 +74,6 @@ final class Stopwatch
      * Stops then restarts an event.
      *
      * @param string $name The event name
-     *
-     * @throws StringsException
-     * @throws RuntimeException If there is no opened section
-     * @throws LogicException   When the event has not been started
-     *
-     * @return Event
      */
     public function lap(string $name): Event
     {
@@ -107,12 +86,6 @@ final class Stopwatch
      * Use this to get information from an Event still running.
      *
      * @param string $name The event name
-     *
-     * @throws LogicException   When the event is not known*@internal
-     * @throws StringsException
-     * @throws RuntimeException if there is no opened section
-     *
-     * @return Event
      */
     public function getEvent(string $name): Event
     {
@@ -123,10 +96,6 @@ final class Stopwatch
      * Checks if the event was started.
      *
      * @param string $name The event name
-     *
-     * @throws RuntimeException if there is no opened section
-     *
-     * @return bool
      */
     public function isStarted(string $name): bool
     {
@@ -137,16 +106,12 @@ final class Stopwatch
      * Creates a new section or re-opens an existing section.
      *
      * @param string|null $id The id of the session to re-open, null to create a new one
-     *
-     * @throws LogicException   When the section to re-open is not reachable
-     * @throws StringsException
-     * @throws RuntimeException if there is no opened section
      */
     public function openSection(?string $id = null): void
     {
         // The $id is accepted only to re-open a previously closed section
         if (null !== $id && null === $this->getCurrentSection()->getChildSection($id)) {
-            throw new LogicException(sprintf('The section "%s" has been started at an other level and can not be opened.', $id));
+            throw new \LogicException(sprintf('The section "%s" has been started at an other level and can not be opened.', $id));
         }
 
         // Create a new Event meant to measure the timing and memory of the opening child section
@@ -172,10 +137,6 @@ final class Stopwatch
      * self::getSectionEvents($id).
      *
      * @param string $id The identifier of the section
-     *
-     * @throws LogicException   When there's no started section to be stopped
-     * @throws RuntimeException If there is no opened section
-     * @throws StringsException
      */
     public function stopSection(string $id): void
     {
@@ -186,7 +147,7 @@ final class Stopwatch
 
         // This happens if the only active section is the self::STOPWATCH_ROOT one.
         if (1 === (\is_array($this->activeSections) || $this->activeSections instanceof \Countable ? \count($this->activeSections) : 0)) {
-            throw new LogicException('There is no started section to stop.');
+            throw new \LogicException('There is no started section to stop.');
         }
 
         // Remove the closing section from the active ones
@@ -202,18 +163,10 @@ final class Stopwatch
         $this->stop(self::SECTION_CHILD);
     }
 
-    /**
-     * @param string $id
-     *
-     * @throws StringsException
-     * @throws InvalidArgumentException If the passed Section doesn't exist or is not closed
-     *
-     * @return Section
-     */
     public function getSection(string $id): Section
     {
         if (false === $this->hasSection($id)) {
-            throw new InvalidArgumentException(sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id));
+            throw new \InvalidArgumentException(sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id));
         }
 
         return $this->sections[$id];
@@ -227,11 +180,6 @@ final class Stopwatch
         return $this->sections;
     }
 
-    /**
-     * @param string $id
-     *
-     * @return bool
-     */
     public function hasSection(string $id): bool
     {
         return isset($this->sections[$id]);
@@ -241,8 +189,6 @@ final class Stopwatch
      * Gets all events for a given section.
      *
      * @param string $id A section identifier
-     *
-     * @throws StringsException
      *
      * @return Event[]
      */
@@ -264,17 +210,12 @@ final class Stopwatch
         $this->activeSections = [self::STOPWATCH_ROOT => new Section()];
     }
 
-    /**
-     * @throws RuntimeException if there is no opened section
-     *
-     * @return Section
-     */
     private function getCurrentSection(): Section
     {
         $currentSection = \end($this->activeSections);
 
         if (false === $currentSection) {
-            throw new RuntimeException('There is no opened Section. This is not possible and is a bug: investigate it further.');
+            throw new \RuntimeException('There is no opened Section. This is not possible and is a bug: investigate it further.');
         }
 
         return $currentSection;

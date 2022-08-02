@@ -35,9 +35,6 @@ final class Period
      *
      * Time and Memory objects are passed when the Event has to
      * calculate some measurement including not still stopped Periods.
-     *
-     * @param Time|null   $time
-     * @param Memory|null $memory
      */
     public function __construct(Time $time = null, Memory $memory = null)
     {
@@ -45,17 +42,11 @@ final class Period
         $this->memory = $memory ?? new Memory();
     }
 
-    /**
-     * @return Time
-     */
     public function getTime(): Time
     {
         return $this->time;
     }
 
-    /**
-     * @return Memory
-     */
     public function getMemory(): Memory
     {
         return $this->memory;
@@ -74,9 +65,6 @@ final class Period
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isStopped(): bool
     {
         return $this->getTime()->isStopped() && $this->getMemory()->isStopped();

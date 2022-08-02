@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace SerendipityHQ\Component\Stopwatch\Properties;
 
-use LogicException;
-
 /**
  * Manages timings.
  *
@@ -36,23 +34,15 @@ final class Time
         $this->startTime = \microtime(true);
     }
 
-    /**
-     * @return float
-     */
     public function getStartTime(): float
     {
         return $this->startTime;
     }
 
-    /**
-     * @throws LogicException If the end time is retrieved before the Period is stopped
-     *
-     * @return float
-     */
     public function getEndTime(): float
     {
         if (null === $this->endTime) {
-            throw new LogicException('Not yet stopped: you cannot get the end time until you stop.');
+            throw new \LogicException('Not yet stopped: you cannot get the end time until you stop.');
         }
 
         return $this->endTime;
@@ -60,15 +50,11 @@ final class Time
 
     /**
      * The difference between the stop time and the start time = the duration.
-     *
-     * @throws LogicException if the method is called before the Period to which it belongs to is stopped
-     *
-     * @return float
      */
     public function getDuration(): float
     {
         if (null === $this->endTime) {
-            throw new LogicException('Not yet stopped: you cannot get duration until you stop.');
+            throw new \LogicException('Not yet stopped: you cannot get duration until you stop.');
         }
 
         return $this->endTime - $this->startTime;
@@ -84,9 +70,6 @@ final class Time
         $this->endTime = \microtime(true);
     }
 
-    /**
-     * @return bool
-     */
     public function isStopped(): bool
     {
         return null !== $this->endTime;
