@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.24.0@06dd975cb55d36af80f242561738f16c5f58264f">
+<files psalm-version="4.26.0@6998fabb2bf528b65777bf9941920888d23c03ac">
+  <file src="src/Section.php">
+    <DeprecatedFunction occurrences="2">
+      <code>sprintf('Event "%s" is not known.', $name)</code>
+      <code>sprintf('Event "%s" is not started.', $name)</code>
+    </DeprecatedFunction>
+  </file>
   <file src="src/Stopwatch.php">
+    <DeprecatedFunction occurrences="2">
+      <code>sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id)</code>
+      <code>sprintf('The section "%s" has been started at an other level and can not be opened.', $id)</code>
+    </DeprecatedFunction>
     <DocblockTypeContradiction occurrences="1">
       <code>0</code>
     </DocblockTypeContradiction>
@@ -9,6 +19,14 @@
     </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/Utils/Formatter.php">
+    <DeprecatedFunction occurrences="6">
+      <code>sprintf('%d B', $memory)</code>
+      <code>sprintf('%d KiB', \round($print, $precision))</code>
+      <code>sprintf('%s %s', \round($microtime / $format[2], $precision), $format[1])</code>
+      <code>sprintf('%s %s', \round($microtime, $precision), $format[1])</code>
+      <code>sprintf('%s GiB', \round($print, $precision))</code>
+      <code>sprintf('%s MiB', \round($print, $precision))</code>
+    </DeprecatedFunction>
     <PossiblyUndefinedMethod occurrences="3">
       <code>$format</code>
       <code>$format</code>
