@@ -12,6 +12,7 @@ return [
     // PhanUnreferencedPublicMethod : 50+ occurrences
     // PhanAccessMethodInternal : 30+ occurrences
     // PhanUndeclaredStaticMethod : 30+ occurrences
+    // PhanDeprecatedFunction : 10+ occurrences
     // PhanUndeclaredMethod : 5 occurrences
     // PhanUnreferencedClass : 4 occurrences
     // PhanRedefinedExtendedClass : 2 occurrences
@@ -22,9 +23,9 @@ return [
         'src/Event.php' => ['PhanUnreferencedPublicMethod'],
         'src/Period.php' => ['PhanAccessMethodInternal', 'PhanUnreferencedPublicMethod'],
         'src/Properties/Origin.php' => ['PhanUnreferencedPublicMethod'],
-        'src/Section.php' => ['PhanUnreferencedPublicMethod'],
-        'src/Stopwatch.php' => ['PhanUnreferencedPublicMethod'],
-        'src/Utils/Formatter.php' => ['PhanTypePossiblyInvalidDimOffset', 'PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
+        'src/Section.php' => ['PhanDeprecatedFunction', 'PhanUnreferencedPublicMethod'],
+        'src/Stopwatch.php' => ['PhanDeprecatedFunction', 'PhanUnreferencedPublicMethod'],
+        'src/Utils/Formatter.php' => ['PhanDeprecatedFunction', 'PhanTypePossiblyInvalidDimOffset', 'PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
         'src/Utils/MemoryCalc.php' => ['PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
         'tests/EventTest.php' => ['PhanAccessMethodInternal', 'PhanRedefinedExtendedClass', 'PhanUndeclaredMethod', 'PhanUndeclaredStaticMethod', 'PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
         'tests/StopwatchTest.php' => ['PhanAccessMethodInternal', 'PhanRedefinedExtendedClass', 'PhanUndeclaredMethod', 'PhanUndeclaredStaticMethod', 'PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
