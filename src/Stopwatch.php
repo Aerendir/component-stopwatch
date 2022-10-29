@@ -146,7 +146,7 @@ final class Stopwatch
         $this->stop(self::SECTION);
 
         // This happens if the only active section is the self::STOPWATCH_ROOT one.
-        if (1 === (\is_array($this->activeSections) || $this->activeSections instanceof \Countable ? \count($this->activeSections) : 0)) {
+        if (1 === (is_countable($this->activeSections) ? \count($this->activeSections) : 0)) {
             throw new \LogicException('There is no started section to stop.');
         }
 
