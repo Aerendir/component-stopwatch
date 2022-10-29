@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.26.0@6998fabb2bf528b65777bf9941920888d23c03ac">
+<files psalm-version="4.29.0@7ec5ffbd5f68ae03782d7fd33fff0c45a69f95b3">
   <file src="src/Section.php">
     <DeprecatedFunction occurrences="2">
       <code>sprintf('Event "%s" is not known.', $name)</code>
@@ -15,7 +15,7 @@
       <code>0</code>
     </DocblockTypeContradiction>
     <RedundantConditionGivenDocblockType occurrences="1">
-      <code>\is_array($this-&gt;activeSections)</code>
+      <code>is_countable($this-&gt;activeSections)</code>
     </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/Utils/Formatter.php">
