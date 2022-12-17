@@ -19,7 +19,7 @@ namespace SerendipityHQ\Component\Stopwatch\Properties;
 final class Origin
 {
     private float $originTime;
-    private Memory $originMemory;
+    private int $originMemory;
 
     /** @var int $originMemoryCurrent Of the memory assigned to PHP, the amount of memory currently consumed by the script */
     private int $originMemoryCurrent;
