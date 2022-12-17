@@ -18,20 +18,17 @@ namespace SerendipityHQ\Component\Stopwatch\Properties;
  */
 final class Origin
 {
-    /** @var float $originTime */
-    private $originTime;
-
-    /** @var Memory $originMemory */
-    private $originMemory;
+    private float $originTime;
+    private Memory $originMemory;
 
     /** @var int $originMemoryCurrent Of the memory assigned to PHP, the amount of memory currently consumed by the script */
-    private $originMemoryCurrent;
+    private int $originMemoryCurrent;
 
     /** @var int $originMemoryPeak The max amount of memory assigned to PHP */
-    private $originMemoryPeak;
+    private int $originMemoryPeak;
 
     /** @var int $originMemoryPeakEmalloc The max amount of memory assigned to PHP and used by emalloc() */
-    private $originMemoryPeakEmalloc;
+    private int $originMemoryPeakEmalloc;
 
     /**
      * Sets the current time and memories.

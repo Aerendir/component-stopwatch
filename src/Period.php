@@ -24,11 +24,8 @@ use SerendipityHQ\Component\Stopwatch\Properties\Time;
  */
 final class Period
 {
-    /** @var Time $time */
-    private $time;
-
-    /** @var Memory $memory */
-    private $memory;
+    private Time $time;
+    private Memory $memory;
 
     /**
      * Initializes the Period.

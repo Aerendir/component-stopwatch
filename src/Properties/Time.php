@@ -20,8 +20,7 @@ namespace SerendipityHQ\Component\Stopwatch\Properties;
  */
 final class Time
 {
-    /** @var float $startTime */
-    private $startTime;
+    private float $startTime;
 
     /** @var float|null $endTime */
     private $endTime;

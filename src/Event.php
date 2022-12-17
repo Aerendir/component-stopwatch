@@ -23,11 +23,8 @@ use SerendipityHQ\Component\Stopwatch\Properties\Origin;
  */
 final class Event
 {
-    /** @var Origin $origin */
-    private $origin;
-
-    /** @var string $category */
-    private $category;
+    private Origin $origin;
+    private string $category;
 
     /** @var Period[] $started */
     private $started = [];
@@ -232,6 +229,6 @@ final class Event
      */
     public function isStarted(): bool
     {
-        return ! empty($this->started);
+        return [] !== $this->started;
     }
 }
