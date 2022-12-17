@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.29.0@7ec5ffbd5f68ae03782d7fd33fff0c45a69f95b3">
+<files psalm-version="5.2.0@fb685a16df3050d4c18d8a4100fe83abe6458cba">
+  <file src="src/Properties/Origin.php">
+    <InvalidReturnStatement occurrences="1">
+      <code>$this-&gt;originMemory</code>
+    </InvalidReturnStatement>
+    <InvalidReturnType occurrences="1">
+      <code>Memory</code>
+    </InvalidReturnType>
+  </file>
   <file src="src/Section.php">
     <DeprecatedFunction occurrences="2">
       <code>sprintf('Event "%s" is not known.', $name)</code>
@@ -27,9 +35,7 @@
       <code>sprintf('%s GiB', \round($print, $precision))</code>
       <code>sprintf('%s MiB', \round($print, $precision))</code>
     </DeprecatedFunction>
-    <PossiblyUndefinedMethod occurrences="3">
-      <code>$format</code>
-      <code>$format</code>
+    <PossiblyUndefinedMethod occurrences="1">
       <code>$format</code>
     </PossiblyUndefinedMethod>
   </file>
