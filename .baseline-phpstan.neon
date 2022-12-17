@@ -6,6 +6,11 @@ parameters:
 			path: src/Properties/Memory.php
 
 		-
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Properties\\\\Origin\\:\\:getOriginMemory\\(\\) should return SerendipityHQ\\\\Component\\\\Stopwatch\\\\Properties\\\\Memory but returns int\\.$#"
+			count: 1
+			path: src/Properties/Origin.php
+
+		-
 			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
 			count: 1
 			path: src/Stopwatch.php

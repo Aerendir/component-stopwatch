@@ -25,8 +25,7 @@ use function Safe\sprintf;
  */
 final class Section
 {
-    /** @var Origin $origin */
-    private $origin;
+    private Origin $origin;
 
     /** @var Event[] $events */
     private $events = [];

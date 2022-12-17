@@ -16,13 +16,14 @@ return [
     // PhanUndeclaredMethod : 5 occurrences
     // PhanUnreferencedClass : 4 occurrences
     // PhanRedefinedExtendedClass : 2 occurrences
+    // PhanTypeMismatchReturnReal : 1 occurrence
     // PhanTypePossiblyInvalidDimOffset : 1 occurrence
 
     // Currently, file_suppressions and directory_suppressions are the only supported suppressions
     'file_suppressions' => [
         'src/Event.php' => ['PhanUnreferencedPublicMethod'],
         'src/Period.php' => ['PhanAccessMethodInternal', 'PhanUnreferencedPublicMethod'],
-        'src/Properties/Origin.php' => ['PhanUnreferencedPublicMethod'],
+        'src/Properties/Origin.php' => ['PhanTypeMismatchReturnReal', 'PhanUnreferencedPublicMethod'],
         'src/Section.php' => ['PhanDeprecatedFunction', 'PhanUnreferencedPublicMethod'],
         'src/Stopwatch.php' => ['PhanDeprecatedFunction', 'PhanUnreferencedPublicMethod'],
         'src/Utils/Formatter.php' => ['PhanDeprecatedFunction', 'PhanTypePossiblyInvalidDimOffset', 'PhanUnreferencedClass', 'PhanUnreferencedPublicMethod'],
