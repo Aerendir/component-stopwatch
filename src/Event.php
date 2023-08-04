@@ -35,7 +35,7 @@ final class Event
     /**
      * @param string|null $category The event category or null to use the default
      */
-    public function __construct(?string $category = null)
+    public function __construct(string $category = null)
     {
         $this->origin   = new Origin();
         $this->category = $category ?? 'default';

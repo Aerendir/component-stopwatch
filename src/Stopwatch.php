@@ -107,7 +107,7 @@ final class Stopwatch
      *
      * @param string|null $id The id of the session to re-open, null to create a new one
      */
-    public function openSection(?string $id = null): void
+    public function openSection(string $id = null): void
     {
         // The $id is accepted only to re-open a previously closed section
         if (null !== $id && null === $this->getCurrentSection()->getChildSection($id)) {
