@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.2.0@fb685a16df3050d4c18d8a4100fe83abe6458cba">
+<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
   <file src="src/Properties/Origin.php">
-    <InvalidReturnStatement occurrences="1">
-      <code>$this-&gt;originMemory</code>
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->originMemory]]></code>
     </InvalidReturnStatement>
-    <InvalidReturnType occurrences="1">
+    <InvalidReturnType>
       <code>Memory</code>
     </InvalidReturnType>
   </file>
   <file src="src/Section.php">
-    <DeprecatedFunction occurrences="2">
-      <code>sprintf('Event "%s" is not known.', $name)</code>
-      <code>sprintf('Event "%s" is not started.', $name)</code>
+    <DeprecatedFunction>
+      <code><![CDATA[sprintf('Event "%s" is not known.', $name)]]></code>
+      <code><![CDATA[sprintf('Event "%s" is not started.', $name)]]></code>
     </DeprecatedFunction>
   </file>
   <file src="src/Stopwatch.php">
-    <DeprecatedFunction occurrences="2">
-      <code>sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id)</code>
-      <code>sprintf('The section "%s" has been started at an other level and can not be opened.', $id)</code>
+    <DeprecatedFunction>
+      <code><![CDATA[sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id)]]></code>
+      <code><![CDATA[sprintf('The section "%s" has been started at an other level and can not be opened.', $id)]]></code>
     </DeprecatedFunction>
-    <DocblockTypeContradiction occurrences="1">
+    <DocblockTypeContradiction>
       <code>0</code>
     </DocblockTypeContradiction>
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>is_countable($this-&gt;activeSections)</code>
+    <RedundantConditionGivenDocblockType>
+      <code><![CDATA[is_countable($this->activeSections)]]></code>
     </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/Utils/Formatter.php">
-    <DeprecatedFunction occurrences="6">
-      <code>sprintf('%d B', $memory)</code>
-      <code>sprintf('%d KiB', \round($print, $precision))</code>
-      <code>sprintf('%s %s', \round($microtime / $format[2], $precision), $format[1])</code>
-      <code>sprintf('%s %s', \round($microtime, $precision), $format[1])</code>
-      <code>sprintf('%s GiB', \round($print, $precision))</code>
-      <code>sprintf('%s MiB', \round($print, $precision))</code>
+    <DeprecatedFunction>
+      <code><![CDATA[sprintf('%d B', $memory)]]></code>
+      <code><![CDATA[sprintf('%d KiB', \round($print, $precision))]]></code>
+      <code><![CDATA[sprintf('%s %s', \round($microtime / $format[2], $precision), $format[1])]]></code>
+      <code><![CDATA[sprintf('%s %s', \round($microtime, $precision), $format[1])]]></code>
+      <code><![CDATA[sprintf('%s GiB', \round($print, $precision))]]></code>
+      <code><![CDATA[sprintf('%s MiB', \round($print, $precision))]]></code>
     </DeprecatedFunction>
-    <PossiblyUndefinedMethod occurrences="1">
+    <PossiblyUndefinedMethod>
       <code>$format</code>
     </PossiblyUndefinedMethod>
   </file>
   <file src="tests/StopwatchTest.php">
-    <InvalidOperand occurrences="1">
+    <InvalidOperand>
       <code>\microtime(true) * 1000</code>
     </InvalidOperand>
-    <PossiblyFalseArgument occurrences="1">
+    <PossiblyFalseArgument>
       <code>\end($section)</code>
     </PossiblyFalseArgument>
   </file>
