@@ -93,7 +93,7 @@ final class Section
         }
 
         // If no $id is passed or if the Section is not already created, create a new Section
-        if (null === $id || ! $section instanceof \SerendipityHQ\Component\Stopwatch\Section) {
+        if (null === $id || ! $section instanceof Section) {
             // Return the created section so Stopwatch can add it to the list of currently active Sections
             $section          = new self();
             $this->children[] = $section;
