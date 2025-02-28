@@ -25,8 +25,7 @@ use function Safe\sprintf;
  */
 final class Section
 {
-    /** @var Origin $origin */
-    private $origin;
+    private Origin $origin;
 
     /** @var Event[] $events */
     private $events = [];
@@ -85,7 +84,7 @@ final class Section
      *
      * @internal
      */
-    public function openChildSection(?string $id = null): Section
+    public function openChildSection(string $id = null): Section
     {
         $section = null;
 
@@ -94,7 +93,7 @@ final class Section
         }
 
         // If no $id is passed or if the Section is not already created, create a new Section
-        if (null === $id || ! $section instanceof \SerendipityHQ\Component\Stopwatch\Section) {
+        if (null === $id || ! $section instanceof Section) {
             // Return the created section so Stopwatch can add it to the list of currently active Sections
             $section          = new self();
             $this->children[] = $section;
@@ -134,7 +133,7 @@ final class Section
      *
      * @internal
      */
-    public function startEvent(string $name, ?string $category = null): Event
+    public function startEvent(string $name, string $category = null): Event
     {
         if ( ! isset($this->events[$name])) {
             $this->events[$name] = new Event($category);

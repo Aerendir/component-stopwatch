@@ -33,16 +33,16 @@ final class Memory
     private const MEMORY_GET_PEAK_USAGE = 'memory_get_peak_usage';
 
     /** @var int $startMemory The amount of memory assigned to PHP */
-    private $startMemory;
+    private int $startMemory;
 
     /** @var int $startMemoryCurrent Of the memory assigned to PHP, the amount of memory currently consumed by the script */
-    private $startMemoryCurrent;
+    private int $startMemoryCurrent;
 
     /** @var int $startMemoryPeak The max amount of memory assigned to PHP */
-    private $startMemoryPeak;
+    private int $startMemoryPeak;
 
     /** @var int $startMemoryPeakEmalloc The max amount of memory assigned to PHP and used by emalloc() */
-    private $startMemoryPeakEmalloc;
+    private int $startMemoryPeakEmalloc;
 
     /** @var int|null $endMemory The amount of memory assigned to PHP */
     private $endMemory;

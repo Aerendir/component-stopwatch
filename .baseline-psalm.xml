@@ -1,25 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.24.0@06dd975cb55d36af80f242561738f16c5f58264f">
+<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
+  <file src="src/Properties/Origin.php">
+    <InvalidReturnStatement>
+      <code><![CDATA[$this->originMemory]]></code>
+    </InvalidReturnStatement>
+    <InvalidReturnType>
+      <code>Memory</code>
+    </InvalidReturnType>
+  </file>
+  <file src="src/Section.php">
+    <DeprecatedFunction>
+      <code><![CDATA[sprintf('Event "%s" is not known.', $name)]]></code>
+      <code><![CDATA[sprintf('Event "%s" is not started.', $name)]]></code>
+    </DeprecatedFunction>
+  </file>
   <file src="src/Stopwatch.php">
-    <DocblockTypeContradiction occurrences="1">
+    <DeprecatedFunction>
+      <code><![CDATA[sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id)]]></code>
+      <code><![CDATA[sprintf('The section "%s" has been started at an other level and can not be opened.', $id)]]></code>
+    </DeprecatedFunction>
+    <DocblockTypeContradiction>
       <code>0</code>
     </DocblockTypeContradiction>
-    <RedundantConditionGivenDocblockType occurrences="1">
-      <code>\is_array($this-&gt;activeSections)</code>
+    <RedundantConditionGivenDocblockType>
+      <code><![CDATA[is_countable($this->activeSections)]]></code>
     </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/Utils/Formatter.php">
-    <PossiblyUndefinedMethod occurrences="3">
-      <code>$format</code>
-      <code>$format</code>
+    <DeprecatedFunction>
+      <code><![CDATA[sprintf('%d B', $memory)]]></code>
+      <code><![CDATA[sprintf('%d KiB', \round($print, $precision))]]></code>
+      <code><![CDATA[sprintf('%s %s', \round($microtime / $format[2], $precision), $format[1])]]></code>
+      <code><![CDATA[sprintf('%s %s', \round($microtime, $precision), $format[1])]]></code>
+      <code><![CDATA[sprintf('%s GiB', \round($print, $precision))]]></code>
+      <code><![CDATA[sprintf('%s MiB', \round($print, $precision))]]></code>
+    </DeprecatedFunction>
+    <PossiblyUndefinedMethod>
       <code>$format</code>
     </PossiblyUndefinedMethod>
   </file>
   <file src="tests/StopwatchTest.php">
-    <InvalidOperand occurrences="1">
+    <InvalidOperand>
       <code>\microtime(true) * 1000</code>
     </InvalidOperand>
-    <PossiblyFalseArgument occurrences="1">
+    <PossiblyFalseArgument>
       <code>\end($section)</code>
     </PossiblyFalseArgument>
   </file>

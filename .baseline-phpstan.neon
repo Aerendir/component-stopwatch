@@ -6,12 +6,12 @@ parameters:
 			path: src/Properties/Memory.php
 
 		-
-			message: "#^Instanceof between \\*NEVER\\* and Countable will always evaluate to false\\.$#"
+			message: "#^Method SerendipityHQ\\\\Component\\\\Stopwatch\\\\Properties\\\\Origin\\:\\:getOriginMemory\\(\\) should return SerendipityHQ\\\\Component\\\\Stopwatch\\\\Properties\\\\Memory but returns int\\.$#"
 			count: 1
-			path: src/Stopwatch.php
+			path: src/Properties/Origin.php
 
 		-
-			message: "#^Result of \\|\\| is always true\\.$#"
+			message: "#^Else branch is unreachable because ternary operator condition is always true\\.$#"
 			count: 1
 			path: src/Stopwatch.php
 
