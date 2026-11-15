@@ -33,7 +33,7 @@ final class Period
      * Time and Memory objects are passed when the Event has to
      * calculate some measurement including not still stopped Periods.
      */
-    public function __construct(Time $time = null, Memory $memory = null)
+    public function __construct(?Time $time = null, ?Memory $memory = null)
     {
         $this->time   = $time   ?? new Time();
         $this->memory = $memory ?? new Memory();
