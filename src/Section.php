@@ -15,8 +15,6 @@ namespace SerendipityHQ\Component\Stopwatch;
 
 use SerendipityHQ\Component\Stopwatch\Properties\Origin;
 
-use function Safe\sprintf;
-
 /**
  * Stopwatch section.
  *
@@ -166,7 +164,7 @@ final class Section
     public function stopEvent(string $name): Event
     {
         if ( ! isset($this->events[$name])) {
-            throw new \LogicException(sprintf('Event "%s" is not started.', $name));
+            throw new \LogicException(\sprintf('Event "%s" is not started.', $name));
         }
 
         return $this->events[$name]->stop();
@@ -198,7 +196,7 @@ final class Section
     public function getEvent(string $name): Event
     {
         if ( ! isset($this->events[$name])) {
-            throw new \LogicException(sprintf('Event "%s" is not known.', $name));
+            throw new \LogicException(\sprintf('Event "%s" is not known.', $name));
         }
 
         return $this->events[$name];
