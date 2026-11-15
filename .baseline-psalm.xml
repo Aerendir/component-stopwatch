@@ -1,50 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.15.0@5c774aca4746caf3d239d9c8cadb9f882ca29352">
+<files psalm-version="7.6.0@4303c7dbbc23efaac3d988707b4acf4d5508a9cc">
+  <file src="src/Event.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getEndTime]]></code>
+      <code><![CDATA[getMemory]]></code>
+      <code><![CDATA[getMemoryCurrent]]></code>
+      <code><![CDATA[getOrigin]]></code>
+    </PossiblyUnusedMethod>
+    <PossiblyUnusedReturnValue>
+      <code><![CDATA[Event]]></code>
+    </PossiblyUnusedReturnValue>
+    <UnnecessaryVarAnnotation>
+      <code><![CDATA[Period]]></code>
+      <code><![CDATA[Period]]></code>
+    </UnnecessaryVarAnnotation>
+    <UnusedProperty>
+      <code><![CDATA[$origin]]></code>
+    </UnusedProperty>
+  </file>
+  <file src="src/Period.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[isStopped]]></code>
+    </PossiblyUnusedMethod>
+  </file>
+  <file src="src/Properties/Memory.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getEndMemory]]></code>
+      <code><![CDATA[getEndMemoryCurrent]]></code>
+      <code><![CDATA[getEndMemoryPeak]]></code>
+      <code><![CDATA[getEndMemoryPeakEmalloc]]></code>
+      <code><![CDATA[getStartMemory]]></code>
+      <code><![CDATA[getStartMemoryCurrent]]></code>
+      <code><![CDATA[getStartMemoryPeak]]></code>
+      <code><![CDATA[getStartMemoryPeakEmalloc]]></code>
+      <code><![CDATA[isStopped]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedProperty>
+      <code><![CDATA[$endMemory]]></code>
+      <code><![CDATA[$endMemoryCurrent]]></code>
+      <code><![CDATA[$endMemoryPeak]]></code>
+      <code><![CDATA[$endMemoryPeakEmalloc]]></code>
+      <code><![CDATA[$startMemory]]></code>
+      <code><![CDATA[$startMemoryCurrent]]></code>
+      <code><![CDATA[$startMemoryPeak]]></code>
+      <code><![CDATA[$startMemoryPeakEmalloc]]></code>
+    </UnusedProperty>
+  </file>
   <file src="src/Properties/Origin.php">
     <InvalidReturnStatement>
       <code><![CDATA[$this->originMemory]]></code>
     </InvalidReturnStatement>
     <InvalidReturnType>
-      <code>Memory</code>
+      <code><![CDATA[Memory]]></code>
     </InvalidReturnType>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getOriginMemory]]></code>
+      <code><![CDATA[getOriginMemoryCurrent]]></code>
+      <code><![CDATA[getOriginMemoryPeak]]></code>
+      <code><![CDATA[getOriginMemoryPeakEmalloc]]></code>
+      <code><![CDATA[getOriginTime]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedProperty>
+      <code><![CDATA[$originMemory]]></code>
+      <code><![CDATA[$originMemoryCurrent]]></code>
+      <code><![CDATA[$originMemoryPeak]]></code>
+      <code><![CDATA[$originMemoryPeakEmalloc]]></code>
+      <code><![CDATA[$originTime]]></code>
+    </UnusedProperty>
+  </file>
+  <file src="src/Properties/Time.php">
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getEndTime]]></code>
+      <code><![CDATA[isStopped]]></code>
+    </PossiblyUnusedMethod>
   </file>
   <file src="src/Section.php">
-    <DeprecatedFunction>
-      <code><![CDATA[sprintf('Event "%s" is not known.', $name)]]></code>
-      <code><![CDATA[sprintf('Event "%s" is not started.', $name)]]></code>
-    </DeprecatedFunction>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[getOrigin]]></code>
+      <code><![CDATA[getSectionEvent]]></code>
+      <code><![CDATA[lap]]></code>
+    </PossiblyUnusedMethod>
+    <UnusedProperty>
+      <code><![CDATA[$origin]]></code>
+    </UnusedProperty>
   </file>
   <file src="src/Stopwatch.php">
-    <DeprecatedFunction>
-      <code><![CDATA[sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id)]]></code>
-      <code><![CDATA[sprintf('The section "%s" has been started at an other level and can not be opened.', $id)]]></code>
-    </DeprecatedFunction>
     <DocblockTypeContradiction>
-      <code>0</code>
+      <code><![CDATA[0]]></code>
     </DocblockTypeContradiction>
+    <PossiblyUnusedMethod>
+      <code><![CDATA[lap]]></code>
+    </PossiblyUnusedMethod>
     <RedundantConditionGivenDocblockType>
       <code><![CDATA[is_countable($this->activeSections)]]></code>
     </RedundantConditionGivenDocblockType>
   </file>
   <file src="src/Utils/Formatter.php">
-    <DeprecatedFunction>
-      <code><![CDATA[sprintf('%d B', $memory)]]></code>
-      <code><![CDATA[sprintf('%d KiB', \round($print, $precision))]]></code>
-      <code><![CDATA[sprintf('%s %s', \round($microtime / $format[2], $precision), $format[1])]]></code>
-      <code><![CDATA[sprintf('%s %s', \round($microtime, $precision), $format[1])]]></code>
-      <code><![CDATA[sprintf('%s GiB', \round($print, $precision))]]></code>
-      <code><![CDATA[sprintf('%s MiB', \round($print, $precision))]]></code>
-    </DeprecatedFunction>
-    <PossiblyUndefinedMethod>
-      <code>$format</code>
-    </PossiblyUndefinedMethod>
+    <UnusedClass>
+      <code><![CDATA[Formatter]]></code>
+    </UnusedClass>
+  </file>
+  <file src="src/Utils/MemoryCalc.php">
+    <UnusedClass>
+      <code><![CDATA[MemoryCalc]]></code>
+    </UnusedClass>
   </file>
   <file src="tests/StopwatchTest.php">
     <InvalidOperand>
-      <code>\microtime(true) * 1000</code>
+      <code><![CDATA[\microtime(true) * 1000]]></code>
     </InvalidOperand>
     <PossiblyFalseArgument>
-      <code>\end($section)</code>
+      <code><![CDATA[\end($section)]]></code>
     </PossiblyFalseArgument>
+    <UnusedMethodCall>
+      <code><![CDATA[setAccessible]]></code>
+      <code><![CDATA[setAccessible]]></code>
+    </UnusedMethodCall>
   </file>
 </files>

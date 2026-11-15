@@ -15,4 +15,11 @@ use DG\BypassFinals;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+// Only the component's own classes: removing final and readonly from PHPUnit's classes breaks it.
+$sourceDirectory = \realpath(__DIR__ . '/../src');
+if (false === $sourceDirectory) {
+    throw new RuntimeException('The src directory of the component cannot be found.');
+}
+
+BypassFinals::allowPaths([$sourceDirectory . '/*']);
 BypassFinals::enable();
