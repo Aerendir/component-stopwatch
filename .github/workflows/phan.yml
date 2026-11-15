@@ -20,10 +20,10 @@ jobs:
 
         steps:
             -   name: Checkout
-                uses: actions/checkout@v4
+                uses: actions/checkout@v6
 
             -   name: Setup PHP
-                uses: shivammathur/setup-php@2.32.0
+                uses: shivammathur/setup-php@2.36.0
                 with:
                     php-version: ${{ matrix.php }}
                     coverage: none # disable xdebug, pcov
@@ -38,6 +38,11 @@ jobs:
             -   name: Remove Rector
                 run: |
                     composer rem rector/rector --dev --no-update
+
+            -   name: Remove Roave Security Advisories
+                # It conflicts with every PHP version out of security support, and Composer blocks vulnerable packages on its own
+                run: |
+                    composer rem roave/security-advisories --dev --no-update
 
             -   name: Install Composer deps
                 uses: ramsey/composer-install@v3

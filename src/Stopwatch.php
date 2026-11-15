@@ -13,8 +13,6 @@ declare(strict_types=1);
 
 namespace SerendipityHQ\Component\Stopwatch;
 
-use function Safe\sprintf;
-
 /**
  * Stopwatch provides a way to profile code.
  *
@@ -55,7 +53,7 @@ final class Stopwatch
      * @param string      $name     The event name
      * @param string|null $category The eventcategory
      */
-    public function start(string $name, string $category = null): Event
+    public function start(string $name, ?string $category = null): Event
     {
         return $this->getCurrentSection()->startEvent($name, $category);
     }
@@ -107,11 +105,11 @@ final class Stopwatch
      *
      * @param string|null $id The id of the session to re-open, null to create a new one
      */
-    public function openSection(string $id = null): void
+    public function openSection(?string $id = null): void
     {
         // The $id is accepted only to re-open a previously closed section
         if (null !== $id && null === $this->getCurrentSection()->getChildSection($id)) {
-            throw new \LogicException(sprintf('The section "%s" has been started at an other level and can not be opened.', $id));
+            throw new \LogicException(\sprintf('The section "%s" has been started at an other level and can not be opened.', $id));
         }
 
         // Create a new Event meant to measure the timing and memory of the opening child section
@@ -166,7 +164,7 @@ final class Stopwatch
     public function getSection(string $id): Section
     {
         if (false === $this->hasSection($id)) {
-            throw new \InvalidArgumentException(sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id));
+            throw new \InvalidArgumentException(\sprintf('The section "%s" doesn\'t exist. Maybe you have not still closed it.', $id));
         }
 
         return $this->sections[$id];
