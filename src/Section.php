@@ -82,7 +82,7 @@ final class Section
      *
      * @internal
      */
-    public function openChildSection(string $id = null): Section
+    public function openChildSection(?string $id = null): Section
     {
         $section = null;
 
@@ -131,7 +131,7 @@ final class Section
      *
      * @internal
      */
-    public function startEvent(string $name, string $category = null): Event
+    public function startEvent(string $name, ?string $category = null): Event
     {
         if ( ! isset($this->events[$name])) {
             $this->events[$name] = new Event($category);

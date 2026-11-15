@@ -53,7 +53,7 @@ final class Stopwatch
      * @param string      $name     The event name
      * @param string|null $category The eventcategory
      */
-    public function start(string $name, string $category = null): Event
+    public function start(string $name, ?string $category = null): Event
     {
         return $this->getCurrentSection()->startEvent($name, $category);
     }
@@ -105,7 +105,7 @@ final class Stopwatch
      *
      * @param string|null $id The id of the session to re-open, null to create a new one
      */
-    public function openSection(string $id = null): void
+    public function openSection(?string $id = null): void
     {
         // The $id is accepted only to re-open a previously closed section
         if (null !== $id && null === $this->getCurrentSection()->getChildSection($id)) {
